@@ -2,6 +2,8 @@ package container;
 
 import java.util.ArrayList;
 
+import storage.IStorage;
+
 public class SimpleStorage implements IStorage {
 	private ArrayList<Class<?>> list;
 

@@ -1,5 +1,9 @@
 package container;
 
+import classloader.JRoboClassLoader;
+import classloader.Resolver;
+import storage.IStorage;
+import storage.Storage;
 import exceptions.JRoboContainerException;
 
 public class Container implements IContainer {
@@ -10,9 +14,9 @@ public class Container implements IContainer {
 
 	public Container() {
 		storage = new Storage();
+		resolver = new Resolver();
 		classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"));
 		classLoader.loadClasses();
-		resolver = new Resolver();
 	}
 	
 	@SuppressWarnings("unchecked")

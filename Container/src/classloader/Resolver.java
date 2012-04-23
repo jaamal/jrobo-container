@@ -1,4 +1,4 @@
-package container;
+package classloader;
 
 import java.util.ArrayList;
 
@@ -24,11 +24,7 @@ public class Resolver {
 		try {
 			result = resolvedClass.cast(resolvedClass.newInstance());
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return result;
 		

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import classloader.JRoboClassLoader;
+
 import tests.files.classloader.innerclasstest.OuterClass;
 import tests.files.classloader.simpletest.IOneImplementation;
 import tests.files.classloader.simpletest.OneImplementation;
 
-import container.JRoboClassLoader;
 import container.SimpleStorage;
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -45,7 +46,7 @@ public class ClassLoaderTest extends TestCase {
 	@Test
 	public void testFolderWithInnerClass() {
 		JRoboClassLoader loader = new JRoboClassLoader(storage,
-				"bin/tests/files/classloader/privateclasstest/");
+				"bin/tests/files/classloader/innerclasstest/");
 		loader.loadClasses();
 		ArrayList<Class<?>> actual = storage.getLoadedClasses();
 		ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
