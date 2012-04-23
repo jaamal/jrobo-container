@@ -1,10 +1,10 @@
 package tests.files.gettingandcreating;
 
-public class ForGetAndCreateTesting implements IForGetAndCreateTesting {
+public class Incrementer implements IIncrementer {
 
 	private int value;
 
-	public ForGetAndCreateTesting() {
+	public Incrementer() {
 		value = 0;
 	}
 

@@ -1,5 +1,5 @@
 package tests.files.gettingandcreating;
 
-public interface IForGetAndCreateTesting {
+public interface IIncrementer {
 	int inc();
 }

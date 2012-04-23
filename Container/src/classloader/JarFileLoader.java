@@ -11,11 +11,10 @@ import storage.IStorage;
 public class JarFileLoader {
 
 	IStorage storage;
-	
+
 	public JarFileLoader(IStorage storage) {
 		this.storage = storage;
 	}
-	
 
 	public void load(File file) {
 		try {
@@ -31,14 +30,13 @@ public class JarFileLoader {
 
 	private void loadJarEntry(JarFile file, JarEntry entry) {
 		try {
-			if (entry.getName().endsWith(".class"))
-			{
-				Class<?> clazz = new InnerClassLoader().readClass(file.getInputStream(entry));
-				if(clazz != null)
+			if (entry.getName().endsWith(".class")) {
+				Class<?> clazz = new InnerClassLoader().readClass(file
+						.getInputStream(entry));
+				if (clazz != null)
 					storage.addClass(clazz);
-				else
-				{
-					
+				else {
+
 				}
 			}
 		} catch (IOException e) {

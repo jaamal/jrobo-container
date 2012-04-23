@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import tests.files.classloader.simpletest.IOneImplementation;
 import tests.files.classloader.simpletest.OneImplementation;
-import tests.files.gettingandcreating.IForGetAndCreateTesting;
+import tests.files.gettingandcreating.IIncrementer;
 
 
 import container.Container;
@@ -32,31 +32,31 @@ public class OneImplementationTest extends TestCase {
 	@Test
 	public void testGetting() throws JRoboContainerException
 	{
-		IForGetAndCreateTesting result1 = container.get(IForGetAndCreateTesting.class);
+		IIncrementer result1 = container.get(IIncrementer.class);
 		Assert.assertTrue(result1.inc() == 1);
-		IForGetAndCreateTesting result2 = container.get(IForGetAndCreateTesting.class);
+		IIncrementer result2 = container.get(IIncrementer.class);
 		Assert.assertTrue(result2.inc() == 2);
 	}
 	
 	@Test
 	public void testCreating() throws JRoboContainerException
 	{
-		IForGetAndCreateTesting result1 = container.create(IForGetAndCreateTesting.class);
+		IIncrementer result1 = container.create(IIncrementer.class);
 		Assert.assertTrue(result1.inc() == 1);
-		IForGetAndCreateTesting result2 = container.create(IForGetAndCreateTesting.class);
+		IIncrementer result2 = container.create(IIncrementer.class);
 		Assert.assertTrue(result2.inc() == 1);
 	}
 	
 	@Test
 	public void testCreatingAndGetting() throws JRoboContainerException
 	{
-		IForGetAndCreateTesting result1 = container.create(IForGetAndCreateTesting.class);
+		IIncrementer result1 = container.create(IIncrementer.class);
 		Assert.assertTrue(result1.inc() == 1);
-		IForGetAndCreateTesting result2 = container.get(IForGetAndCreateTesting.class);
+		IIncrementer result2 = container.get(IIncrementer.class);
 		Assert.assertTrue(result2.inc() == 1);
-		IForGetAndCreateTesting result3 = container.create(IForGetAndCreateTesting.class);
+		IIncrementer result3 = container.create(IIncrementer.class);
 		Assert.assertTrue(result3.inc() == 1);
-		IForGetAndCreateTesting result4 = container.get(IForGetAndCreateTesting.class);
+		IIncrementer result4 = container.get(IIncrementer.class);
 		Assert.assertTrue(result4.inc() == 2);
 	}
 	

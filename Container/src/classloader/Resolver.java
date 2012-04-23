@@ -7,9 +7,9 @@ import exceptions.ImplementationNotFoundException;
 import exceptions.JRoboContainerException;
 
 public class Resolver {
-	
-	public Class<?> resolveClass(Class<?> requiredInterface, ArrayList<Class<?>> implementations) throws JRoboContainerException
-	{
+
+	public Class<?> resolveClass(Class<?> requiredInterface,
+			ArrayList<Class<?>> implementations) throws JRoboContainerException {
 		if (implementations.size() == 0) {
 			throw new ImplementationNotFoundException(requiredInterface);
 		}
@@ -27,6 +27,6 @@ public class Resolver {
 		} catch (IllegalAccessException e) {
 		}
 		return result;
-		
+
 	}
 }
