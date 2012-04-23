@@ -1,13 +1,10 @@
 package tests.classloader;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.junit.Test;
 
 import tests.files.classloader.innerclasstest.OuterClass;
-import tests.files.classloader.innerclasstest.OuterClass.InnerClass;
 import tests.files.classloader.simpletest.IOneImplementation;
 import tests.files.classloader.simpletest.OneImplementation;
 
