@@ -1,8 +1,8 @@
 package container;
 
-import java.util.ArrayList;
-
 import storage.IStorage;
+
+import java.util.ArrayList;
 
 public class SimpleStorage implements IStorage {
 	private ArrayList<Class<?>> list;
@@ -26,7 +26,7 @@ public class SimpleStorage implements IStorage {
 
 
 	@Override
-	public ArrayList<Class<?>> getImplementations(Class<?> requiredInterface) {
+	public ArrayList<Class<?>> getImplementations(Class<?> requiredAbstraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,5 +42,10 @@ public class SimpleStorage implements IStorage {
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public void buildFullDiagram() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
 }

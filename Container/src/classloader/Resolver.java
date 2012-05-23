@@ -1,20 +1,20 @@
 package classloader;
 
-import java.util.ArrayList;
-
 import exceptions.AmbiguousImplementationMatchException;
 import exceptions.ImplementationNotFoundException;
 import exceptions.JRoboContainerException;
 
+import java.util.ArrayList;
+
 public class Resolver {
 
-	public Class<?> resolveClass(Class<?> requiredInterface,
+	public Class<?> resolveClass(Class<?> requiredAbstraction,
 			ArrayList<Class<?>> implementations) throws JRoboContainerException {
 		if (implementations.size() == 0) {
-			throw new ImplementationNotFoundException(requiredInterface);
+			throw new ImplementationNotFoundException(requiredAbstraction);
 		}
 		if (implementations.size() > 1) {
-			throw new AmbiguousImplementationMatchException(requiredInterface);
+			throw new AmbiguousImplementationMatchException(requiredAbstraction);
 		}
 		return implementations.get(0);
 	}
@@ -30,3 +30,4 @@ public class Resolver {
 
 	}
 }
+

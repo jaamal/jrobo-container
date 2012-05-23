@@ -1,31 +1,28 @@
 package container;
 
-import classloader.IPathsFilter;
 import classloader.JRoboClassLoader;
 import classloader.Resolver;
-import exceptions.JRoboContainerException;
 import storage.IStorage;
 import storage.Storage;
+import exceptions.JRoboContainerException;
 
 public class Container implements IContainer {
 
 	private JRoboClassLoader classLoader;
 	private IStorage storage;
 	private Resolver resolver;
-    private IPathsFilter filter;
 
-	public Container(IPathsFilter filter) {
+	public Container() {
 		storage = new Storage();
 		resolver = new Resolver();
-		classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), filter);
+		classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"));
 		classLoader.loadClasses();
-        storage.buildFullDiagram();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(Class<T> requiredAbstraction) throws JRoboContainerException {
-		Class<?> resolvedClass = resolver.resolveClass(requiredAbstraction, storage.getImplementations(requiredAbstraction));
+	public <T> T get(Class<T> requiredInterface) throws JRoboContainerException {
+		Class<?> resolvedClass = resolver.resolveClass(requiredInterface, storage.getImplementations(requiredInterface));
 		if(storage.getInstance(resolvedClass) == null)
 			storage.putInstance(resolvedClass, resolver.createNewInstance(resolvedClass));
 		return (T)storage.getInstance(resolvedClass);
@@ -33,8 +30,8 @@ public class Container implements IContainer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T create(Class<T> requiredAbstraction) throws JRoboContainerException {
-		Class<?> resolvedClass = resolver.resolveClass(requiredAbstraction, storage.getImplementations(requiredAbstraction));
+	public <T> T create(Class<T> requiredInterface) throws JRoboContainerException {
+		Class<?> resolvedClass = resolver.resolveClass(requiredInterface, storage.getImplementations(requiredInterface));
 		return (T)resolver.createNewInstance(resolvedClass);
 	}
 }

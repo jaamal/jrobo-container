@@ -1,12 +1,12 @@
 package classloader;
 
+import storage.IStorage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
-import storage.IStorage;
 
 public class JarFileLoader {
 
@@ -17,6 +17,7 @@ public class JarFileLoader {
 	}
 
 	public void load(File file) {
+        System.out.println(file.getAbsolutePath());
 		try {
 			JarFile jarFile = new JarFile(file);
 			Enumeration<JarEntry> entries = jarFile.entries();
@@ -31,6 +32,7 @@ public class JarFileLoader {
 	private void loadJarEntry(JarFile file, JarEntry entry) {
 		try {
 			if (entry.getName().endsWith(".class")) {
+                //System.out.println(entry.getName());
 				Class<?> clazz = new InnerClassLoader().readClass(file
 						.getInputStream(entry));
 				if (clazz != null)

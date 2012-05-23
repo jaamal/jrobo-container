@@ -1,23 +1,26 @@
 package classloader;
 
-import java.io.File;
-
 import storage.IStorage;
+
+import java.io.File;
 
 public class JRoboClassLoader {
 
 	String classPath;
-	InnerClassLoader innerClassLoader;
+    private IPathsFilter filter;
+    InnerClassLoader innerClassLoader;
 	DirectoriesWalker directoriesWalker;
 
-	public JRoboClassLoader(IStorage storage, String classPath) {
+	public JRoboClassLoader(IStorage storage, String classPath, IPathsFilter filter) {
 		this.classPath = classPath;
-		this.directoriesWalker = new DirectoriesWalker(storage);
+        this.filter = filter;
+        this.directoriesWalker = new DirectoriesWalker(storage);
 	}
 
 	public void loadClasses() {
-		for (String path : classPath.split(";")) {
-			directoriesWalker.addFolder(new File(path));
+		for (String path : classPath.split("[:;]")) {
+            if(filter.accept(path))
+                directoriesWalker.addFolder(new File(path));
 		}
 	}
 
