@@ -19,12 +19,12 @@ public class Storage implements IStorage {
         graph = new HashMap<Class<?>, ArrayList<Class<?>>>();
     }
 
-    private void addEdge(Class<?> currentInterface, Class<?> clazz) {
+    private void addEdge(Class<?> parent, Class<?> child) {
 
-        if (!graph.containsKey(currentInterface))
-            graph.put(currentInterface,
+        if (!graph.containsKey(parent))
+            graph.put(parent,
                     new ArrayList<Class<?>>());
-        graph.get(currentInterface).add(clazz);
+        graph.get(parent).add(child);
     }
 
     @Override

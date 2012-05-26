@@ -10,7 +10,7 @@ public class Resolver {
 
 	public Class<?> resolveClass(Class<?> requiredAbstraction,
 			ArrayList<Class<?>> implementations) throws JRoboContainerException {
-		if (implementations.size() == 0) {
+		if (implementations == null || implementations.size() == 0) {
 			throw new ImplementationNotFoundException(requiredAbstraction);
 		}
 		if (implementations.size() > 1) {

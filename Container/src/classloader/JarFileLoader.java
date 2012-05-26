@@ -32,8 +32,7 @@ public class JarFileLoader {
 	private void loadJarEntry(JarFile file, JarEntry entry) {
 		try {
 			if (entry.getName().endsWith(".class")) {
-                //System.out.println(entry.getName());
-				Class<?> clazz = new InnerClassLoader().readClass(file
+                Class<?> clazz = new InnerClassLoader().readClass(file
 						.getInputStream(entry));
 				if (clazz != null)
 					storage.addClass(clazz);

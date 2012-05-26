@@ -2,8 +2,8 @@ package exceptions;
 
 @SuppressWarnings("serial")
 public class ImplementationNotFoundException extends JRoboContainerException {
-	public ImplementationNotFoundException(Class<?> requiredInterface)
+	public ImplementationNotFoundException(Class<?> requiredAbstraction)
 	{
-		super("Can't find any implementation of interface" + requiredInterface.getCanonicalName() + ".");
+		super("Can't find any implementation for abstraction " + requiredAbstraction.getCanonicalName() + ".");
 	}
 }

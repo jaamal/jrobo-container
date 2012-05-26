@@ -1,8 +1,8 @@
 package classloader;
 
-import java.io.File;
-
 import storage.IStorage;
+
+import java.io.File;
 
 public class DirectoriesWalker {
 
@@ -15,7 +15,7 @@ public class DirectoriesWalker {
 	}
 
 	public void addFolder(File currentLocation) {
-		if (currentLocation.isFile())
+        if (currentLocation.isFile())
 			addFile(currentLocation);
 		else {
 			for (File nextLocation : currentLocation.listFiles()) {
