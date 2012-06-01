@@ -18,7 +18,7 @@ public class JRoboClassLoader {
 	}
 
 	public void loadClasses() {
-		for (String path : classPath.split("[:;]")) {
+		for (String path : classPath.split(System.getProperty("path.separator"))) {
             if(filter.accept(path))
                 directoriesWalker.addFolder(new File(path));
 		}
