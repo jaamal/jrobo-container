@@ -20,7 +20,6 @@ public class OneImplementationTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         container = new Container(new NoSystemsFilter());
-        //asdf
     }
 
     @Test

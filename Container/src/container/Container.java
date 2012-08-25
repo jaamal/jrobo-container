@@ -24,16 +24,20 @@ public class Container implements IContainer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(Class<T> requiredAbstraction) throws JRoboContainerException {
-		Class<?> resolvedClass = resolver.resolveClass(requiredAbstraction, storage.getImplementations(requiredAbstraction));
+        Class<?> resolvedClass = resolveClass(requiredAbstraction);
 		if(storage.getInstance(resolvedClass) == null)
 			storage.putInstance(resolvedClass, resolver.createNewInstance(resolvedClass));
 		return (T)storage.getInstance(resolvedClass);
 	}
 
-	@SuppressWarnings("unchecked")
+    private Class<?> resolveClass(Class<?> requiredAbstraction) throws JRoboContainerException {
+        return resolver.resolveClass(requiredAbstraction, storage.getImplementations(requiredAbstraction));
+    }
+
+    @SuppressWarnings("unchecked")
 	@Override
-	public <T> T create(Class<T> requiredAbrstraction) throws JRoboContainerException {
-		Class<?> resolvedClass = resolver.resolveClass(requiredAbrstraction, storage.getImplementations(requiredAbrstraction));
+	public <T> T create(Class<T> requiredAbstraction) throws JRoboContainerException {
+		Class<?> resolvedClass = resolveClass(requiredAbstraction);
 		return (T)resolver.createNewInstance(resolvedClass);
 	}
 }
