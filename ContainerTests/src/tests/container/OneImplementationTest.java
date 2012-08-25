@@ -3,8 +3,8 @@ package tests.container;
 import container.Container;
 import exceptions.JRoboContainerException;
 import files.multipleimplementation.IMultipleImplementation;
+import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Test;
 import tests.files.classloader.simpletest.IOneImplementation;
 import tests.files.classloader.simpletest.OneImplementation;
@@ -20,6 +20,7 @@ public class OneImplementationTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         container = new Container(new NoSystemsFilter());
+        //asdf
     }
 
     @Test
@@ -77,16 +78,14 @@ public class OneImplementationTest extends TestCase {
 
 
     @Test
-    public void testMultiInterfaceCreate() throws JRoboContainerException
-    {
+    public void testMultiInterfaceCreate() throws JRoboContainerException {
         MultiInterface1 a = container.create(MultiInterface1.class);
         MultiInterface2 b = container.create(MultiInterface2.class);
         Assert.assertTrue(a != b);
     }
 
     @Test
-    public void testMultiInterfaceGet() throws JRoboContainerException
-    {
+    public void testMultiInterfaceGet() throws JRoboContainerException {
         MultiInterface1 a = container.get(MultiInterface1.class);
         MultiInterface2 b = container.get(MultiInterface2.class);
         Assert.assertTrue(a == b);
@@ -96,14 +95,14 @@ public class OneImplementationTest extends TestCase {
     public void testInterfacesLevelsGet() throws JRoboContainerException {
         Object result = container.get(ClassWithTwoInterfaces.class);
         Assert.assertTrue(result instanceof ClassWithTwoInterfaces);
-        ((ClassWithTwoInterfaces)result).increment();
+        ((ClassWithTwoInterfaces) result).increment();
         result = container.get(LowerInterface.class);
         Assert.assertTrue(result instanceof ClassWithTwoInterfaces);
-        ((ClassWithTwoInterfaces)result).increment();
+        ((ClassWithTwoInterfaces) result).increment();
         result = container.get(UpperInterface.class);
         Assert.assertTrue(result instanceof ClassWithTwoInterfaces);
-        ((ClassWithTwoInterfaces)result).increment();
-        Assert.assertEquals(((ClassWithTwoInterfaces)result).value, 3);
+        ((ClassWithTwoInterfaces) result).increment();
+        Assert.assertEquals(((ClassWithTwoInterfaces) result).value, 3);
     }
 
     @Test
