@@ -50,4 +50,18 @@ public class Storage implements IStorage {
         extendedInheritanceGraph = new ExtendedInheritanceGraph(directInheritanceGraph);
     }
 
+    @Override
+    public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
+        putInstance(abstraction, instance);
+        for(Class<?> ancestor : extendedInheritanceGraph.getAncestors(abstraction))
+        {
+            putInstance(ancestor, instance);
+        }
+    }
+
+    @Override
+    public boolean hasInstance(Class<?> requiredAbstraction) {
+        return instancesManager.hasInstance(requiredAbstraction);
+    }
+
 }

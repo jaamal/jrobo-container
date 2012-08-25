@@ -48,4 +48,14 @@ public class SimpleStorage implements IStorage {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public boolean hasInstance(Class<?> requiredAbstraction) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }

@@ -24,4 +24,9 @@ public class InstancesManager implements IInstancesManager
             throw new InstanceForAbstractionNotFoundException(clazz.getName());
         return (T) instances.get(clazz);
     }
+
+    @Override
+    public boolean hasInstance(Class<?> requiredAbstraction) {
+        return instances.containsKey(requiredAbstraction) && instances.get(requiredAbstraction) != null;
+    }
 }

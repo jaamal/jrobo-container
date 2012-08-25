@@ -17,12 +17,13 @@ public class ExtendedInheritanceGraph implements IExtendedInheritanceGraph {
         ancestors = new HashMap<Class<?>, ArrayList<Class<?>>>();
         HashSet<Class<?>> watchedClasses = new HashSet<Class<?>>();
         for (Class<?> clazz : directInheritanceGraph.getVertices())
+        {
+            ancestors.put(clazz, new ArrayList<Class<?>>());
             if (!watchedClasses.contains(clazz))
                 dfs(clazz, watchedClasses);
+        }
         for (Class<?> ancestor : directInheritanceGraph.getVertices())
             for (Class<?> descendant : descendants.get(ancestor)) {
-                if (!ancestors.containsKey(descendant))
-                    ancestors.put(descendant, new ArrayList<Class<?>>());
                 ancestors.get(descendant).add(ancestor);
             }
     }
