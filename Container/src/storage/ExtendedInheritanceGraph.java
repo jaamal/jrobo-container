@@ -8,15 +8,23 @@ import java.util.HashSet;
 public class ExtendedInheritanceGraph implements IExtendedInheritanceGraph {
     private IDirectInheritanceGraph directInheritanceGraph;
 
-    private HashMap<Class<?>, ArrayList<Class<?>>> children;
+    private HashMap<Class<?>, ArrayList<Class<?>>> descendants;
+    private HashMap<Class<?>, ArrayList<Class<?>>> ancestors;
 
     public ExtendedInheritanceGraph(IDirectInheritanceGraph directInheritanceGraph) {
         this.directInheritanceGraph = directInheritanceGraph;
-        children = new HashMap<Class<?>, ArrayList<Class<?>>>();
+        descendants = new HashMap<Class<?>, ArrayList<Class<?>>>();
+        ancestors = new HashMap<Class<?>, ArrayList<Class<?>>>();
         HashSet<Class<?>> watchedClasses = new HashSet<Class<?>>();
         for (Class<?> clazz : directInheritanceGraph.getVertices())
             if (!watchedClasses.contains(clazz))
                 dfs(clazz, watchedClasses);
+        for (Class<?> ancestor : directInheritanceGraph.getVertices())
+            for (Class<?> descendant : descendants.get(ancestor)) {
+                if (!ancestors.containsKey(descendant))
+                    ancestors.put(descendant, new ArrayList<Class<?>>());
+                ancestors.get(descendant).add(ancestor);
+            }
     }
 
 
@@ -31,14 +39,19 @@ public class ExtendedInheritanceGraph implements IExtendedInheritanceGraph {
                 dfs(to, watchedClasses);
         HashSet<Class<?>> union = new HashSet<Class<?>>();
         for (Class<?> to : directInheritanceGraph.getAdjacent(clazz))
-            union.addAll(children.get(to));
+            union.addAll(descendants.get(to));
         if (!isAbstractOrInterface(clazz))
             union.add(clazz);
-        children.put(clazz, new ArrayList<Class<?>>(union));
+        descendants.put(clazz, new ArrayList<Class<?>>(union));
     }
 
     @Override
-    public ArrayList<Class<?>> getChildren(Class<?> abstraction) {
-        return children.get(abstraction);
+    public ArrayList<Class<?>> getDescendants(Class<?> abstraction) {
+        return descendants.get(abstraction);
+    }
+
+    @Override
+    public ArrayList<Class<?>> getAncestors(Class<?> abstraction) {
+        return ancestors.get(abstraction);
     }
 }

@@ -3,5 +3,6 @@ package storage;
 import java.util.ArrayList;
 
 public interface IExtendedInheritanceGraph {
-    ArrayList<Class<?>> getChildren(Class<?> abstraction);
+    ArrayList<Class<?>> getDescendants(Class<?> abstraction);
+    ArrayList<Class<?>> getAncestors(Class<?> abstraction);
 }

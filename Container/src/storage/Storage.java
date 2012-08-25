@@ -31,7 +31,7 @@ public class Storage implements IStorage {
 
     @Override
     public ArrayList<Class<?>> getImplementations(Class<?> requiredAbstraction) {
-        return extendedInheritanceGraph.getChildren(requiredAbstraction);
+        return extendedInheritanceGraph.getDescendants(requiredAbstraction);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +43,6 @@ public class Storage implements IStorage {
     @Override
     public <T> void putInstance(Class<T> resolvedClass, Object newInstance) {
         instancesManager.putInstance(resolvedClass, newInstance);
-
     }
 
     @Override
