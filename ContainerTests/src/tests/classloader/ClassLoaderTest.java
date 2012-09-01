@@ -26,7 +26,7 @@ public class ClassLoaderTest extends TestCase {
 
 	@Test
 	public void testSimpleJar() {
-        File tst = new File("ContainerTests/bin/tests/files/classloader/simpletest");
+        File tst = new File("out/production/ContainerTests/tests/files/classloader/simpletest");
         System.out.println(tst.getAbsolutePath());
         for(File s : tst.listFiles())
             System.out.println(s.getAbsolutePath());
@@ -35,7 +35,7 @@ public class ClassLoaderTest extends TestCase {
 	@Test
 	public void testSimpleFolder() {
 		JRoboClassLoader loader = new JRoboClassLoader(storage,
-				"ContainerTests/bin/tests/files/classloader/simpletest/", fakeFilter);
+				"out/production/ContainerTests/tests/files/classloader/simpletest/", fakeFilter);
 		loader.loadClasses();
 		ArrayList<Class<?>> actual = storage.getLoadedClasses();
 		ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
@@ -51,7 +51,7 @@ public class ClassLoaderTest extends TestCase {
 	@Test
 	public void testFolderWithInnerClass() {
 		JRoboClassLoader loader = new JRoboClassLoader(storage,
-				"ContainerTests/bin/tests/files/classloader/innerclasstest/", fakeFilter);
+				"out/production/ContainerTests/tests/files/classloader/innerclasstest/", fakeFilter);
 		loader.loadClasses();
 		ArrayList<Class<?>> actual = storage.getLoadedClasses();
 		ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
