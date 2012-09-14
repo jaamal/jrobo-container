@@ -71,5 +71,4 @@ public class Storage implements IStorage {
     public Object getSynchronizeObject(Class<?> resolvedClass){
         return synchronizeObjects.get(resolvedClass);
     }
-
 }
