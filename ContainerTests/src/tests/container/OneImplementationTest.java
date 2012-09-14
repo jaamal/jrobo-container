@@ -23,6 +23,14 @@ public class OneImplementationTest extends TestCase {
     }
 
     @Test
+    public void testGetsSameObject()
+    {
+        IOneImplementation result1 = container.get(IOneImplementation.class);
+        IOneImplementation result2 = container.get(IOneImplementation.class);
+        Assert.assertSame(result1, result2);
+    }
+
+    @Test
     public void testSimple() throws JRoboContainerException {
         IOneImplementation result = container.get(IOneImplementation.class);
         Assert.assertTrue(result instanceof OneImplementation);

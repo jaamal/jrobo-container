@@ -58,4 +58,9 @@ public class SimpleStorage implements IStorage {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public Object getSynchronizeObject(Class<?> resolvedClass) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }

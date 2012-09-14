@@ -3,20 +3,24 @@ package storage;
 import exceptions.InstanceForAbstractionNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Storage implements IStorage {
 
     IDirectInheritanceGraph directInheritanceGraph;
     IExtendedInheritanceGraph extendedInheritanceGraph;
     IInstancesManager instancesManager;
+    HashMap<Class<?>, Object> synchronizeObjects;
 
     public Storage() {
+        synchronizeObjects = new HashMap<Class<?>, Object>();
         directInheritanceGraph = new DirectInheritanceGraph();
         instancesManager = new InstancesManager();
     }
 
     @Override
     public <T> void addClass(Class<T> clazz) {
+        synchronizeObjects.put(clazz, new Object());
         Class<?>[] interfaces = clazz.getInterfaces();
         Class<?> superClass = clazz.getSuperclass();
         directInheritanceGraph.addVertex(clazz);
@@ -53,8 +57,7 @@ public class Storage implements IStorage {
     @Override
     public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
         putInstance(abstraction, instance);
-        for(Class<?> ancestor : extendedInheritanceGraph.getAncestors(abstraction))
-        {
+        for (Class<?> ancestor : extendedInheritanceGraph.getAncestors(abstraction)) {
             putInstance(ancestor, instance);
         }
     }
@@ -62,6 +65,11 @@ public class Storage implements IStorage {
     @Override
     public boolean hasInstance(Class<?> requiredAbstraction) {
         return instancesManager.hasInstance(requiredAbstraction);
+    }
+
+    @Override
+    public Object getSynchronizeObject(Class<?> resolvedClass){
+        return synchronizeObjects.get(resolvedClass);
     }
 
 }

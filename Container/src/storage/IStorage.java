@@ -18,4 +18,6 @@ public interface IStorage {
     <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance);
 
     boolean hasInstance(Class<?> requiredAbstraction);
+
+    Object getSynchronizeObject(Class<?> resolvedClass);
 }
