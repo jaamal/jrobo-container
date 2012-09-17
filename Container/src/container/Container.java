@@ -3,6 +3,8 @@ package container;
 import classloader.IPathsFilter;
 import classloader.JRoboClassLoader;
 import classloader.Resolver;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import storage.IStorage;
 import storage.Storage;
 import exceptions.JRoboContainerException;
@@ -26,12 +28,14 @@ public class Container implements IContainer {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> requiredAbstraction) throws JRoboContainerException {
+        logger.info("Getting" + requiredAbstraction.getName());
         if (storage.hasInstance(requiredAbstraction))
             return (T) storage.getInstance(requiredAbstraction);
         Class<?> resolvedClass = resolveClass(requiredAbstraction);
+        logger.info(requiredAbstraction.getName() + " resolved as " + resolvedClass.getName());
         synchronized (storage.getSynchronizeObject(resolvedClass)) {
             if (storage.getInstance(resolvedClass) == null) {
-                System.out.println("Creating " + requiredAbstraction.getName());
+                logger.info("Creating " + requiredAbstraction.getName());
                 storage.putInstance(resolvedClass, resolver.createNewInstance(resolvedClass));
             }
         }
@@ -54,4 +58,5 @@ public class Container implements IContainer {
         storage.bindInstance(abstraction, instance);
     }
 
+    Logger logger = LogManager.getLogger(Container.class);
 }
