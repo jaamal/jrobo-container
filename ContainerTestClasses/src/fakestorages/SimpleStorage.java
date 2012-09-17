@@ -1,4 +1,4 @@
-package container;
+package fakestorages;
 
 import storage.IStorage;
 

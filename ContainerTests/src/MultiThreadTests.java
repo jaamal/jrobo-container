@@ -16,14 +16,6 @@ import org.junit.Test;
  */
 public class MultiThreadTests extends JRoboContainerTestBase {
 
-    private IContainer container;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        container = new Container(new NoSystemsFilter());
-    }
-
     public void testSimpleMultiThread() throws InterruptedException {
         int threadsCount = 10;
         GetterThread[] threads = new GetterThread[threadsCount];

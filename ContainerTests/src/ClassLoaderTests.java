@@ -4,9 +4,8 @@ import classloader.JRoboClassLoader;
 import classloader.innerclasstest.OuterClass;
 import classloader.simpletest.IOneImplementation;
 import classloader.simpletest.OneImplementation;
-import container.SimpleStorage;
+import fakestorages.SimpleStorage;
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.ArrayList;

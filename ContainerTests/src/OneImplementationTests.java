@@ -13,14 +13,6 @@ import singleimplementation.*;
 
 public class OneImplementationTests extends JRoboContainerTestBase {
 
-    private Container container;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        container = new Container(new NoSystemsFilter());
-    }
-
     @Test
     public void testGetsSameObject()
     {
