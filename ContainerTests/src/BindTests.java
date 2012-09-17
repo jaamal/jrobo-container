@@ -9,7 +9,7 @@ import multipleimplementation.MultipleImplementationSecond;
 import org.junit.Test;
 
 
-public class BindTests extends TestCase {
+public class BindTests extends JRoboContainerTestBase {
 
     private Container container;
 

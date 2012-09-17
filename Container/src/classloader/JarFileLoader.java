@@ -17,7 +17,6 @@ public class JarFileLoader {
 	}
 
 	public void load(File file) {
-        System.out.println(file.getAbsolutePath());
 		try {
 			JarFile jarFile = new JarFile(file);
 			Enumeration<JarEntry> entries = jarFile.entries();

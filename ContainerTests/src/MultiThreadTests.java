@@ -14,7 +14,7 @@ import org.junit.Test;
  * Time: 16:11
  * To change this template use File | Settings | File Templates.
  */
-public class MultiThreadTests extends TestCase {
+public class MultiThreadTests extends JRoboContainerTestBase {
 
     private IContainer container;
 

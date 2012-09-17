@@ -9,10 +9,9 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class ClassLoaderTest extends TestCase {
+public class ClassLoaderTests extends JRoboContainerTestBase {
     private SimpleStorage storage;
     private IPathsFilter fakeFilter;
 

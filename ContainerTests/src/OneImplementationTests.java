@@ -11,7 +11,7 @@ import org.junit.Test;
 import singleimplementation.*;
 
 
-public class OneImplementationTest extends TestCase {
+public class OneImplementationTests extends JRoboContainerTestBase {
 
     private Container container;
 

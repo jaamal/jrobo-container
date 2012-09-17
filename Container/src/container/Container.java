@@ -23,19 +23,19 @@ public class Container implements IContainer {
         classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), filter);
         classLoader.loadClasses();
         storage.buildFullDiagram();
+        logger.info("Container was configured successfully.");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> requiredAbstraction) throws JRoboContainerException {
-        logger.info("Getting" + requiredAbstraction.getName());
+        logger.info("Getting " + requiredAbstraction.getName());
         if (storage.hasInstance(requiredAbstraction))
             return (T) storage.getInstance(requiredAbstraction);
         Class<?> resolvedClass = resolveClass(requiredAbstraction);
-        logger.info(requiredAbstraction.getName() + " resolved as " + resolvedClass.getName());
+        logger.info(requiredAbstraction.getName() + " resolved to " + resolvedClass.getName());
         synchronized (storage.getSynchronizeObject(resolvedClass)) {
             if (storage.getInstance(resolvedClass) == null) {
-                logger.info("Creating " + requiredAbstraction.getName());
                 storage.putInstance(resolvedClass, resolver.createNewInstance(resolvedClass));
             }
         }
@@ -49,6 +49,7 @@ public class Container implements IContainer {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T create(Class<T> requiredAbstraction) throws JRoboContainerException {
+        logger.info("Creating " + requiredAbstraction.getName());
         Class<?> resolvedClass = resolveClass(requiredAbstraction);
         return (T) resolver.createNewInstance(resolvedClass);
     }
