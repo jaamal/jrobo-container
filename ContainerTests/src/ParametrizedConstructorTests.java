@@ -1,4 +1,8 @@
+import cyclicaldependecy.CycleA;
+import cyclicaldependecy.CycleD;
+import cyclicaldependecy.CycleE;
 import exceptions.AmbiguousConstructorException;
+import exceptions.CyclicalDependencyException;
 import exceptions.JRoboContainerException;
 import junit.framework.Assert;
 import multipleconstructor.MultipleConstructor;
@@ -41,11 +45,42 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase {
         }
         catch(AmbiguousConstructorException ex)
         {
-
         }
         catch(Exception ex)
         {
             Assert.fail();
+        }
+    }
+
+    @Test(timeout = 1000)
+    public void testCyclicalDependency() throws JRoboContainerException
+    {
+        try
+        {
+            container.get(CycleA.class);
+            Assert.fail();
+        }
+        catch(CyclicalDependencyException ex)
+        {
+            logger.info("catched");
+        }
+        try
+        {
+            container.get(CycleD.class);
+            Assert.fail();
+        }
+        catch(CyclicalDependencyException ex)
+        {
+            logger.info("catched");
+        }
+        try
+        {
+            container.get(CycleE.class);
+            Assert.fail();
+        }
+        catch(CyclicalDependencyException ex)
+        {
+            logger.info("catched");
         }
     }
 }
