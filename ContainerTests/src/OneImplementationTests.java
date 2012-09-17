@@ -14,8 +14,7 @@ import singleimplementation.*;
 public class OneImplementationTests extends JRoboContainerTestBase {
 
     @Test
-    public void testGetsSameObject()
-    {
+    public void testGetsSameObject() throws JRoboContainerException {
         IOneImplementation result1 = container.get(IOneImplementation.class);
         IOneImplementation result2 = container.get(IOneImplementation.class);
         Assert.assertSame(result1, result2);

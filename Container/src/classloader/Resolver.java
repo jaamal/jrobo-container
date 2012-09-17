@@ -21,18 +21,6 @@ public class Resolver {
         return implementations.get(0);
     }
 
-    public <T> T createNewInstance(Class<T> resolvedClass) {
-        T result = null;
-        try {
-            result = resolvedClass.cast(resolvedClass.newInstance());
-        } catch (InstantiationException e) {
-            logger.error(e.getMessage());
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage());
-        }
-        return result;
-
-    }
 
     Logger logger = LogManager.getLogger(Resolver.class);
 }
