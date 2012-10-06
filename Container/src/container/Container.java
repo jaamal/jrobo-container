@@ -4,10 +4,7 @@ import annotations.ContainerConstructor;
 import classloader.IPathsFilter;
 import classloader.JRoboClassLoader;
 import classloader.Resolver;
-import configurations.BindedInstanceConfiguration;
-import configurations.ConfigurationsManager;
-import configurations.IConfiguration;
-import configurations.IConfigurationsManager;
+import configurations.*;
 import exceptions.AmbiguousConstructorException;
 import exceptions.CyclicalDependencyException;
 import exceptions.NoConstructorsFoundException;
@@ -49,5 +46,12 @@ public class Container implements IContainer {
     public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
         storage.setConfiguration(abstraction, new BindedInstanceConfiguration(storage, abstraction, instance));
     }
+
+    @Override
+    public <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> bindedImplementation) {
+
+        storage.setConfiguration(abstraction, new BindedImplementationConfiguration(storage, abstraction, bindedImplementation));
+    }
+
     Logger logger = LogManager.getLogger(Container.class);
 }
