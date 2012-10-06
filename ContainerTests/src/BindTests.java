@@ -15,10 +15,10 @@ public class BindTests extends JRoboContainerTestBase {
     public void testBind() throws JRoboContainerException {
         MultipleImplementationFirst impl1 = new MultipleImplementationFirst();
         MultipleImplementationSecond impl2 = new MultipleImplementationSecond();
-        container.bind(IMultipleImplementation.class, impl1);
+        container.bindInstance(IMultipleImplementation.class, impl1);
         IMultipleImplementation testImpl = container.get(IMultipleImplementation.class);
         Assert.assertTrue(testImpl instanceof MultipleImplementationFirst);
-        container.bind(IMultipleImplementation.class, impl2);
+        container.bindInstance(IMultipleImplementation.class, impl2);
         testImpl = container.get(IMultipleImplementation.class);
         Assert.assertTrue(testImpl instanceof MultipleImplementationSecond);
     }

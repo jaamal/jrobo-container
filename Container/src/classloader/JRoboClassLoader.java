@@ -1,5 +1,6 @@
 package classloader;
 
+import configurations.IConfigurationsManager;
 import storage.IStorage;
 
 import java.io.File;
@@ -8,7 +9,6 @@ public class JRoboClassLoader {
 
 	String classPath;
     private IPathsFilter filter;
-    InnerClassLoader innerClassLoader;
 	DirectoriesWalker directoriesWalker;
 
 	public JRoboClassLoader(IStorage storage, String classPath, IPathsFilter filter) {

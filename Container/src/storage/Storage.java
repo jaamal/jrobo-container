@@ -1,5 +1,9 @@
 package storage;
 
+import configurations.AutoConfiguration;
+import configurations.ConfigurationsManager;
+import configurations.IConfiguration;
+import configurations.IConfigurationsManager;
 import exceptions.InstanceForAbstractionNotFoundException;
 
 import java.util.ArrayList;
@@ -9,17 +13,18 @@ public class Storage implements IStorage {
 
     IDirectInheritanceGraph directInheritanceGraph;
     IExtendedInheritanceGraph extendedInheritanceGraph;
-    IInstancesManager instancesManager;
     HashMap<Class<?>, Object> synchronizeObjects;
+    IConfigurationsManager configurationsManager;
 
     public Storage() {
         synchronizeObjects = new HashMap<Class<?>, Object>();
         directInheritanceGraph = new DirectInheritanceGraph();
-        instancesManager = new InstancesManager();
+        configurationsManager = new ConfigurationsManager();
     }
 
     @Override
     public <T> void addClass(Class<T> clazz) {
+        configurationsManager.setConfiguration(clazz, new AutoConfiguration(this, clazz));
         synchronizeObjects.put(clazz, new Object());
         Class<?>[] interfaces = clazz.getInterfaces();
         Class<?> superClass = clazz.getSuperclass();
@@ -30,7 +35,6 @@ public class Storage implements IStorage {
         if (superClass != null && !superClass.equals(Object.class)) {
             directInheritanceGraph.addEdge(superClass, clazz);
         }
-        instancesManager.putInstance(clazz, null);
     }
 
     @Override
@@ -38,37 +42,23 @@ public class Storage implements IStorage {
         return extendedInheritanceGraph.getDescendants(requiredAbstraction);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getInstance(Class<T> resolvedClass) throws InstanceForAbstractionNotFoundException {
-        return instancesManager.getInstance(resolvedClass);
-    }
-
-    @Override
-    public <T> void putInstance(Class<T> resolvedClass, Object newInstance) {
-        instancesManager.putInstance(resolvedClass, newInstance);
-    }
-
-    @Override
-    public void buildFullDiagram() {
+    public void buildExtendedInheritanceGraph() {
         extendedInheritanceGraph = new ExtendedInheritanceGraph(directInheritanceGraph);
-    }
-
-    @Override
-    public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
-        putInstance(abstraction, instance);
-        for (Class<?> ancestor : extendedInheritanceGraph.getAncestors(abstraction)) {
-            putInstance(ancestor, instance);
-        }
-    }
-
-    @Override
-    public boolean hasInstance(Class<?> requiredAbstraction) {
-        return instancesManager.hasInstance(requiredAbstraction);
     }
 
     @Override
     public Object getSynchronizeObject(Class<?> resolvedClass){
         return synchronizeObjects.get(resolvedClass);
+    }
+
+    @Override
+    public <T> IConfiguration getConfiguration(Class<T> abstraction) {
+        return configurationsManager.getConfiguration(abstraction);
+    }
+
+    @Override
+    public <T> void setConfiguration(Class<T> abstraction, IConfiguration configuration) {
+        configurationsManager.setConfiguration(abstraction, configuration);
     }
 }
