@@ -17,7 +17,6 @@ import java.util.HashSet;
  */
 public class BindedInstanceConfiguration extends AbstractConfiguration {
     private final IStorage storage;
-    private final Class<?> abstraction;
     private final Object instance;
 
     public BindedInstanceConfiguration(IStorage storage, Class<?> abstraction, Object instance) {

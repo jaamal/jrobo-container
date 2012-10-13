@@ -2,7 +2,6 @@ package configurations;
 
 import exceptions.JRoboContainerException;
 import storage.IStorage;
-import sun.reflect.generics.scope.ClassScope;
 
 import java.util.HashSet;
 
@@ -13,10 +12,9 @@ import java.util.HashSet;
  * Time: 16:57
  * To change this template use File | Settings | File Templates.
  */
-public class BindedImplementationConfiguration implements IConfiguration {
+public class BindedImplementationConfiguration extends AbstractConfiguration {
 
     private final IStorage storage;
-    private final Class<?> abstraction;
     private final Class<?> bindedImplementation;
 
     public BindedImplementationConfiguration(IStorage storage, Class<?> abstraction, Class<?> bindedImplementation) {

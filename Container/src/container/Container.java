@@ -10,8 +10,6 @@ import org.apache.log4j.Logger;
 import storage.IStorage;
 import storage.Storage;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Container implements IContainer
@@ -56,11 +54,7 @@ public class Container implements IContainer
     @Override
     public <T> T[] getAll(Class<T> requiredAbstraction) throws JRoboContainerException
     {
-        ArrayList<Class<?>> implementations = storage.getImplementations(requiredAbstraction);
-        ArrayList<T> result = new ArrayList<T>();
-        for(Class<?> implementation : implementations)
-            result.add(get((Class<T>)implementation));
-        return result.toArray((T[]) Array.newInstance(requiredAbstraction, result.size()));
+        return storage.getConfiguration(requiredAbstraction).getAll(new HashSet<Class<?>>());
     }
 
     Logger logger = LogManager.getLogger(Container.class);

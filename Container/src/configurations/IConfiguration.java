@@ -14,4 +14,5 @@ import java.util.HashSet;
 public interface IConfiguration {
     <T> T get(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
     <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
+    <T> T[] getAll(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
 }

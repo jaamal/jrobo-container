@@ -47,4 +47,9 @@ public class SimpleStorage implements IStorage {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public <T> void setConfiguration(Class<T> abstraction, IConfiguration configuration)
+    {
+    }
+
 }

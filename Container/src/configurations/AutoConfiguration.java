@@ -24,7 +24,6 @@ import java.util.HashSet;
  */
 public class AutoConfiguration extends AbstractConfiguration {
 
-    private Class<?> abstraction;
     private Object instance;
 
     public AutoConfiguration(IStorage storage, Class<?> abstraction) {
