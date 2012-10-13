@@ -37,7 +37,10 @@ public abstract class AbstractConfiguration implements IConfiguration
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
-            parameters[i] = storage.getConfiguration(parametersTypes[i]).get(usedClasses);
+            if (parametersTypes[i].isArray())
+                parameters[i] = storage.getConfiguration(parametersTypes[i].getComponentType()).getAll(usedClasses);
+            else
+                parameters[i] = storage.getConfiguration(parametersTypes[i]).get(usedClasses);
         }
         usedClasses.remove(resolvedClass);
         return constructor.newInstance(parameters);
@@ -69,7 +72,7 @@ public abstract class AbstractConfiguration implements IConfiguration
         ArrayList<Class<?>> implementations = storage.getImplementations(abstraction);
         ArrayList<T> result = new ArrayList<T>();
         for (Class<?> implementation : implementations)
-            result.add((T)storage.getConfiguration(implementation).get(usedClasses));
+            result.add((T) storage.getConfiguration(implementation).get(usedClasses));
         return result.toArray((T[]) Array.newInstance(abstraction, result.size()));
     }
 }

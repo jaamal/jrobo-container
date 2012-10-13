@@ -3,19 +3,14 @@ import getall.*;
 import junit.framework.Assert;
 import org.junit.Test;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mv146
- * Date: 13.10.12
- * Time: 12:09
- * To change this template use File | Settings | File Templates.
- */
-public class GetAllTests extends JRoboContainerTestBase
+public class ArrayInArgumentsTests extends JRoboContainerTestBase
 {
     @Test
-    public void testGetAll() throws JRoboContainerException
+    public void testArrayInArguments() throws JRoboContainerException
     {
-        IFourImplementations implementations[] = container.getAll(IFourImplementations.class);
+        IArrayInArguments instance = container.get(IArrayInArguments.class);
+        Assert.assertNotNull(instance);
+        IFourImplementations[] implementations = instance.getImplementations();
         Assert.assertEquals(implementations.length, 4);
         checkClassExistence(implementations, FirstImplementation.class);
         checkClassExistence(implementations, SecondImplementation.class);
