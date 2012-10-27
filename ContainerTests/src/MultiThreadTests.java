@@ -1,11 +1,6 @@
 import classloader.simpletest.IOneImplementation;
-import container.Container;
-import container.IContainer;
-import filters.NoSystemsFilter;
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import multithread.GetterThread;
-import org.junit.Test;
 
 /**
  * Created with IntelliJ IDEA.

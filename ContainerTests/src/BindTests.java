@@ -1,8 +1,5 @@
-import container.Container;
 import exceptions.JRoboContainerException;
-import filters.NoSystemsFilter;
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import multipleimplementation.IMultipleImplementation;
 import multipleimplementation.MultipleImplementationFirst;
 import multipleimplementation.MultipleImplementationSecond;

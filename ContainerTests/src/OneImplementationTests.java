@@ -1,11 +1,8 @@
 import classloader.simpletest.IOneImplementation;
 import classloader.simpletest.OneImplementation;
-import container.Container;
 import exceptions.JRoboContainerException;
-import filters.NoSystemsFilter;
 import gettingcreating.IIncrementer;
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import multipleimplementation.IMultipleImplementation;
 import org.junit.Test;
 import singleimplementation.*;
