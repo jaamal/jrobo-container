@@ -4,7 +4,6 @@ import classloader.IPathsFilter;
 import classloader.JRoboClassLoader;
 import configurations.BindedImplementationConfiguration;
 import configurations.BindedInstanceConfiguration;
-import exceptions.JRoboContainerException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import storage.IStorage;
@@ -28,13 +27,13 @@ public class Container implements IContainer
     }
 
     @Override
-    public <T> T get(Class<T> requiredAbstraction) throws JRoboContainerException
+    public <T> T get(Class<T> requiredAbstraction)
     {
         return storage.getConfiguration(requiredAbstraction).get(new HashSet<Class<?>>());
     }
 
     @Override
-    public <T> T create(Class<T> requiredAbstraction) throws JRoboContainerException
+    public <T> T create(Class<T> requiredAbstraction)
     {
         return storage.getConfiguration(requiredAbstraction).create(new HashSet<Class<?>>());
     }
@@ -52,7 +51,7 @@ public class Container implements IContainer
     }
 
     @Override
-    public <T> T[] getAll(Class<T> requiredAbstraction) throws JRoboContainerException
+    public <T> T[] getAll(Class<T> requiredAbstraction)
     {
         return storage.getConfiguration(requiredAbstraction).getAll(new HashSet<Class<?>>());
     }
