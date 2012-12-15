@@ -1,27 +1,33 @@
 package classloader;
 
-import configurations.IConfigurationsManager;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import storage.IStorage;
 
 import java.io.File;
 
-public class JRoboClassLoader {
+public class JRoboClassLoader
+{
 
-	String classPath;
-    private IPathsFilter filter;
-	DirectoriesWalker directoriesWalker;
+    String classPath;
+    private IEntitiesFilter filter;
+    EntitiesWalker directoriesWalker;
+    Logger logger = LogManager.getLogger(JRoboClassLoader.class);
 
-	public JRoboClassLoader(IStorage storage, String classPath, IPathsFilter filter) {
-		this.classPath = classPath;
-        this.filter = filter;
-        this.directoriesWalker = new DirectoriesWalker(storage);
-	}
+    public JRoboClassLoader(IStorage storage, String classPath, IEntitiesFilter entitiesFilter)
+    {
+        this.classPath = classPath;
+        this.filter = entitiesFilter;
+        this.directoriesWalker = new EntitiesWalker(storage, entitiesFilter);
+    }
 
-	public void loadClasses() {
-		for (String path : classPath.split(System.getProperty("path.separator"))) {
-            if(filter.accept(path))
-                directoriesWalker.addFolder(new File(path));
-		}
-	}
+    public void loadClasses()
+    {
+        for (String path : classPath.split(System.getProperty("path.separator")))
+        {
+            logger.info("Loading " + path);
+            directoriesWalker.addFolder(new File(path));
+        }
+    }
 
 }
