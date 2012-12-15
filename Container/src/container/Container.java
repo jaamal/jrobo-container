@@ -4,6 +4,7 @@ import classloader.IJarsFilter;
 import classloader.JRoboClassLoader;
 import configurations.BindedImplementationConfiguration;
 import configurations.BindedInstanceConfiguration;
+import filters.NoJarsFilter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import storage.IStorage;
@@ -16,6 +17,15 @@ public class Container implements IContainer
 
     private JRoboClassLoader classLoader;
     private IStorage storage;
+
+    public Container()
+    {
+        storage = new Storage();
+        classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), new NoJarsFilter());
+        classLoader.loadClasses();
+        storage.buildExtendedInheritanceGraph();
+        logger.info("Container was configured successfully.");
+    }
 
     public Container(IJarsFilter jarsFilter)
     {

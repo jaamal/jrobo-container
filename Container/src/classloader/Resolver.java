@@ -16,7 +16,10 @@ public class Resolver {
             throw new ImplementationNotFoundException(requiredAbstraction);
         }
         if (implementations.size() > 1) {
-            throw new AmbiguousImplementationMatchException(requiredAbstraction);
+            String implementationsString = "";
+            for(Class<?> implementation : implementations)
+            implementationsString = implementationsString + implementation.getCanonicalName() + System.getProperty("line.separator");
+            throw new AmbiguousImplementationMatchException(requiredAbstraction, implementationsString);
         }
         return implementations.get(0);
     }
