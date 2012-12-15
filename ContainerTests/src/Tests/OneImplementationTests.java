@@ -15,12 +15,6 @@ public class OneImplementationTests extends JRoboContainerTestBase
 {
 
     @Test
-    public void testEmpty()
-    {
-
-    }
-
-    @Test
     public void testGetsSameObject() throws JRoboContainerException
     {
         IOneImplementation result1 = container.get(IOneImplementation.class);

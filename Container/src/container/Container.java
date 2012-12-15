@@ -1,6 +1,6 @@
 package container;
 
-import classloader.IEntitiesFilter;
+import classloader.IJarsFilter;
 import classloader.JRoboClassLoader;
 import configurations.BindedImplementationConfiguration;
 import configurations.BindedInstanceConfiguration;
@@ -17,10 +17,10 @@ public class Container implements IContainer
     private JRoboClassLoader classLoader;
     private IStorage storage;
 
-    public Container(IEntitiesFilter entitiesFilter)
+    public Container(IJarsFilter jarsFilter)
     {
         storage = new Storage();
-        classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), entitiesFilter);
+        classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), jarsFilter);
         classLoader.loadClasses();
         storage.buildExtendedInheritanceGraph();
         logger.info("Container was configured successfully.");

@@ -1,8 +1,8 @@
 package TestBases;
 
-import Filters.TestFilesFilter;
 import container.Container;
 import container.IContainer;
+import filters.NoJarsFilter;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.log4j.LogManager;
@@ -22,7 +22,7 @@ public abstract class JRoboContainerTestBase extends TestCase
     protected void setUp() throws Exception
     {
         DOMConfigurator.configure("log4j.xml");
-        container = new Container(new TestFilesFilter());
+        container = new Container(new NoJarsFilter());
     }
 
 

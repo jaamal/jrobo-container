@@ -1,18 +1,11 @@
 package testclasses.classloader;
 
-import classloader.IEntitiesFilter;
+import classloader.IJarsFilter;
 
-public class FakeFilter implements IEntitiesFilter
+public class FakeFilter implements IJarsFilter
 {
-
     @Override
     public boolean acceptJar(String jarName)
-    {
-        return true;
-    }
-
-    @Override
-    public boolean acceptClass(String className)
     {
         return true;
     }

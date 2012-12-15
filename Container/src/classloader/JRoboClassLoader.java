@@ -10,11 +10,11 @@ public class JRoboClassLoader
 {
 
     String classPath;
-    private IEntitiesFilter filter;
+    private IJarsFilter filter;
     EntitiesWalker directoriesWalker;
     Logger logger = LogManager.getLogger(JRoboClassLoader.class);
 
-    public JRoboClassLoader(IStorage storage, String classPath, IEntitiesFilter entitiesFilter)
+    public JRoboClassLoader(IStorage storage, String classPath, IJarsFilter entitiesFilter)
     {
         this.classPath = classPath;
         this.filter = entitiesFilter;
@@ -25,7 +25,6 @@ public class JRoboClassLoader
     {
         for (String path : classPath.split(System.getProperty("path.separator")))
         {
-            logger.info("Loading " + path);
             directoriesWalker.addFolder(new File(path));
         }
     }

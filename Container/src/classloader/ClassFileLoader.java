@@ -10,12 +10,10 @@ public class ClassFileLoader
 {
 
     IStorage storage;
-    private IEntitiesFilter entitiesFilter;
 
-    public ClassFileLoader(IStorage storage, IEntitiesFilter entitiesFilter)
+    public ClassFileLoader(IStorage storage)
     {
         this.storage = storage;
-        this.entitiesFilter = entitiesFilter;
     }
 
     public void load(File file)
@@ -23,7 +21,7 @@ public class ClassFileLoader
         try
         {
             Class<?> clazz = new InnerClassLoader().readClass(new FileInputStream(file));
-            if (clazz != null && entitiesFilter.acceptClass(clazz.getCanonicalName()))
+            if (clazz != null)
                 storage.addClass(clazz);
         }
         catch (FileNotFoundException e)

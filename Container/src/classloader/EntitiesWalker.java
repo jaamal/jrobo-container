@@ -9,9 +9,9 @@ public class EntitiesWalker
 	private ClassFileLoader classFileLoader;
 	private JarFileLoader jarFileLoader;
 
-	public EntitiesWalker(IStorage storage, IEntitiesFilter entitiesFilter) {
-		classFileLoader = new ClassFileLoader(storage, entitiesFilter);
-		jarFileLoader = new JarFileLoader(storage, entitiesFilter);
+	public EntitiesWalker(IStorage storage, IJarsFilter jarsFilter) {
+		classFileLoader = new ClassFileLoader(storage);
+		jarFileLoader = new JarFileLoader(storage, jarsFilter);
 	}
 
 	public void addFolder(File currentLocation) {

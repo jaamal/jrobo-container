@@ -1,7 +1,7 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import classloader.IEntitiesFilter;
+import classloader.IJarsFilter;
 import classloader.JRoboClassLoader;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ClassLoaderTests extends JRoboContainerTestBase
 {
     private SimpleStorage storage;
-    private IEntitiesFilter fakeFilter;
+    private IJarsFilter fakeFilter;
 
     @Override
     protected void setUp() throws Exception

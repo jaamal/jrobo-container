@@ -12,9 +12,9 @@ public class JarFileLoader
 {
 
     IStorage storage;
-    private IEntitiesFilter entitiesFilter;
+    private IJarsFilter entitiesFilter;
 
-    public JarFileLoader(IStorage storage, IEntitiesFilter entitiesFilter)
+    public JarFileLoader(IStorage storage, IJarsFilter entitiesFilter)
     {
         this.storage = storage;
         this.entitiesFilter = entitiesFilter;
