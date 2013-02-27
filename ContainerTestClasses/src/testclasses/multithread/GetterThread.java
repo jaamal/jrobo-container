@@ -1,6 +1,6 @@
 package testclasses.multithread;
 
-import container.IContainer;
+import overclocking.jrobocontainer.container.IContainer;
 import testclasses.classloader.simpletest.IOneImplementation;
 
 /**

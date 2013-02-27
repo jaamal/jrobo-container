@@ -1,7 +1,7 @@
 package testclasses.fakestorages;
 
-import configurations.IConfiguration;
-import storage.IStorage;
+import overclocking.jrobocontainer.configurations.IConfiguration;
+import overclocking.jrobocontainer.storage.IStorage;
 
 import java.util.ArrayList;
 

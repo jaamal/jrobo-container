@@ -1,6 +1,6 @@
 package testclasses.multipleconstructor;
 
-import annotations.ContainerConstructor;
+import overclocking.jrobocontainer.annotations.ContainerConstructor;
 
 /**
  * Created with IntelliJ IDEA.

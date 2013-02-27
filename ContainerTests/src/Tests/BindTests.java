@@ -1,7 +1,7 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;
 import testclasses.multipleimplementation.MultipleImplementationFirst;

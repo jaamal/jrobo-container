@@ -1,10 +1,10 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import classloader.IClassLoaderConfiguration;
-import classloader.JRoboClassLoader;
 import junit.framework.Assert;
 import org.junit.Test;
+import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
+import overclocking.jrobocontainer.classloader.JRoboClassLoader;
 import testclasses.classloader.FakeFilter;
 import testclasses.classloader.innerclasstest.OuterClass;
 import testclasses.classloader.simpletest.IOneImplementation;

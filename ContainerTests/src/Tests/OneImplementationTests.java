@@ -3,7 +3,7 @@ package Tests;
 import TestBases.JRoboContainerTestBase;
 import testclasses.classloader.simpletest.IOneImplementation;
 import testclasses.classloader.simpletest.OneImplementation;
-import exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import testclasses.gettingcreating.IIncrementer;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;

@@ -1,6 +1,6 @@
 package testclasses.classloader;
 
-import classloader.IClassLoaderConfiguration;
+import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
 
 public class FakeFilter implements IClassLoaderConfiguration
 {
