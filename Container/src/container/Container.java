@@ -5,8 +5,6 @@ import classloader.JRoboClassLoader;
 import configurations.BindedImplementationConfiguration;
 import configurations.BindedInstanceConfiguration;
 import filters.NoJarsFilter;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import storage.IStorage;
 import storage.Storage;
 
@@ -24,7 +22,6 @@ public class Container implements IContainer
         classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), new NoJarsFilter());
         classLoader.loadClasses();
         storage.buildExtendedInheritanceGraph();
-        logger.info("Container was configured successfully.");
     }
 
     public Container(IJarsFilter jarsFilter)
@@ -33,7 +30,6 @@ public class Container implements IContainer
         classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), jarsFilter);
         classLoader.loadClasses();
         storage.buildExtendedInheritanceGraph();
-        logger.info("Container was configured successfully.");
     }
 
     @Override
@@ -65,6 +61,4 @@ public class Container implements IContainer
     {
         return storage.getConfiguration(requiredAbstraction).getAll(new HashSet<Class<?>>());
     }
-
-    Logger logger = LogManager.getLogger(Container.class);
 }

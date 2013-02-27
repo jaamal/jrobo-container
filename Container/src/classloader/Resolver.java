@@ -3,8 +3,6 @@ package classloader;
 import exceptions.AmbiguousImplementationMatchException;
 import exceptions.ImplementationNotFoundException;
 import exceptions.JRoboContainerException;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -23,8 +21,5 @@ public class Resolver {
         }
         return implementations.get(0);
     }
-
-
-    Logger logger = LogManager.getLogger(Resolver.class);
 }
 

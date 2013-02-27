@@ -68,7 +68,6 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
         }
         catch (CyclicalDependencyException ex)
         {
-            logger.info("catched");
         }
         try
         {
@@ -77,7 +76,6 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
         }
         catch (CyclicalDependencyException ex)
         {
-            logger.info("catched");
         }
         try
         {
@@ -86,7 +84,6 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
         }
         catch (CyclicalDependencyException ex)
         {
-            logger.info("catched");
         }
     }
 }

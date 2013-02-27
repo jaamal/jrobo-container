@@ -6,8 +6,6 @@ import exceptions.AmbiguousConstructorException;
 import exceptions.CyclicalDependencyException;
 import exceptions.JRoboContainerException;
 import exceptions.NoConstructorsFoundException;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import storage.IStorage;
 
 import java.lang.annotation.Annotation;
@@ -35,13 +33,11 @@ public class AutoConfiguration extends AbstractConfiguration {
     @SuppressWarnings("unchecked")
     public <T> T get(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
         try {
-            logger.info("Getting " + abstraction.getName());
             if(instance != null)
             {
                 return (T)instance;
             }
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
-            logger.info(abstraction.getName() + " resolved to " + resolvedClass.getName());
             synchronized (storage.getSynchronizeObject(resolvedClass)) {
                 if(resolvedClass == abstraction)
                     instance = getInstance(resolvedClass, usedClasses);
@@ -59,7 +55,6 @@ public class AutoConfiguration extends AbstractConfiguration {
     @SuppressWarnings("unchecked")
     public <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
         try {
-            logger.info("Creating " + abstraction.getName());
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             return (T)getInstance(resolvedClass, usedClasses);
         } catch (JRoboContainerException ex) {
@@ -69,6 +64,4 @@ public class AutoConfiguration extends AbstractConfiguration {
             throw new JRoboContainerException("Failed to create " + abstraction.getName(), ex);
         }
     }
-
-    Logger logger = LogManager.getLogger(AutoConfiguration.class);
 }

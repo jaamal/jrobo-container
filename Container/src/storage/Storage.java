@@ -4,15 +4,12 @@ import configurations.AutoConfiguration;
 import configurations.ConfigurationsManager;
 import configurations.IConfiguration;
 import configurations.IConfigurationsManager;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Storage implements IStorage
 {
-    Logger logger = LogManager.getLogger(Storage.class);
     IDirectInheritanceGraph directInheritanceGraph;
     IExtendedInheritanceGraph extendedInheritanceGraph;
     HashMap<Class<?>, Object> synchronizeObjects;
@@ -28,7 +25,6 @@ public class Storage implements IStorage
     @Override
     public <T> void addClass(Class<T> clazz)
     {
-        logger.info("Adding class " + clazz.getCanonicalName());
         configurationsManager.setConfiguration(clazz, new AutoConfiguration(this, clazz));
         synchronizeObjects.put(clazz, new Object());
         Class<?>[] interfaces = clazz.getInterfaces();

@@ -2,8 +2,6 @@ package configurations;
 
 import classloader.Resolver;
 import exceptions.JRoboContainerException;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import storage.IStorage;
 
 import java.util.HashSet;
@@ -34,7 +32,6 @@ public class BindedInstanceConfiguration extends AbstractConfiguration {
     @Override
     public <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
         try {
-            logger.info("Creating " + abstraction.getName());
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             return (T)getInstance(resolvedClass, usedClasses);
         } catch (JRoboContainerException ex) {
@@ -44,5 +41,4 @@ public class BindedInstanceConfiguration extends AbstractConfiguration {
             throw new JRoboContainerException("Failed to create " + abstraction.getName(), ex);
         }
     }
-    Logger logger = LogManager.getLogger(BindedInstanceConfiguration.class);
 }

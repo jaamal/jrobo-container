@@ -4,9 +4,6 @@ import container.Container;
 import container.IContainer;
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +17,6 @@ public abstract class JRoboContainerTestBase extends TestCase
     @Override
     protected void setUp() throws Exception
     {
-        DOMConfigurator.configure("log4j.xml");
         container = new Container();
     }
 
@@ -40,7 +36,5 @@ public abstract class JRoboContainerTestBase extends TestCase
                 return;
         Assert.fail();
     }
-
-    protected Logger logger = LogManager.getLogger(JRoboContainerTestBase.class);
     protected IContainer container;
 }
