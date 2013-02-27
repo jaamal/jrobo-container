@@ -1,10 +1,10 @@
 package container;
 
-import classloader.IJarsFilter;
+import classloader.IClassLoaderConfiguration;
 import classloader.JRoboClassLoader;
 import configurations.BindedImplementationConfiguration;
 import configurations.BindedInstanceConfiguration;
-import filters.NoJarsFilter;
+import classloaderconfigurations.DefaultClassLoaderConfiguration;
 import storage.IStorage;
 import storage.Storage;
 
@@ -18,16 +18,13 @@ public class Container implements IContainer
 
     public Container()
     {
-        storage = new Storage();
-        classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), new NoJarsFilter());
-        classLoader.loadClasses();
-        storage.buildExtendedInheritanceGraph();
+        this(new DefaultClassLoaderConfiguration());
     }
 
-    public Container(IJarsFilter jarsFilter)
+    public Container(IClassLoaderConfiguration classLoaderConfiguration)
     {
         storage = new Storage();
-        classLoader = new JRoboClassLoader(storage, System.getProperty("java.class.path"), jarsFilter);
+        classLoader = new JRoboClassLoader(storage, classLoaderConfiguration);
         classLoader.loadClasses();
         storage.buildExtendedInheritanceGraph();
     }

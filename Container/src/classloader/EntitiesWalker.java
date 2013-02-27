@@ -9,7 +9,7 @@ public class EntitiesWalker
 	private ClassFileLoader classFileLoader;
 	private JarFileLoader jarFileLoader;
 
-	public EntitiesWalker(IStorage storage, IJarsFilter jarsFilter) {
+	public EntitiesWalker(IStorage storage, IClassLoaderConfiguration jarsFilter) {
 		classFileLoader = new ClassFileLoader(storage);
 		jarFileLoader = new JarFileLoader(storage, jarsFilter);
 	}

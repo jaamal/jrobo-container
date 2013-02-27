@@ -8,14 +8,14 @@ public class JRoboClassLoader
 {
 
     String classPath;
-    private IJarsFilter filter;
+    private IClassLoaderConfiguration filter;
     EntitiesWalker directoriesWalker;
 
-    public JRoboClassLoader(IStorage storage, String classPath, IJarsFilter entitiesFilter)
+    public JRoboClassLoader(IStorage storage, IClassLoaderConfiguration classLoaderConfiguration)
     {
-        this.classPath = classPath;
-        this.filter = entitiesFilter;
-        this.directoriesWalker = new EntitiesWalker(storage, entitiesFilter);
+        this.classPath = classLoaderConfiguration.getClassPaths();
+        this.filter = classLoaderConfiguration;
+        this.directoriesWalker = new EntitiesWalker(storage, classLoaderConfiguration);
     }
 
     public void loadClasses()

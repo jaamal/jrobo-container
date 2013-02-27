@@ -1,7 +1,7 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import classloader.IJarsFilter;
+import classloader.IClassLoaderConfiguration;
 import classloader.JRoboClassLoader;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -16,21 +16,19 @@ import java.util.ArrayList;
 public class ClassLoaderTests extends JRoboContainerTestBase
 {
     private SimpleStorage storage;
-    private IJarsFilter fakeFilter;
+    private IClassLoaderConfiguration fakeFilter;
 
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
         storage = new SimpleStorage();
-        fakeFilter = new FakeFilter();
     }
 
     @Test
     public void testSimpleFolder()
     {
-        JRoboClassLoader loader = new JRoboClassLoader(storage,
-                "out/production/ContainerTestClasses/testclasses/classloader/simpletest/", fakeFilter);
+        JRoboClassLoader loader = new JRoboClassLoader(storage, new FakeFilter("out/production/ContainerTestClasses/testclasses/classloader/simpletest/"));
         loader.loadClasses();
         ArrayList<Class<?>> actual = storage.getLoadedClasses();
         ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
@@ -42,8 +40,7 @@ public class ClassLoaderTests extends JRoboContainerTestBase
     @Test
     public void testFolderWithInnerClass()
     {
-        JRoboClassLoader loader = new JRoboClassLoader(storage,
-                "out/production/ContainerTestClasses/testclasses/classloader/innerclasstest/", fakeFilter);
+        JRoboClassLoader loader = new JRoboClassLoader(storage, new FakeFilter("out/production/ContainerTestClasses/testclasses/classloader/innerclasstest/"));
         loader.loadClasses();
         ArrayList<Class<?>> actual = storage.getLoadedClasses();
         ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
