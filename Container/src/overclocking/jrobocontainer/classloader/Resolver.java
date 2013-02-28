@@ -2,14 +2,13 @@ package overclocking.jrobocontainer.classloader;
 
 import overclocking.jrobocontainer.exceptions.AmbiguousImplementationMatchException;
 import overclocking.jrobocontainer.exceptions.ImplementationNotFoundException;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 
 import java.util.ArrayList;
 
 public class Resolver {
 
     public static Class<?> resolveClass(Class<?> requiredAbstraction,
-                                 ArrayList<Class<?>> implementations) throws JRoboContainerException {
+                                 ArrayList<Class<?>> implementations) {
         if (implementations == null || implementations.size() == 0) {
             throw new ImplementationNotFoundException(requiredAbstraction);
         }

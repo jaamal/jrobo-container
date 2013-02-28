@@ -3,8 +3,8 @@ package overclocking.jrobocontainer.container;
 import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
 import overclocking.jrobocontainer.classloader.JRoboClassLoader;
 import overclocking.jrobocontainer.classloaderconfigurations.DefaultClassLoaderConfiguration;
-import overclocking.jrobocontainer.configurations.BindedImplementationConfiguration;
-import overclocking.jrobocontainer.configurations.BindedInstanceConfiguration;
+import overclocking.jrobocontainer.configurations.BoundImplementationConfiguration;
+import overclocking.jrobocontainer.configurations.BoundInstanceConfiguration;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.injectioncontext.InjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
@@ -46,13 +46,13 @@ public class Container implements IContainer
     @Override
     public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance)
     {
-        storage.setConfiguration(abstraction, new BindedInstanceConfiguration(storage, abstraction, instance));
+        storage.setConfiguration(abstraction, new BoundInstanceConfiguration(storage, abstraction, instance));
     }
 
     @Override
-    public <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> bindedImplementation)
+    public <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> boundImplementation)
     {
-        storage.setConfiguration(abstraction, new BindedImplementationConfiguration(storage, abstraction, bindedImplementation));
+        storage.setConfiguration(abstraction, new BoundImplementationConfiguration(storage, abstraction, boundImplementation));
     }
 
     @Override

@@ -23,7 +23,7 @@ public class AutoConfiguration extends AbstractConfiguration {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get(IInjectionContext injectionContext) throws JRoboContainerException {
+    public <T> T innerGet(IInjectionContext injectionContext){
         try {
             if(instance != null)
             {
@@ -44,8 +44,7 @@ public class AutoConfiguration extends AbstractConfiguration {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T create(IInjectionContext injectionContext) throws JRoboContainerException {
+    public <T> T innerCreate(IInjectionContext injectionContext) {
         try {
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             return (T)getInstance(resolvedClass, injectionContext);

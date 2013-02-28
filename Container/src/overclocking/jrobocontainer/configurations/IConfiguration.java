@@ -1,6 +1,5 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 
 /**
@@ -11,7 +10,7 @@ import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
  * To change this template use File | Settings | File Templates.
  */
 public interface IConfiguration {
-    <T> T get(IInjectionContext injectionContext) throws JRoboContainerException;
-    <T> T create(IInjectionContext injectionContext) throws JRoboContainerException;
-    <T> T[] getAll(IInjectionContext injectionContext) throws JRoboContainerException;
+    <T> T get(IInjectionContext injectionContext);
+    <T> T create(IInjectionContext injectionContext);
+    <T> T[] getAll(IInjectionContext injectionContext);
 }

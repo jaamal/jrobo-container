@@ -12,24 +12,22 @@ import overclocking.jrobocontainer.storage.IStorage;
  * Time: 16:49
  * To change this template use File | Settings | File Templates.
  */
-public class BindedInstanceConfiguration extends AbstractConfiguration {
+public class BoundInstanceConfiguration extends AbstractConfiguration {
     private final IStorage storage;
     private final Object instance;
 
-    public BindedInstanceConfiguration(IStorage storage, Class<?> abstraction, Object instance) {
+    public BoundInstanceConfiguration(IStorage storage, Class<?> abstraction, Object instance) {
 
         this.storage = storage;
         this.abstraction = abstraction;
         this.instance = instance;
     }
 
-    @Override
-    public <T> T get(IInjectionContext injectionContext) throws JRoboContainerException {
+    public <T> T innerGet(IInjectionContext injectionContext){
         return (T)instance;
     }
 
-    @Override
-    public <T> T create(IInjectionContext injectionContext) throws JRoboContainerException {
+    public <T> T innerCreate(IInjectionContext injectionContext) throws JRoboContainerException {
         try {
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             return (T)getInstance(resolvedClass, injectionContext);

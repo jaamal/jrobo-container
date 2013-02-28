@@ -11,7 +11,6 @@ import overclocking.jrobocontainer.storage.IStorage;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +25,7 @@ public abstract class AbstractConfiguration implements IConfiguration
     IStorage storage;
     protected Class<?> abstraction;
 
-    protected <T> T getInstance(Class<T> resolvedClass, IInjectionContext injectionContext) throws InvocationTargetException, IllegalAccessException, InstantiationException, JRoboContainerException
+    protected <T> T getInstance(Class<T> resolvedClass, IInjectionContext injectionContext)
     {
         if (injectionContext.isClassProcessing(resolvedClass))
             throw new CyclicalDependencyException(resolvedClass);
@@ -43,10 +42,18 @@ public abstract class AbstractConfiguration implements IConfiguration
                 parameters[i] = storage.getConfiguration(parametersTypes[i]).get(injectionContext);
         }
         injectionContext.markClassAsNotProcessing(resolvedClass);
-        return constructor.newInstance(parameters);
+        try
+        {
+            return constructor.newInstance(parameters);
+        }
+        catch (Exception ex)
+        {
+            throw new JRoboContainerException("Failed to get " + resolvedClass.getCanonicalName(), ex);
+        }
     }
 
-    private <T> Constructor<T> getConstructor(Class<T> clazz) throws NoConstructorsFoundException, AmbiguousConstructorException
+    @SuppressWarnings("unchecked")
+    private <T> Constructor<T> getConstructor(Class<T> clazz)
     {
         Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
         if (constructors.length == 1)
@@ -67,7 +74,22 @@ public abstract class AbstractConfiguration implements IConfiguration
         return result;
     }
 
-    public <T> T[] getAll(IInjectionContext injectionContext) throws JRoboContainerException
+    abstract protected <T> T innerGet(IInjectionContext injectionContext);
+    abstract protected <T> T innerCreate(IInjectionContext injectionContext);
+
+    @Override
+    public <T> T get(IInjectionContext injectionContext)
+    {
+        return innerGet(injectionContext);
+    }
+
+    @Override
+    public <T> T create(IInjectionContext injectionContext)
+    {
+        return innerCreate(injectionContext);
+    }
+
+    public <T> T[] getAll(IInjectionContext injectionContext)
     {
         ArrayList<Class<?>> implementations = storage.getImplementations(abstraction);
         ArrayList<T> result = new ArrayList<T>();
