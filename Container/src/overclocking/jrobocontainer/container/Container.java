@@ -2,13 +2,13 @@ package overclocking.jrobocontainer.container;
 
 import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
 import overclocking.jrobocontainer.classloader.JRoboClassLoader;
+import overclocking.jrobocontainer.classloaderconfigurations.DefaultClassLoaderConfiguration;
 import overclocking.jrobocontainer.configurations.BindedImplementationConfiguration;
 import overclocking.jrobocontainer.configurations.BindedInstanceConfiguration;
-import overclocking.jrobocontainer.classloaderconfigurations.DefaultClassLoaderConfiguration;
+import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
+import overclocking.jrobocontainer.injectioncontext.InjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
 import overclocking.jrobocontainer.storage.Storage;
-
-import java.util.HashSet;
 
 public class Container implements IContainer
 {
@@ -32,13 +32,15 @@ public class Container implements IContainer
     @Override
     public <T> T get(Class<T> requiredAbstraction)
     {
-        return storage.getConfiguration(requiredAbstraction).get(new HashSet<Class<?>>());
+        IInjectionContext injectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).get(injectionContext);
     }
 
     @Override
     public <T> T create(Class<T> requiredAbstraction)
     {
-        return storage.getConfiguration(requiredAbstraction).create(new HashSet<Class<?>>());
+        IInjectionContext injectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).create(injectionContext);
     }
 
     @Override
@@ -56,6 +58,7 @@ public class Container implements IContainer
     @Override
     public <T> T[] getAll(Class<T> requiredAbstraction)
     {
-        return storage.getConfiguration(requiredAbstraction).getAll(new HashSet<Class<?>>());
+        IInjectionContext injectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).getAll(injectionContext);
     }
 }

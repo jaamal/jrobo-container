@@ -1,9 +1,8 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
-
-import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,12 +23,12 @@ public class BindedImplementationConfiguration extends AbstractConfiguration {
     }
 
     @Override
-    public <T> T get(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
-        return storage.getConfiguration(bindedImplementation).get(usedClasses);
+    public <T> T get(IInjectionContext injectionContext) throws JRoboContainerException {
+        return storage.getConfiguration(bindedImplementation).get(injectionContext);
     }
 
     @Override
-    public <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
-        return storage.getConfiguration(bindedImplementation).create(usedClasses);
+    public <T> T create(IInjectionContext injectionContext) throws JRoboContainerException {
+        return storage.getConfiguration(bindedImplementation).create(injectionContext);
     }
 }

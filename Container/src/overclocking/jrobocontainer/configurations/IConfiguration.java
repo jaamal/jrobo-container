@@ -1,8 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-
-import java.util.HashSet;
+import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +11,7 @@ import java.util.HashSet;
  * To change this template use File | Settings | File Templates.
  */
 public interface IConfiguration {
-    <T> T get(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
-    <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
-    <T> T[] getAll(HashSet<Class<?>> usedClasses) throws JRoboContainerException;
+    <T> T get(IInjectionContext injectionContext) throws JRoboContainerException;
+    <T> T create(IInjectionContext injectionContext) throws JRoboContainerException;
+    <T> T[] getAll(IInjectionContext injectionContext) throws JRoboContainerException;
 }

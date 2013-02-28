@@ -5,6 +5,7 @@ import overclocking.jrobocontainer.exceptions.AmbiguousConstructorException;
 import overclocking.jrobocontainer.exceptions.CyclicalDependencyException;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import overclocking.jrobocontainer.exceptions.NoConstructorsFoundException;
+import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.lang.annotation.Annotation;
@@ -12,7 +13,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,11 +26,11 @@ public abstract class AbstractConfiguration implements IConfiguration
     IStorage storage;
     protected Class<?> abstraction;
 
-    protected <T> T getInstance(Class<T> resolvedClass, HashSet<Class<?>> usedClasses) throws InvocationTargetException, IllegalAccessException, InstantiationException, JRoboContainerException
+    protected <T> T getInstance(Class<T> resolvedClass, IInjectionContext injectionContext) throws InvocationTargetException, IllegalAccessException, InstantiationException, JRoboContainerException
     {
-        if (usedClasses.contains(resolvedClass))
+        if (injectionContext.isClassProcessing(resolvedClass))
             throw new CyclicalDependencyException(resolvedClass);
-        usedClasses.add(resolvedClass);
+        injectionContext.markClassAsProcessing(resolvedClass);
         Constructor<T> constructor = getConstructor(resolvedClass);
         Class<?>[] parametersTypes = constructor.getParameterTypes();
         int parametersCount = constructor.getParameterTypes().length;
@@ -38,11 +38,11 @@ public abstract class AbstractConfiguration implements IConfiguration
         for (int i = 0; i < parametersCount; i++)
         {
             if (parametersTypes[i].isArray())
-                parameters[i] = storage.getConfiguration(parametersTypes[i].getComponentType()).getAll(usedClasses);
+                parameters[i] = storage.getConfiguration(parametersTypes[i].getComponentType()).getAll(injectionContext);
             else
-                parameters[i] = storage.getConfiguration(parametersTypes[i]).get(usedClasses);
+                parameters[i] = storage.getConfiguration(parametersTypes[i]).get(injectionContext);
         }
-        usedClasses.remove(resolvedClass);
+        injectionContext.markClassAsNotProcessing(resolvedClass);
         return constructor.newInstance(parameters);
     }
 
@@ -67,12 +67,12 @@ public abstract class AbstractConfiguration implements IConfiguration
         return result;
     }
 
-    public <T> T[] getAll(HashSet<Class<?>> usedClasses) throws JRoboContainerException
+    public <T> T[] getAll(IInjectionContext injectionContext) throws JRoboContainerException
     {
         ArrayList<Class<?>> implementations = storage.getImplementations(abstraction);
         ArrayList<T> result = new ArrayList<T>();
         for (Class<?> implementation : implementations)
-            result.add((T) storage.getConfiguration(implementation).get(usedClasses));
+            result.add((T) storage.getConfiguration(implementation).get(injectionContext));
         return result.toArray((T[]) Array.newInstance(abstraction, result.size()));
     }
 }

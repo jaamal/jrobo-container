@@ -2,9 +2,8 @@ package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.classloader.Resolver;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
-
-import java.util.HashSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +23,7 @@ public class AutoConfiguration extends AbstractConfiguration {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
+    public <T> T get(IInjectionContext injectionContext) throws JRoboContainerException {
         try {
             if(instance != null)
             {
@@ -33,9 +32,9 @@ public class AutoConfiguration extends AbstractConfiguration {
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             synchronized (storage.getSynchronizeObject(resolvedClass)) {
                 if(resolvedClass == abstraction)
-                    instance = getInstance(resolvedClass, usedClasses);
+                    instance = getInstance(resolvedClass, injectionContext);
                 else
-                    instance = storage.getConfiguration(resolvedClass).get(usedClasses);
+                    instance = storage.getConfiguration(resolvedClass).get(injectionContext);
             }
             return (T)instance;
         } catch (JRoboContainerException ex) {
@@ -46,10 +45,10 @@ public class AutoConfiguration extends AbstractConfiguration {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T create(HashSet<Class<?>> usedClasses) throws JRoboContainerException {
+    public <T> T create(IInjectionContext injectionContext) throws JRoboContainerException {
         try {
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
-            return (T)getInstance(resolvedClass, usedClasses);
+            return (T)getInstance(resolvedClass, injectionContext);
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {
