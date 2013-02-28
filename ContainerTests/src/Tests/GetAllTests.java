@@ -1,10 +1,10 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-import testclasses.getall.*;
 import junit.framework.Assert;
 import org.junit.Test;
+import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import testclasses.getall.*;
 
 
 /**
@@ -20,12 +20,14 @@ public class GetAllTests extends JRoboContainerTestBase
     public void testGetAll() throws JRoboContainerException
     {
         IFourImplementations implementations[] = container.getAll(IFourImplementations.class);
+        System.out.println(container.getLastLog());
         Assert.assertEquals(implementations.length, 4);
         checkClassExistence(implementations, FirstImplementation.class);
         checkClassExistence(implementations, SecondImplementation.class);
         checkClassExistence(implementations, ThirdImplementation.class);
         checkClassExistence(implementations, FourthImplementation.class);
         IFourImplementations nextImplementations[] = container.getAll(IFourImplementations.class);
+        System.out.println(container.getLastLog());
         for (IFourImplementations implementation : implementations)
             checkInstanceExistence(nextImplementations, implementation);
     }

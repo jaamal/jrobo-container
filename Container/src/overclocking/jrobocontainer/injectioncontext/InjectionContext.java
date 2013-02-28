@@ -1,5 +1,8 @@
 package overclocking.jrobocontainer.injectioncontext;
 
+import overclocking.jrobocontainer.logging.ILog;
+import overclocking.jrobocontainer.logging.Log;
+
 import java.util.HashSet;
 
 /**
@@ -12,9 +15,11 @@ import java.util.HashSet;
 public class InjectionContext implements IInjectionContext {
 
     private HashSet<Class<?>> processingClasses;
+    private ILog log;
     public InjectionContext()
     {
         processingClasses = new HashSet<Class<?>>();
+        log = new Log();
     }
     @Override
     public boolean isClassProcessing(Class<?> clazz) {
@@ -29,5 +34,45 @@ public class InjectionContext implements IInjectionContext {
     @Override
     public void markClassAsNotProcessing(Class<?> clazz) {
         processingClasses.remove(clazz);
+    }
+
+    @Override
+    public void beginGet(Class<?> clazz) {
+        log.beginGet(clazz);
+    }
+
+    @Override
+    public void endGet(Class<?> clazz) {
+        log.endGet(clazz);
+    }
+
+    @Override
+    public void beginCreate(Class<?> clazz) {
+        log.beginCreate(clazz);
+    }
+
+    @Override
+    public void endCreate(Class<?> clazz) {
+        log.endCreate(clazz);
+    }
+
+    @Override
+    public void beginGetAll(Class<?> clazz) {
+        log.beginGetAll(clazz);
+    }
+
+    @Override
+    public void endGetAll(Class<?> clazz) {
+        log.endGetAll(clazz);
+    }
+
+    @Override
+    public void reuse(Class<?> clazz) {
+        log.reuse(clazz);
+    }
+
+    @Override
+    public String getLog() {
+        return log.getLog();
     }
 }

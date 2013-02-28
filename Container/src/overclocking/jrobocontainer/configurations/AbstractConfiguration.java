@@ -80,21 +80,29 @@ public abstract class AbstractConfiguration implements IConfiguration
     @Override
     public <T> T get(IInjectionContext injectionContext)
     {
-        return innerGet(injectionContext);
+        injectionContext.beginGet(abstraction);
+        T result = innerGet(injectionContext);
+        injectionContext.endGet(abstraction);
+        return result;
     }
 
     @Override
     public <T> T create(IInjectionContext injectionContext)
     {
-        return innerCreate(injectionContext);
+        injectionContext.beginCreate(abstraction);
+        T result = innerCreate(injectionContext);
+        injectionContext.endCreate(abstraction);
+        return result;
     }
 
     public <T> T[] getAll(IInjectionContext injectionContext)
     {
+        injectionContext.beginGetAll(abstraction);
         ArrayList<Class<?>> implementations = storage.getImplementations(abstraction);
         ArrayList<T> result = new ArrayList<T>();
         for (Class<?> implementation : implementations)
             result.add((T) storage.getConfiguration(implementation).get(injectionContext));
+        injectionContext.endGetAll(abstraction);
         return result.toArray((T[]) Array.newInstance(abstraction, result.size()));
     }
 }

@@ -27,8 +27,10 @@ public class AutoConfiguration extends AbstractConfiguration {
         try {
             if(instance != null)
             {
+                injectionContext.reuse(abstraction);
                 return (T)instance;
             }
+            injectionContext.beginCreate(abstraction);
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             synchronized (storage.getSynchronizeObject(resolvedClass)) {
                 if(resolvedClass == abstraction)
@@ -36,6 +38,7 @@ public class AutoConfiguration extends AbstractConfiguration {
                 else
                     instance = storage.getConfiguration(resolvedClass).get(injectionContext);
             }
+            injectionContext.endCreate(abstraction);
             return (T)instance;
         } catch (JRoboContainerException ex) {
             throw ex;

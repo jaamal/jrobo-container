@@ -15,6 +15,7 @@ public class Container implements IContainer
 
     private JRoboClassLoader classLoader;
     private IStorage storage;
+    private IInjectionContext lastInjectionContext;
 
     public Container()
     {
@@ -32,15 +33,15 @@ public class Container implements IContainer
     @Override
     public <T> T get(Class<T> requiredAbstraction)
     {
-        IInjectionContext injectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).get(injectionContext);
+        lastInjectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).get(lastInjectionContext);
     }
 
     @Override
     public <T> T create(Class<T> requiredAbstraction)
     {
-        IInjectionContext injectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).create(injectionContext);
+        lastInjectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).create(lastInjectionContext);
     }
 
     @Override
@@ -58,7 +59,12 @@ public class Container implements IContainer
     @Override
     public <T> T[] getAll(Class<T> requiredAbstraction)
     {
-        IInjectionContext injectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).getAll(injectionContext);
+        lastInjectionContext = new InjectionContext();
+        return storage.getConfiguration(requiredAbstraction).getAll(lastInjectionContext);
+    }
+
+    @Override
+    public String getLastLog() {
+        return lastInjectionContext.getLog();
     }
 }

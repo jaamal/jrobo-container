@@ -24,6 +24,7 @@ public class BoundInstanceConfiguration extends AbstractConfiguration {
     }
 
     public <T> T innerGet(IInjectionContext injectionContext){
+        injectionContext.reuse(abstraction);
         return (T)instance;
     }
 
