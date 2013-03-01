@@ -1,5 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
+import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+
 import java.util.HashMap;
 
 /**
@@ -19,7 +21,9 @@ public class ConfigurationsManager implements IConfigurationsManager {
 
     @Override
     public <T> IConfiguration getConfiguration(Class<T> abstraction) {
-        return configurations.get(abstraction);
+        if(configurations.containsKey(abstraction))
+            return configurations.get(abstraction);
+        throw new JRoboContainerException(abstraction.getCanonicalName() + " not found in paths");
     }
 
     @Override
