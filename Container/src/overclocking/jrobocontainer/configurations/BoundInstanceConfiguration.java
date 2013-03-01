@@ -36,7 +36,7 @@ public class BoundInstanceConfiguration extends AbstractConfiguration {
             throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new JRoboContainerException("Failed to create " + abstraction.getName(), ex);
+            throw new JRoboContainerException("Failed to create " + abstraction.getName(), injectionContext, ex);
         }
     }
 }

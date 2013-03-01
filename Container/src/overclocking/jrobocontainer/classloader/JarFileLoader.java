@@ -52,7 +52,6 @@ public class JarFileLoader
                     storage.addClass(clazz);
                 else
                 {
-
                 }
             }
         }

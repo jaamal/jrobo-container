@@ -1,10 +1,10 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
+import overclocking.jrobocontainer.exceptions.AmbiguousAnnotatedConstructorException;
 import testclasses.cyclicaldependecy.CycleA;
 import testclasses.cyclicaldependecy.CycleD;
 import testclasses.cyclicaldependecy.CycleE;
-import overclocking.jrobocontainer.exceptions.AmbiguousConstructorException;
 import overclocking.jrobocontainer.exceptions.CyclicalDependencyException;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import junit.framework.Assert;
@@ -49,7 +49,7 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
             container.get(MultipleConstructorIncorrect.class);
             Assert.fail();
         }
-        catch (AmbiguousConstructorException ex)
+        catch (AmbiguousAnnotatedConstructorException ex)
         {
         }
         catch (Exception ex)

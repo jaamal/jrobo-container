@@ -4,6 +4,7 @@ import overclocking.jrobocontainer.configurations.AutoConfiguration;
 import overclocking.jrobocontainer.configurations.ConfigurationsManager;
 import overclocking.jrobocontainer.configurations.IConfiguration;
 import overclocking.jrobocontainer.configurations.IConfigurationsManager;
+import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,9 @@ public class Storage implements IStorage
     @Override
     public Object getSynchronizeObject(Class<?> resolvedClass)
     {
-        return synchronizeObjects.get(resolvedClass);
+        if(synchronizeObjects.containsKey(resolvedClass))
+            return synchronizeObjects.get(resolvedClass);
+        throw new JRoboContainerException("No synchronize object found for " + resolvedClass.getCanonicalName());
     }
 
     @Override

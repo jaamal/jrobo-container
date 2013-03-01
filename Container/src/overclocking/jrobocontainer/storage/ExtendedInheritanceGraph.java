@@ -48,11 +48,15 @@ public class ExtendedInheritanceGraph implements IExtendedInheritanceGraph {
 
     @Override
     public ArrayList<Class<?>> getDescendants(Class<?> abstraction) {
-        return descendants.get(abstraction);
+        if(descendants.containsKey(abstraction))
+            return descendants.get(abstraction);
+        return new ArrayList<Class<?>>();
     }
 
     @Override
     public ArrayList<Class<?>> getAncestors(Class<?> abstraction) {
-        return ancestors.get(abstraction);
+        if(ancestors.containsKey(abstraction))
+            return ancestors.get(abstraction);
+        return new ArrayList<Class<?>>();
     }
 }

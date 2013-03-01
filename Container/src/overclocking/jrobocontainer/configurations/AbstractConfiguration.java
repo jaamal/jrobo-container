@@ -1,10 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.annotations.ContainerConstructor;
-import overclocking.jrobocontainer.exceptions.AmbiguousConstructorException;
-import overclocking.jrobocontainer.exceptions.CyclicalDependencyException;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-import overclocking.jrobocontainer.exceptions.NoConstructorsFoundException;
+import overclocking.jrobocontainer.exceptions.*;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
@@ -48,11 +45,10 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
         catch (Exception ex)
         {
-            throw new JRoboContainerException("Failed to get " + resolvedClass.getCanonicalName(), ex);
+            throw new JRoboContainerException("Failed to get " + resolvedClass.getCanonicalName(), injectionContext, ex);
         }
     }
 
-    @SuppressWarnings("unchecked")
     private <T> Constructor<T> getConstructor(Class<T> clazz)
     {
         Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
@@ -67,10 +63,12 @@ public abstract class AbstractConfiguration implements IConfiguration
             if (constructor.getAnnotation(ContainerConstructor.class) != null)
             {
                 if (result != null)
-                    throw new AmbiguousConstructorException(clazz);
+                    throw new AmbiguousAnnotatedConstructorException(clazz);
                 result = constructor;
             }
         }
+        if(result == null)
+            throw new AmbiguousConstructorException(clazz);
         return result;
     }
 

@@ -34,16 +34,20 @@ public class AutoConfiguration extends AbstractConfiguration {
             Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             synchronized (storage.getSynchronizeObject(resolvedClass)) {
                 if(resolvedClass == abstraction)
+                {
                     instance = getInstance(resolvedClass, injectionContext);
+                }
                 else
+                {
                     instance = storage.getConfiguration(resolvedClass).get(injectionContext);
+                }
             }
             injectionContext.endCreate(abstraction);
             return (T)instance;
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new JRoboContainerException("Failed to get " + abstraction.getName(), ex);
+            throw new JRoboContainerException("Failed to get " + abstraction.getName(), injectionContext, ex);
         }
     }
 
