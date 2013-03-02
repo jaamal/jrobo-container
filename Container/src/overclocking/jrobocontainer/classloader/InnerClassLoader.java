@@ -13,8 +13,8 @@ public class InnerClassLoader extends ClassLoader {
 					byteCode.length);
 			return (Class<T>) ClassLoader.getSystemClassLoader().loadClass(
 					result.getCanonicalName());
-		} catch (Exception ex) {
-            log.append("Failed to get class by bytecode: " + ex.getMessage());
+		} catch (Throwable ex) {
+            log.append("Failed to get class by bytecode: " + ex);
 		}
 		return null;
 	}
