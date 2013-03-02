@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
 import overclocking.jrobocontainer.classloader.JRoboClassLoader;
+import overclocking.jrobocontainer.logging.ClassesLoadingLog;
 import testclasses.classloader.FakeFilter;
 import testclasses.classloader.innerclasstest.OuterClass;
 import testclasses.classloader.simpletest.IOneImplementation;
@@ -29,7 +30,7 @@ public class ClassLoaderTests extends JRoboContainerTestBase
     public void testSimpleFolder()
     {
         JRoboClassLoader loader = new JRoboClassLoader(storage, new FakeFilter("out/production/ContainerTestClasses/testclasses/classloader/simpletest/"));
-        loader.loadClasses();
+        loader.loadClasses(new ClassesLoadingLog());
         ArrayList<Class<?>> actual = storage.getLoadedClasses();
         ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
         expected.add(IOneImplementation.class);
@@ -41,7 +42,7 @@ public class ClassLoaderTests extends JRoboContainerTestBase
     public void testFolderWithInnerClass()
     {
         JRoboClassLoader loader = new JRoboClassLoader(storage, new FakeFilter("out/production/ContainerTestClasses/testclasses/classloader/innerclasstest/"));
-        loader.loadClasses();
+        loader.loadClasses(new ClassesLoadingLog());
         ArrayList<Class<?>> actual = storage.getLoadedClasses();
         ArrayList<Class<?>> expected = new ArrayList<Class<?>>();
         expected.add(OuterClass.class);

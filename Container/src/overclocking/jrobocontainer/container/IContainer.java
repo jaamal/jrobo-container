@@ -11,5 +11,7 @@ public interface IContainer {
 
     <T> T[] getAll(Class<T> requiredAbstraction);
 
+    String getClassesLoadingLog();
+
     String getLastLog();
 }

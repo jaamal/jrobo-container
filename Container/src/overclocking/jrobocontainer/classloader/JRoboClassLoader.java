@@ -1,5 +1,6 @@
 package overclocking.jrobocontainer.classloader;
 
+import overclocking.jrobocontainer.logging.IClassesLoadingLog;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.io.File;
@@ -18,11 +19,11 @@ public class JRoboClassLoader
         this.directoriesWalker = new EntitiesWalker(storage, classLoaderConfiguration);
     }
 
-    public void loadClasses()
+    public void loadClasses(IClassesLoadingLog log)
     {
         for (String path : classPath.split(System.getProperty("path.separator")))
         {
-            directoriesWalker.addFolder(new File(path));
+            directoriesWalker.addFolder(new File(path), log);
         }
     }
 

@@ -7,6 +7,8 @@ import overclocking.jrobocontainer.configurations.BoundImplementationConfigurati
 import overclocking.jrobocontainer.configurations.BoundInstanceConfiguration;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.injectioncontext.InjectionContext;
+import overclocking.jrobocontainer.logging.ClassesLoadingLog;
+import overclocking.jrobocontainer.logging.IClassesLoadingLog;
 import overclocking.jrobocontainer.storage.IStorage;
 import overclocking.jrobocontainer.storage.Storage;
 
@@ -16,6 +18,7 @@ public class Container implements IContainer
     private JRoboClassLoader classLoader;
     private IStorage storage;
     private IInjectionContext lastInjectionContext;
+    private IClassesLoadingLog classesLoadingLog;
 
     public Container()
     {
@@ -26,7 +29,8 @@ public class Container implements IContainer
     {
         storage = new Storage();
         classLoader = new JRoboClassLoader(storage, classLoaderConfiguration);
-        classLoader.loadClasses();
+        classesLoadingLog = new ClassesLoadingLog();
+        classLoader.loadClasses(classesLoadingLog);
         storage.buildExtendedInheritanceGraph();
     }
 
@@ -61,6 +65,11 @@ public class Container implements IContainer
     {
         lastInjectionContext = new InjectionContext();
         return storage.getConfiguration(requiredAbstraction).getAll(lastInjectionContext);
+    }
+
+    @Override
+    public String getClassesLoadingLog() {
+        return classesLoadingLog.getLog();
     }
 
     @Override
