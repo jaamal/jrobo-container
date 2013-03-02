@@ -10,18 +10,31 @@ package overclocking.jrobocontainer.logging;
 public class ClassesLoadingLog implements IClassesLoadingLog {
 
     private StringBuilder log;
+    private int count;
 
     public ClassesLoadingLog()
     {
         log = new StringBuilder();
+        count = 0;
     }
     @Override
     public String getLog() {
-        return log.toString();
+        return "Loaded " + count + " classes\r\n" + log.toString();
     }
 
     @Override
     public void append(String location) {
         log.append(location + "\r\n");
+    }
+
+    @Override
+    public void incrementCounter() {
+        count++;
+    }
+
+    @Override
+    public int getCounter()
+    {
+        return count;
     }
 }

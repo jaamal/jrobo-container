@@ -1,5 +1,6 @@
 package overclocking.jrobocontainer.classloader;
 
+import overclocking.jrobocontainer.logging.ClassesLoadingLog;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class JarFileLoader
             if (entry.getName().endsWith(".class"))
             {
                 Class<?> clazz = new InnerClassLoader().readClass(file
-                        .getInputStream(entry));
+                        .getInputStream(entry), new ClassesLoadingLog());
                 if (clazz != null)
                     storage.addClass(clazz);
                 else

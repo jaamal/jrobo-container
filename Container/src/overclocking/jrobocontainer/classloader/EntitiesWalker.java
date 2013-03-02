@@ -29,7 +29,7 @@ public class EntitiesWalker
 	private void addFile(File file, IClassesLoadingLog log) {
         log.append("Trying to add " + file.getAbsolutePath());
 		if (file.getName().endsWith(".class"))
-			classFileLoader.load(file);
+			classFileLoader.load(file, log);
 		if (file.getName().endsWith(".jar"))
 			jarFileLoader.load(file);
 	}

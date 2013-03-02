@@ -10,4 +10,6 @@ package overclocking.jrobocontainer.logging;
 public interface IClassesLoadingLog {
     String getLog();
     void append(String location);
+    void incrementCounter();
+    int getCounter();
 }
