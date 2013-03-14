@@ -7,7 +7,8 @@ package overclocking.jrobocontainer.logging;
  * Time: 12:07
  * To change this template use File | Settings | File Templates.
  */
-public class ClassesLoadingLog implements IClassesLoadingLog {
+public class ClassesLoadingLog implements IClassesLoadingLog
+{
 
     private StringBuilder log;
     private int count;
@@ -17,18 +18,22 @@ public class ClassesLoadingLog implements IClassesLoadingLog {
         log = new StringBuilder();
         count = 0;
     }
+
     @Override
-    public String getLog() {
+    public String getLog()
+    {
         return "Loaded " + count + " classes\r\n" + log.toString();
     }
 
     @Override
-    public void append(String location) {
+    public void append(String location)
+    {
         log.append(location + "\r\n");
     }
 
     @Override
-    public void incrementCounter() {
+    public void incrementCounter()
+    {
         count++;
     }
 

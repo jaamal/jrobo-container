@@ -5,17 +5,21 @@ import overclocking.jrobocontainer.exceptions.ImplementationNotFoundException;
 
 import java.util.ArrayList;
 
-public class Resolver {
+public class Resolver
+{
 
     public static Class<?> resolveClass(Class<?> requiredAbstraction,
-                                 ArrayList<Class<?>> implementations) {
-        if (implementations == null || implementations.size() == 0) {
+                                        ArrayList<Class<?>> implementations)
+    {
+        if (implementations == null || implementations.size() == 0)
+        {
             throw new ImplementationNotFoundException(requiredAbstraction);
         }
-        if (implementations.size() > 1) {
+        if (implementations.size() > 1)
+        {
             String implementationsString = "";
-            for(Class<?> implementation : implementations)
-            implementationsString = implementationsString + implementation.getCanonicalName() + System.getProperty("line.separator");
+            for (Class<?> implementation : implementations)
+                implementationsString = implementationsString + implementation.getCanonicalName() + System.getProperty("line.separator");
             throw new AmbiguousImplementationMatchException(requiredAbstraction, implementationsString);
         }
         return implementations.get(0);

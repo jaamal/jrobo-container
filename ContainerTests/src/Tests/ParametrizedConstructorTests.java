@@ -61,6 +61,7 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
     @Test(timeout = 1000)
     public void testCyclicalDependency() throws JRoboContainerException
     {
+        System.out.println(container.getClassesLoadingLog());
         try
         {
             container.get(CycleA.class);

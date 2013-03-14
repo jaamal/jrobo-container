@@ -1,6 +1,7 @@
 package testclasses.fakestorages;
 
 import overclocking.jrobocontainer.configurations.IConfiguration;
+import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class SimpleStorage implements IStorage {
 	}
 
 	@Override
-	public <T> void addClass(Class<T> clazz) {
+	public <T> void addClass(Class<T> clazz, ILoadingContext loadingContext) {
 		list.add(clazz);
 	}
 
@@ -50,6 +51,12 @@ public class SimpleStorage implements IStorage {
     @Override
     public <T> void setConfiguration(Class<T> abstraction, IConfiguration configuration)
     {
+    }
+
+    @Override
+    public ArrayList<Class<?>> getAllClasses()
+    {
+        return list;
     }
 
 }

@@ -17,10 +17,10 @@ public class OneImplementationTests extends JRoboContainerTestBase
     @Test
     public void testGetsSameObject() throws JRoboContainerException
     {
+        System.out.println(container.getClassesLoadingLog());
         IOneImplementation result1 = container.get(IOneImplementation.class);
         IOneImplementation result2 = container.get(IOneImplementation.class);
         Assert.assertSame(result1, result2);
-        System.out.println(container.getClassesLoadingLog());
     }
 
     @Test

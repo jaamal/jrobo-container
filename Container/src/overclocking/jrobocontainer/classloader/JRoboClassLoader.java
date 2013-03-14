@@ -1,30 +1,32 @@
 package overclocking.jrobocontainer.classloader;
 
-import overclocking.jrobocontainer.logging.IClassesLoadingLog;
+import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.io.File;
 
 public class JRoboClassLoader
 {
+    private String classPath;
+    private EntitiesWalker directoriesWalker;
+    private IStorage storage;
 
-    String classPath;
-    private IClassLoaderConfiguration filter;
-    EntitiesWalker directoriesWalker;
-
-    public JRoboClassLoader(IStorage storage, IClassLoaderConfiguration classLoaderConfiguration)
+    public JRoboClassLoader(IStorage storage, IClassLoaderConfiguration classLoaderConfiguration, ClassLoader mainClassLoader)
     {
         this.classPath = classLoaderConfiguration.getClassPaths();
-        this.filter = classLoaderConfiguration;
-        this.directoriesWalker = new EntitiesWalker(storage, classLoaderConfiguration);
+        this.directoriesWalker = new EntitiesWalker(storage, classLoaderConfiguration, mainClassLoader);
+        this.storage = storage;
     }
 
-    public void loadClasses(IClassesLoadingLog log)
+    public void loadClasses(ILoadingContext loadingContext)
     {
-        for (String path : classPath.split(System.getProperty("path.separator")))
-        {
-            directoriesWalker.addFolder(new File(path), log);
-        }
+        for (int i = 0; i < 10; i++)
+            for (String path : classPath.split(System.getProperty("path.separator")))
+            {
+                directoriesWalker.addFolder(new File(path), storage, loadingContext);
+            }
+        for (Class<?> clazz : storage.getAllClasses())
+            loadingContext.appendToLog("!Loaded " + clazz.getName() + ", loader is " + clazz.getClassLoader());
+        storage.buildExtendedInheritanceGraph();
     }
-
 }

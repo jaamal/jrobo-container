@@ -1,36 +1,29 @@
 package overclocking.jrobocontainer.classloader;
 
-import overclocking.jrobocontainer.logging.IClassesLoadingLog;
+import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class ClassFileLoader
 {
 
     IStorage storage;
+    InnerClassLoader classLoader;
 
-    public ClassFileLoader(IStorage storage)
+    public ClassFileLoader(IStorage storage, ClassLoader mainClassLoader)
     {
         this.storage = storage;
+        classLoader = new InnerClassLoader(mainClassLoader);
     }
 
-    public void load(File file, IClassesLoadingLog log)
+    public void load(File file, IStorage storage, ILoadingContext loadingContext)
     {
-        try
+        Class<?> result = classLoader.getClassByPath(file.getAbsolutePath(), loadingContext);
+        if (result != null)
         {
-            Class<?> clazz = new InnerClassLoader().readClass(new FileInputStream(file), log);
-            if (clazz != null)
-            {
-                storage.addClass(clazz);
-                log.incrementCounter();
-            }
-        }
-        catch (FileNotFoundException e)
-        {
-            log.append("Failed to load " + file.getAbsolutePath() + ": " + e.getMessage());
+            storage.addClass(result, loadingContext);
+            loadingContext.addClass(result);
         }
     }
 

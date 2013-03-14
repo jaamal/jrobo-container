@@ -1,6 +1,6 @@
 package overclocking.jrobocontainer.classloader;
 
-import overclocking.jrobocontainer.logging.ClassesLoadingLog;
+import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
 import overclocking.jrobocontainer.storage.IStorage;
 
 import java.io.File;
@@ -12,16 +12,18 @@ import java.util.jar.JarFile;
 public class JarFileLoader
 {
 
-    IStorage storage;
+    private IStorage storage;
     private IClassLoaderConfiguration entitiesFilter;
+    private InnerClassLoader classLoader;
 
     public JarFileLoader(IStorage storage, IClassLoaderConfiguration entitiesFilter)
     {
         this.storage = storage;
         this.entitiesFilter = entitiesFilter;
+        classLoader = new InnerClassLoader(null);
     }
 
-    public void load(File file)
+    public void load(File file, IStorage storage, ILoadingContext loadingContext)
     {
         try
         {
@@ -31,7 +33,7 @@ public class JarFileLoader
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements())
                 {
-                    loadJarEntry(jarFile, entries.nextElement());
+                    loadJarEntry(jarFile, entries.nextElement(), loadingContext);
                 }
             }
         }
@@ -41,23 +43,11 @@ public class JarFileLoader
 
     }
 
-    private void loadJarEntry(JarFile file, JarEntry entry)
+    private void loadJarEntry(JarFile file, JarEntry entry, ILoadingContext loadingContext)
     {
-        try
+        if (entry.getName().endsWith(".class"))
         {
-            if (entry.getName().endsWith(".class"))
-            {
-                Class<?> clazz = new InnerClassLoader().readClass(file
-                        .getInputStream(entry), new ClassesLoadingLog());
-                if (clazz != null)
-                    storage.addClass(clazz);
-                else
-                {
-                }
-            }
-        }
-        catch (IOException e)
-        {
+            classLoader.getClassByPath(file.getName(), loadingContext);
         }
     }
 
