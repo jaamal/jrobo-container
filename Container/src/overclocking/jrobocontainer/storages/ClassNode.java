@@ -1,13 +1,32 @@
 package overclocking.jrobocontainer.storages;
 
+import org.apache.bcel.classfile.JavaClass;
+
 public class ClassNode
 {
     private Class<?> clazz;
     private String className;
+    private JavaClass javaClass;
+
+    public void setJavaClass(JavaClass javaClass)
+    {
+        this.javaClass = javaClass;
+    }
+
+    public JavaClass getJavaClass()
+    {
+        return javaClass;
+    }
 
     public ClassNode(String className)
     {
         this.className = className;
+    }
+
+    public ClassNode(JavaClass javaClass)
+    {
+        this.javaClass = javaClass;
+        this.className = javaClass.getClassName();
     }
 
     public Class<?> getClazz()
@@ -32,11 +51,11 @@ public class ClassNode
 
     public boolean isAbstract()
     {
-        return false;
+        return javaClass.isAbstract();
     }
 
     public boolean isInterface()
     {
-        return false;
+        return javaClass.isInterface();
     }
 }

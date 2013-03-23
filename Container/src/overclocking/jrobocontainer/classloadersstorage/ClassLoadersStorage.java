@@ -18,6 +18,7 @@ public class ClassLoadersStorage implements IClassLoadersStorage
     public ClassLoadersStorage(Instrumentation instrumentation)
     {
         this.instrumentation = instrumentation;
+        classLoaders = getClassLoadersFromInstrumentation();
     }
 
     @Override

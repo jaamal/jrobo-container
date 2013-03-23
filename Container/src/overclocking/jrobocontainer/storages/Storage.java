@@ -33,7 +33,7 @@ public class Storage implements IStorage
     {
         if (this.loadingContext == null)
             this.loadingContext = loadingContext;
-        ClassNode node = classNodesStorage.getClassNode(clazz.getClassName());
+        ClassNode node = classNodesStorage.getClassNode(clazz);
         configurationsManager.setConfiguration(node, new AutoConfiguration(this, node));
         synchronizeObjects.put(node, new Object());
         String[] interfacesNames = clazz.getInterfaceNames();
