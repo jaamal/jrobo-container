@@ -1,5 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
+import overclocking.jrobocontainer.storages.ClassNode;
+
 /**
  * Created with IntelliJ IDEA.
  * User: mv146
@@ -7,7 +9,9 @@ package overclocking.jrobocontainer.configurations;
  * Time: 14:00
  * To change this template use File | Settings | File Templates.
  */
-public interface IConfigurationsManager {
-    <T> IConfiguration getConfiguration(Class<T> abstraction);
-    <T> void setConfiguration(Class<T> abstraction, IConfiguration configuration);
+public interface IConfigurationsManager
+{
+    IConfiguration getConfiguration(ClassNode abstraction);
+
+    void setConfiguration(ClassNode abstraction, IConfiguration configuration);
 }

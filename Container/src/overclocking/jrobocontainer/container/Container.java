@@ -1,143 +1,104 @@
 package overclocking.jrobocontainer.container;
 
-import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
-import overclocking.jrobocontainer.classloader.JRoboClassLoader;
-import overclocking.jrobocontainer.classloaderconfigurations.DefaultClassLoaderConfiguration;
+import overclocking.jrobocontainer.classloaderconfigurations.DefaultClassScannerConfiguration;
+import overclocking.jrobocontainer.classloadersstorage.ClassLoadersStorage;
+import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
+import overclocking.jrobocontainer.classscanning.ClassPathScanner;
+import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
 import overclocking.jrobocontainer.configurations.BoundImplementationConfiguration;
 import overclocking.jrobocontainer.configurations.BoundInstanceConfiguration;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.injectioncontext.InjectionContext;
 import overclocking.jrobocontainer.loadingcontext.LoadingContext;
-import overclocking.jrobocontainer.storage.IStorage;
-import overclocking.jrobocontainer.storage.Storage;
+import overclocking.jrobocontainer.storages.*;
+
+import java.lang.instrument.Instrumentation;
 
 public class Container implements IContainer
 {
 
-    private JRoboClassLoader classLoader;
     private IStorage storage;
     private IInjectionContext lastInjectionContext;
     private LoadingContext loadingContext;
-    private final Object lockObject = new Object();
-    private IClassLoaderConfiguration classLoaderConfiguration;
-    boolean initialized = false;
+    private IClassLoadersStorage classLoadersStorage;
+    private IClassNodesStorage classNodesStorage;
 
-    public Container()
+    public Container(ClassLoader[] classLoaders)
     {
-        this(new DefaultClassLoaderConfiguration());
+        this(new DefaultClassScannerConfiguration(), new ClassLoadersStorage(classLoaders));
     }
 
-    public Container(IClassLoaderConfiguration classLoaderConfiguration)
+    public Container(Instrumentation instrumentation)
     {
-        this.classLoaderConfiguration = classLoaderConfiguration;
+        this(new DefaultClassScannerConfiguration(), new ClassLoadersStorage(instrumentation));
     }
 
-    private void initialize(ClassLoader mainClassLoader)
+    public Container(IClassPathScannerConfiguration classPathScannerConfiguration, ClassLoader[] classLoaders)
     {
-        storage = new Storage();
-        classLoader = new JRoboClassLoader(storage, classLoaderConfiguration, mainClassLoader);
-        loadingContext = new LoadingContext(mainClassLoader);
-        classLoader.loadClasses(loadingContext);
+        this(classPathScannerConfiguration, new ClassLoadersStorage(classLoaders));
+    }
+
+    public Container(IClassPathScannerConfiguration classPathScannerConfiguration, Instrumentation instrumentation)
+    {
+        this(classPathScannerConfiguration, new ClassLoadersStorage(instrumentation));
+    }
+
+    private Container(IClassPathScannerConfiguration classPathScannerConfiguration, IClassLoadersStorage classLoadersStorage)
+    {
+        this.classLoadersStorage = classLoadersStorage;
+        classNodesStorage = new ClassNodesStorage();
+        storage = new Storage(classNodesStorage);
+        ClassPathScanner classPathScanner = new ClassPathScanner(storage, classPathScannerConfiguration);
+        loadingContext = new LoadingContext();
+        classPathScanner.loadClasses(loadingContext);
     }
 
     @Override
     public <T> T get(Class<T> requiredAbstraction)
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(requiredAbstraction.getClassLoader());
-            }
-        }
-        lastInjectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).get(lastInjectionContext);
+        lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
+        return storage.getConfiguration(classNodesStorage.getClassNode(requiredAbstraction)).get(lastInjectionContext);
     }
 
     @Override
     public <T> T create(Class<T> requiredAbstraction)
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(requiredAbstraction.getClassLoader());
-            }
-        }
-        lastInjectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).create(lastInjectionContext);
+        lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
+        return storage.getConfiguration(classNodesStorage.getClassNode(requiredAbstraction)).create(lastInjectionContext);
     }
 
     @Override
     public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance)
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(abstraction.getClassLoader());
-            }
-        }
-        storage.setConfiguration(abstraction, new BoundInstanceConfiguration(storage, abstraction, instance));
+        ClassNode node = classNodesStorage.getClassNode(abstraction);
+        storage.setConfiguration(node, new BoundInstanceConfiguration(storage, node, instance));
     }
 
     @Override
     public <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> boundImplementation)
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(abstraction.getClassLoader());
-            }
-        }
-        storage.setConfiguration(abstraction, new BoundImplementationConfiguration(storage, abstraction, boundImplementation));
+        ClassNode abstractionNode = classNodesStorage.getClassNode(abstraction);
+        ClassNode implNode = classNodesStorage.getClassNode(boundImplementation);
+        storage.setConfiguration(abstractionNode, new BoundImplementationConfiguration(storage, abstractionNode, implNode));
     }
 
     @Override
     public <T> T[] getAll(Class<T> requiredAbstraction)
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(requiredAbstraction.getClassLoader());
-            }
-        }
-        lastInjectionContext = new InjectionContext();
-        return storage.getConfiguration(requiredAbstraction).getAll(lastInjectionContext);
+        lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
+        ClassNode abstractionNode = classNodesStorage.getClassNode(requiredAbstraction);
+        return storage.getConfiguration(abstractionNode).getAll(lastInjectionContext);
     }
 
     @Override
     public String getClassesLoadingLog()
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(null);
-            }
-        }
         return loadingContext.getLog();
     }
 
     @Override
     public String getLastLog()
     {
-        synchronized (lockObject)
-        {
-            if(!initialized)
-            {
-                initialized = true;
-                initialize(null);
-            }
-        }
         return lastInjectionContext.getLog();
     }
 }

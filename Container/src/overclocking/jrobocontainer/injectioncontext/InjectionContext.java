@@ -1,7 +1,10 @@
 package overclocking.jrobocontainer.injectioncontext;
 
+import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
 import overclocking.jrobocontainer.logging.ILog;
 import overclocking.jrobocontainer.logging.Log;
+import overclocking.jrobocontainer.storages.ClassNode;
+import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
 import java.util.HashSet;
 
@@ -12,67 +15,97 @@ import java.util.HashSet;
  * Time: 0:30
  * To change this template use File | Settings | File Templates.
  */
-public class InjectionContext implements IInjectionContext {
+public class InjectionContext implements IInjectionContext
+{
 
-    private HashSet<Class<?>> processingClasses;
+    private HashSet<ClassNode> processingClasses;
     private ILog log;
-    public InjectionContext()
+    private IClassLoadersStorage classLoadersStorage;
+    private IClassNodesStorage classNodesStorage;
+
+    public InjectionContext(IClassLoadersStorage classLoadersStorage, IClassNodesStorage classNodesStorage)
     {
-        processingClasses = new HashSet<Class<?>>();
+        this.classLoadersStorage = classLoadersStorage;
+        this.classNodesStorage = classNodesStorage;
+        processingClasses = new HashSet<ClassNode>();
         log = new Log();
     }
+
     @Override
-    public boolean isClassProcessing(Class<?> clazz) {
+    public boolean isClassProcessing(ClassNode clazz)
+    {
         return processingClasses.contains(clazz);
     }
 
     @Override
-    public void markClassAsProcessing(Class<?> clazz) {
+    public void markClassAsProcessing(ClassNode clazz)
+    {
         processingClasses.add(clazz);
     }
 
     @Override
-    public void markClassAsNotProcessing(Class<?> clazz) {
+    public void markClassAsNotProcessing(ClassNode clazz)
+    {
         processingClasses.remove(clazz);
     }
 
     @Override
-    public void beginGet(Class<?> clazz) {
+    public void beginGet(ClassNode clazz)
+    {
         log.beginGet(clazz);
     }
 
     @Override
-    public void endGet(Class<?> clazz) {
+    public void endGet(ClassNode clazz)
+    {
         log.endGet(clazz);
     }
 
     @Override
-    public void beginCreate(Class<?> clazz) {
+    public void beginCreate(ClassNode clazz)
+    {
         log.beginCreate(clazz);
     }
 
     @Override
-    public void endCreate(Class<?> clazz) {
+    public void endCreate(ClassNode clazz)
+    {
         log.endCreate(clazz);
     }
 
     @Override
-    public void beginGetAll(Class<?> clazz) {
+    public void beginGetAll(ClassNode clazz)
+    {
         log.beginGetAll(clazz);
     }
 
     @Override
-    public void endGetAll(Class<?> clazz) {
+    public void endGetAll(ClassNode clazz)
+    {
         log.endGetAll(clazz);
     }
 
     @Override
-    public void reuse(Class<?> clazz) {
+    public void reuse(ClassNode clazz)
+    {
         log.reuse(clazz);
     }
 
     @Override
-    public String getLog() {
+    public String getLog()
+    {
         return log.getLog();
+    }
+
+    @Override
+    public IClassLoadersStorage getClassLoadersStorage()
+    {
+        return classLoadersStorage;
+    }
+
+    @Override
+    public IClassNodesStorage getClassNodesStorage()
+    {
+        return classNodesStorage;
     }
 }

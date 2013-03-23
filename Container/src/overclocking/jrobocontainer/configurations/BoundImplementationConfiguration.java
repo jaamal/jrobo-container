@@ -1,7 +1,8 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
-import overclocking.jrobocontainer.storage.IStorage;
+import overclocking.jrobocontainer.storages.ClassNode;
+import overclocking.jrobocontainer.storages.IStorage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +14,9 @@ import overclocking.jrobocontainer.storage.IStorage;
 public class BoundImplementationConfiguration extends AbstractConfiguration {
 
     private final IStorage storage;
-    private final Class<?> boundImplementation;
+    private final ClassNode boundImplementation;
 
-    public BoundImplementationConfiguration(IStorage storage, Class<?> abstraction, Class<?> boundImplementation) {
+    public BoundImplementationConfiguration(IStorage storage, ClassNode abstraction, ClassNode boundImplementation) {
         this.storage = storage;
         this.abstraction = abstraction;
         this.boundImplementation = boundImplementation;

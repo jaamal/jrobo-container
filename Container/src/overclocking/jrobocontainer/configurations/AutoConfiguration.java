@@ -1,9 +1,10 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.classloader.Resolver;
+import overclocking.jrobocontainer.classscanning.Resolver;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
-import overclocking.jrobocontainer.storage.IStorage;
+import overclocking.jrobocontainer.storages.ClassNode;
+import overclocking.jrobocontainer.storages.IStorage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,7 @@ public class AutoConfiguration extends AbstractConfiguration {
 
     private Object instance;
 
-    public AutoConfiguration(IStorage storage, Class<?> abstraction) {
+    public AutoConfiguration(IStorage storage, ClassNode abstraction) {
         this.storage = storage;
         this.abstraction = abstraction;
         instance = null;
@@ -31,7 +32,7 @@ public class AutoConfiguration extends AbstractConfiguration {
                 return (T)instance;
             }
             injectionContext.beginCreate(abstraction);
-            Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
+            ClassNode resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             synchronized (storage.getSynchronizeObject(resolvedClass)) {
                 if(resolvedClass == abstraction)
                 {
@@ -47,19 +48,19 @@ public class AutoConfiguration extends AbstractConfiguration {
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new JRoboContainerException("Failed to get " + abstraction.getName(), injectionContext, ex);
+            throw new JRoboContainerException("Failed to get " + abstraction.getClassName(), injectionContext, ex);
         }
     }
 
     public <T> T innerCreate(IInjectionContext injectionContext) {
         try {
-            Class<?> resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
+            ClassNode resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
             return (T)getInstance(resolvedClass, injectionContext);
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
-            throw new JRoboContainerException("Failed to create " + abstraction.getName(), ex);
+            throw new JRoboContainerException("Failed to create " + abstraction.getClassName(), ex);
         }
     }
 }

@@ -1,5 +1,7 @@
 package overclocking.jrobocontainer.logging;
 
+import overclocking.jrobocontainer.storages.ClassNode;
+
 /**
  * Created with IntelliJ IDEA.
  * User: mr146
@@ -26,44 +28,44 @@ public class Log implements ILog {
     }
 
     @Override
-    public void beginGet(Class<?> clazz) {
-        append("Getting " + clazz.getCanonicalName());
+    public void beginGet(ClassNode clazz) {
+        append("Getting " + clazz.getClassName());
         depth++;
     }
 
     @Override
-    public void endGet(Class<?> clazz) {
+    public void endGet(ClassNode clazz) {
         depth--;
-        append("End getting " + clazz.getCanonicalName());
+        append("End getting " + clazz.getClassName());
     }
 
     @Override
-    public void beginCreate(Class<?> clazz) {
-        append("Creating " + clazz.getCanonicalName());
+    public void beginCreate(ClassNode clazz) {
+        append("Creating " + clazz.getClassName());
         depth++;
     }
 
     @Override
-    public void endCreate(Class<?> clazz) {
+    public void endCreate(ClassNode clazz) {
         depth--;
-        append("End creating " + clazz.getCanonicalName());
+        append("End creating " + clazz.getClassName());
     }
 
     @Override
-    public void beginGetAll(Class<?> clazz) {
-        append("Getting all " + clazz.getCanonicalName());
+    public void beginGetAll(ClassNode clazz) {
+        append("Getting all " + clazz.getClassName());
         depth++;
     }
 
     @Override
-    public void endGetAll(Class<?> clazz) {
+    public void endGetAll(ClassNode clazz) {
         depth--;
-        append("End getting all " + clazz.getCanonicalName());
+        append("End getting all " + clazz.getClassName());
     }
 
     @Override
-    public void reuse(Class<?> clazz) {
-        append("Reusing " + clazz.getCanonicalName());
+    public void reuse(ClassNode clazz) {
+        append("Reusing " + clazz.getClassName());
     }
 
     @Override

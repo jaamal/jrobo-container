@@ -1,5 +1,7 @@
 package overclocking.jrobocontainer.exceptions;
 
+import overclocking.jrobocontainer.storages.ClassNode;
+
 /**
  * Created with IntelliJ IDEA.
  * User: mv146
@@ -8,8 +10,8 @@ package overclocking.jrobocontainer.exceptions;
  * To change this template use File | Settings | File Templates.
  */
 public class CyclicalDependencyException extends JRoboContainerException {
-    public CyclicalDependencyException(Class<?> clazz)
+    public CyclicalDependencyException(ClassNode clazz)
     {
-        super("Cyclical dependency found at " + clazz.getName());
+        super("Cyclical dependency found at " + clazz.getClassName());
     }
 }

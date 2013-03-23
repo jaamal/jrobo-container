@@ -1,18 +1,18 @@
 package overclocking.jrobocontainer.classloaderconfigurations;
 
-import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
+import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
 
-public class CustomDirectoryClassLoaderConfiguration implements IClassLoaderConfiguration
+public class CustomDirectoryClassScannerConfiguration implements IClassPathScannerConfiguration
 {
     private String classPath;
 
-    public CustomDirectoryClassLoaderConfiguration(String classPath)
+    public CustomDirectoryClassScannerConfiguration(String classPath)
     {
         this.classPath = classPath;
     }
 
     @Override
-    public boolean acceptJar(String jarName)
+    public boolean acceptsJar(String jarName)
     {
         return false;
     }

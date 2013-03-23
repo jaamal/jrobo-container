@@ -1,11 +1,11 @@
 package overclocking.jrobocontainer.classloaderconfigurations;
 
-import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
+import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
 
-public class DefaultClassLoaderConfiguration implements IClassLoaderConfiguration
+public class DefaultClassScannerConfiguration implements IClassPathScannerConfiguration
 {
     @Override
-    public boolean acceptJar(String jarName)
+    public boolean acceptsJar(String jarName)
     {
         return false;
     }

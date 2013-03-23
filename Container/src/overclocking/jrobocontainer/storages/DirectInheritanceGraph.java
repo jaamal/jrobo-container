@@ -1,41 +1,41 @@
-package overclocking.jrobocontainer.storage;
+package overclocking.jrobocontainer.storages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DirectInheritanceGraph implements IDirectInheritanceGraph {
 
-    HashMap<Class<?>, ArrayList<Class<?>>> graph;
-    ArrayList<Class<?>> vertices;
+    HashMap<ClassNode, ArrayList<ClassNode>> graph;
+    ArrayList<ClassNode> vertices;
 
     public DirectInheritanceGraph()
     {
-        graph = new HashMap<Class<?>, ArrayList<Class<?>>>();
-        vertices = new ArrayList<Class<?>>();
+        graph = new HashMap<ClassNode, ArrayList<ClassNode>>();
+        vertices = new ArrayList<ClassNode>();
     }
 
     @Override
-    public void addVertex(Class<?> vertex) {
+    public void addVertex(ClassNode vertex) {
         if(graph.containsKey(vertex))
             return;
         vertices.add(vertex);
-        graph.put(vertex, new ArrayList<Class<?>>());
+        graph.put(vertex, new ArrayList<ClassNode>());
     }
 
     @Override
-    public void addEdge(Class<?> from, Class<?> to) {
+    public void addEdge(ClassNode from, ClassNode to) {
         if(!graph.containsKey(from))
             addVertex(from);
         graph.get(from).add(to);
     }
 
     @Override
-    public ArrayList<Class<?>> getAdjacent(Class<?> vertex) {
+    public ArrayList<ClassNode> getAdjacent(ClassNode vertex) {
         return graph.get(vertex);
     }
 
     @Override
-    public ArrayList<Class<?>> getVertices() {
+    public ArrayList<ClassNode> getVertices() {
         return vertices;
     }
 }

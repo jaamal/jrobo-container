@@ -1,5 +1,6 @@
 package TestBases;
 
+import overclocking.InstrumentationProvider;
 import overclocking.jrobocontainer.container.Container;
 import overclocking.jrobocontainer.container.IContainer;
 import junit.framework.Assert;
@@ -17,7 +18,7 @@ public abstract class JRoboContainerTestBase extends TestCase
     @Override
     protected void setUp() throws Exception
     {
-        container = new Container();
+        container = new Container(InstrumentationProvider.getInstrumentation());
     }
 
 

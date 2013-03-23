@@ -12,7 +12,7 @@ public class LoadingContext implements ILoadingContext
     IClassesLoadingLog log;
     private ClassLoader mainClassLoader;
 
-    public LoadingContext(ClassLoader mainClassLoader)
+    public LoadingContext()
     {
         this.mainClassLoader = mainClassLoader;
         classes = new ArrayList<Class<?>>();

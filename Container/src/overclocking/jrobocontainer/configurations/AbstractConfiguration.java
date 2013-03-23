@@ -3,7 +3,8 @@ package overclocking.jrobocontainer.configurations;
 import overclocking.jrobocontainer.annotations.ContainerConstructor;
 import overclocking.jrobocontainer.exceptions.*;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
-import overclocking.jrobocontainer.storage.IStorage;
+import overclocking.jrobocontainer.storages.ClassNode;
+import overclocking.jrobocontainer.storages.IStorage;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -20,23 +21,23 @@ import java.util.ArrayList;
 public abstract class AbstractConfiguration implements IConfiguration
 {
     IStorage storage;
-    protected Class<?> abstraction;
+    protected ClassNode abstraction;
 
-    protected <T> T getInstance(Class<T> resolvedClass, IInjectionContext injectionContext)
+    protected <T> T getInstance(ClassNode resolvedClass, IInjectionContext injectionContext)
     {
         if (injectionContext.isClassProcessing(resolvedClass))
             throw new CyclicalDependencyException(resolvedClass);
         injectionContext.markClassAsProcessing(resolvedClass);
-        Constructor<T> constructor = getConstructor(resolvedClass);
+        Constructor<T> constructor = getConstructor(resolvedClass, injectionContext);
         Class<?>[] parametersTypes = constructor.getParameterTypes();
         int parametersCount = constructor.getParameterTypes().length;
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
             if (parametersTypes[i].isArray())
-                parameters[i] = storage.getConfiguration(parametersTypes[i].getComponentType()).getAll(injectionContext);
+                parameters[i] = storage.getConfiguration(injectionContext.getClassNodesStorage().getClassNode(parametersTypes[i].getComponentType())).getAll(injectionContext);
             else
-                parameters[i] = storage.getConfiguration(parametersTypes[i]).get(injectionContext);
+                parameters[i] = storage.getConfiguration(injectionContext.getClassNodesStorage().getClassNode(parametersTypes[i])).get(injectionContext);
         }
         injectionContext.markClassAsNotProcessing(resolvedClass);
         try
@@ -45,12 +46,13 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
         catch (Exception ex)
         {
-            throw new JRoboContainerException("Failed to get " + resolvedClass.getCanonicalName(), injectionContext, ex);
+            throw new JRoboContainerException("Failed to get " + resolvedClass.getClassName(), injectionContext, ex);
         }
     }
 
-    private <T> Constructor<T> getConstructor(Class<T> clazz)
+    private <T> Constructor<T> getConstructor(ClassNode classNode, IInjectionContext injectionContext)
     {
+        Class<T> clazz = injectionContext.getClassNodesStorage().getClassByNode(classNode, injectionContext.getClassLoadersStorage());
         Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
         if (constructors.length == 1)
             return constructors[0];
@@ -96,11 +98,11 @@ public abstract class AbstractConfiguration implements IConfiguration
     public <T> T[] getAll(IInjectionContext injectionContext)
     {
         injectionContext.beginGetAll(abstraction);
-        ArrayList<Class<?>> implementations = storage.getImplementations(abstraction);
+        ArrayList<ClassNode> implementations = storage.getImplementations(abstraction);
         ArrayList<T> result = new ArrayList<T>();
-        for (Class<?> implementation : implementations)
+        for (ClassNode implementation : implementations)
             result.add((T) storage.getConfiguration(implementation).get(injectionContext));
         injectionContext.endGetAll(abstraction);
-        return result.toArray((T[]) Array.newInstance(abstraction, result.size()));
+        return result.toArray((T[]) Array.newInstance(abstraction.getClazz(), result.size()));
     }
 }

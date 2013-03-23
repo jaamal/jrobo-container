@@ -1,8 +1,8 @@
 package testclasses.classloader;
 
-import overclocking.jrobocontainer.classloader.IClassLoaderConfiguration;
+import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
 
-public class FakeFilter implements IClassLoaderConfiguration
+public class FakeFilter implements IClassPathScannerConfiguration
 {
     private String classPaths;
 
@@ -12,7 +12,7 @@ public class FakeFilter implements IClassLoaderConfiguration
     }
 
     @Override
-    public boolean acceptJar(String jarName)
+    public boolean acceptsJar(String jarName)
     {
         return true;
     }
