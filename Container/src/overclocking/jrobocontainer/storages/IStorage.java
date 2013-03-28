@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public interface IStorage {
     void addClass(JavaClass clazz, ILoadingContext loadingContext);
 
-    ArrayList<ClassNode> getImplementations(ClassNode requiredAbstraction);
+    ArrayList<String> getImplementations(String requiredAbstractionId);
 
     void buildExtendedInheritanceGraph();
 
-    Object getSynchronizeObject(ClassNode resolvedClass);
+    Object getSynchronizeObject(String classNodeId);
 
-    IConfiguration getConfiguration(ClassNode abstraction);
+    IConfiguration getConfiguration(String abstractionId);
 
-    void setConfiguration(ClassNode abstraction, IConfiguration configuration);
+    void setConfiguration(String abstractionId, IConfiguration configuration);
 }

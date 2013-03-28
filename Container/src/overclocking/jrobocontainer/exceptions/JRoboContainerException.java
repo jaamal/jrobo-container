@@ -12,12 +12,12 @@ public class JRoboContainerException extends RuntimeException{
 
     public JRoboContainerException(String message, IInjectionContext injectionContext, Exception parentException)
     {
-        super(injectionContext.getLog() + delimiter + message + ": " + parentException.getMessage());
+        super(injectionContext.getLog() + delimiter + message + ": ", parentException);
     }
 
     public JRoboContainerException(String message, Exception parentException)
     {
-        super(message + ": " + parentException.getMessage());
+        super(message, parentException);
     }
 	public JRoboContainerException() {
 		super();

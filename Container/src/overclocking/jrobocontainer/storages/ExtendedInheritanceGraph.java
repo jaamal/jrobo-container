@@ -7,62 +7,65 @@ import java.util.HashSet;
 public class ExtendedInheritanceGraph implements IExtendedInheritanceGraph
 {
     private IDirectInheritanceGraph directInheritanceGraph;
+    private IClassNodesStorage classNodesStorage;
 
-    private HashMap<ClassNode, ArrayList<ClassNode>> descendants;
-    private HashMap<ClassNode, ArrayList<ClassNode>> ancestors;
+    private HashMap<String, ArrayList<String>> descendants;
+    private HashMap<String, ArrayList<String>> ancestors;
 
-    public ExtendedInheritanceGraph(IDirectInheritanceGraph directInheritanceGraph)
+    public ExtendedInheritanceGraph(IDirectInheritanceGraph directInheritanceGraph, IClassNodesStorage classNodesStorage)
     {
         this.directInheritanceGraph = directInheritanceGraph;
-        descendants = new HashMap<ClassNode, ArrayList<ClassNode>>();
-        ancestors = new HashMap<ClassNode, ArrayList<ClassNode>>();
-        HashSet<ClassNode> watchedClasses = new HashSet<ClassNode>();
-        for (ClassNode clazz : directInheritanceGraph.getVertices())
+        this.classNodesStorage = classNodesStorage;
+        descendants = new HashMap<String, ArrayList<String>>();
+        ancestors = new HashMap<String, ArrayList<String>>();
+        HashSet<String> watchedClasses = new HashSet<String>();
+        for (String classId : directInheritanceGraph.getVertices())
         {
-            ancestors.put(clazz, new ArrayList<ClassNode>());
-            if (!watchedClasses.contains(clazz))
-                dfs(clazz, watchedClasses);
+            ancestors.put(classId, new ArrayList<String>());
+            if (!watchedClasses.contains(classId))
+                dfs(classId, watchedClasses);
         }
-        for (ClassNode ancestor : directInheritanceGraph.getVertices())
-            for (ClassNode descendant : descendants.get(ancestor))
+        for (String ancestor : directInheritanceGraph.getVertices())
+            for (String descendant : descendants.get(ancestor))
             {
                 ancestors.get(descendant).add(ancestor);
             }
     }
 
 
-    private boolean isAbstractOrInterface(ClassNode clazz)
+    private boolean isAbstractOrInterface(String classId)
     {
-        return clazz.isAbstract() || clazz.isInterface();
+        ClassNode node = classNodesStorage.getClassNodeById(classId);
+        return node.isAbstract() || node.isInterface();
     }
 
-    private void dfs(ClassNode clazz, HashSet<ClassNode> watchedClasses)
+    private void dfs(String classId, HashSet<String> watchedClasses)
     {
-        watchedClasses.add(clazz);
-        for (ClassNode to : directInheritanceGraph.getAdjacent(clazz))
+        watchedClasses.add(classId);
+        for (String to : directInheritanceGraph.getAdjacent(classId))
             if (!watchedClasses.contains(to))
                 dfs(to, watchedClasses);
-        HashSet<ClassNode> union = new HashSet<ClassNode>();
-        for (ClassNode to : directInheritanceGraph.getAdjacent(clazz))
+        HashSet<String> union = new HashSet<String>();
+        for (String to : directInheritanceGraph.getAdjacent(classId))
             union.addAll(descendants.get(to));
-        if (!isAbstractOrInterface(clazz))
-            union.add(clazz);
-        descendants.put(clazz, new ArrayList<ClassNode>(union));
+        if (!isAbstractOrInterface(classId))
+            union.add(classId);
+        descendants.put(classId, new ArrayList<String>(union));
     }
 
     @Override
-    public ArrayList<ClassNode> getDescendants(ClassNode abstraction)
+    public ArrayList<String> getDescendants(String abstraction)
     {
         if (descendants.containsKey(abstraction))
             return descendants.get(abstraction);
-        return new ArrayList<ClassNode>();
+        return new ArrayList<String>();
     }
 
     @Override
-    public ArrayList<ClassNode> getAncestors(ClassNode abstraction)
+    public ArrayList<String> getAncestors(String abstraction)
     {
         if (ancestors.containsKey(abstraction))
             return ancestors.get(abstraction);
-        return new ArrayList<ClassNode>();
+        return new ArrayList<String>();
     }
 }

@@ -1,16 +1,15 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
+import junit.framework.Assert;
+import org.junit.Test;
 import overclocking.jrobocontainer.exceptions.AmbiguousAnnotatedConstructorException;
+import overclocking.jrobocontainer.exceptions.CyclicalDependencyException;
 import testclasses.cyclicaldependecy.CycleA;
 import testclasses.cyclicaldependecy.CycleD;
 import testclasses.cyclicaldependecy.CycleE;
-import overclocking.jrobocontainer.exceptions.CyclicalDependencyException;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-import junit.framework.Assert;
 import testclasses.multipleconstructor.MultipleConstructor;
 import testclasses.multipleconstructor.MultipleConstructorIncorrect;
-import org.junit.Test;
 import testclasses.parametrizedconstructor.IParamLevel1;
 import testclasses.parametrizedconstructor.ParamLevel1;
 import testclasses.parametrizedconstructor.ParamLevel2A;
@@ -26,7 +25,7 @@ import testclasses.parametrizedconstructor.ParamLevel2B;
 public class ParametrizedConstructorTests extends JRoboContainerTestBase
 {
     @Test
-    public void testParamLevels() throws JRoboContainerException
+    public void testParamLevels()
     {
         IParamLevel1 result = container.get(IParamLevel1.class);
         Assert.assertTrue(result instanceof ParamLevel1);
@@ -36,7 +35,7 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testAnnotationSuccess() throws JRoboContainerException
+    public void testAnnotationSuccess()
     {
         container.get(MultipleConstructor.class);
     }
@@ -59,9 +58,9 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
     }
 
     @Test(timeout = 1000)
-    public void testCyclicalDependency() throws JRoboContainerException
+    public void testCyclicalDependency()
     {
-        System.out.println(container.getClassesLoadingLog());
+        //System.out.println(container.getClassesLoadingLog());
         try
         {
             container.get(CycleA.class);

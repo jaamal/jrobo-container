@@ -15,7 +15,7 @@ public class Storage implements IStorage
 {
     IDirectInheritanceGraph directInheritanceGraph;
     IExtendedInheritanceGraph extendedInheritanceGraph;
-    HashMap<ClassNode, Object> synchronizeObjects;
+    HashMap<String, Object> synchronizeObjects;
     IConfigurationsManager configurationsManager;
     ILoadingContext loadingContext;
     IClassNodesStorage classNodesStorage;
@@ -23,9 +23,9 @@ public class Storage implements IStorage
     public Storage(IClassNodesStorage classNodesStorage)
     {
         this.classNodesStorage = classNodesStorage;
-        synchronizeObjects = new HashMap<ClassNode, Object>();
+        synchronizeObjects = new HashMap<String, Object>();
         directInheritanceGraph = new DirectInheritanceGraph();
-        configurationsManager = new ConfigurationsManager();
+        configurationsManager = new ConfigurationsManager(classNodesStorage);
     }
 
     @Override
@@ -33,48 +33,48 @@ public class Storage implements IStorage
     {
         if (this.loadingContext == null)
             this.loadingContext = loadingContext;
-        ClassNode node = classNodesStorage.getClassNode(clazz);
-        configurationsManager.setConfiguration(node, new AutoConfiguration(this, node));
-        synchronizeObjects.put(node, new Object());
+        String nodeId = classNodesStorage.getClassId(clazz);
+        configurationsManager.setConfiguration(nodeId, new AutoConfiguration(this, nodeId));
+        synchronizeObjects.put(nodeId, new Object());
         String[] interfacesNames = clazz.getInterfaceNames();
         String superClassName = clazz.getSuperclassName();
-        directInheritanceGraph.addVertex(node);
+        directInheritanceGraph.addVertex(nodeId);
         for (String currentInterface : interfacesNames)
         {
-            directInheritanceGraph.addEdge(classNodesStorage.getClassNode(currentInterface), node);
+            directInheritanceGraph.addEdge(classNodesStorage.getClassId(currentInterface), nodeId);
         }
-        directInheritanceGraph.addEdge(classNodesStorage.getClassNode(superClassName), node);
+        directInheritanceGraph.addEdge(classNodesStorage.getClassId(superClassName), nodeId);
     }
 
     @Override
-    public ArrayList<ClassNode> getImplementations(ClassNode requiredAbstraction)
+    public ArrayList<String> getImplementations(String requiredAbstractionId)
     {
-        return extendedInheritanceGraph.getDescendants(requiredAbstraction);
+        return extendedInheritanceGraph.getDescendants(requiredAbstractionId);
     }
 
     @Override
     public void buildExtendedInheritanceGraph()
     {
-        extendedInheritanceGraph = new ExtendedInheritanceGraph(directInheritanceGraph);
+        extendedInheritanceGraph = new ExtendedInheritanceGraph(directInheritanceGraph, classNodesStorage);
     }
 
     @Override
-    public Object getSynchronizeObject(ClassNode resolvedClass)
+    public Object getSynchronizeObject(String resolvedClassId)
     {
-        if (synchronizeObjects.containsKey(resolvedClass))
-            return synchronizeObjects.get(resolvedClass);
-        throw new JRoboContainerException("No synchronize object found for " + resolvedClass.getClassName());
+        if (synchronizeObjects.containsKey(resolvedClassId))
+            return synchronizeObjects.get(resolvedClassId);
+        throw new JRoboContainerException("No synchronize object found for " + resolvedClassId);
     }
 
     @Override
-    public IConfiguration getConfiguration(ClassNode abstraction)
+    public IConfiguration getConfiguration(String abstractionId)
     {
-        return configurationsManager.getConfiguration(abstraction);
+        return configurationsManager.getConfiguration(abstractionId);
     }
 
     @Override
-    public void setConfiguration(ClassNode abstraction, IConfiguration configuration)
+    public void setConfiguration(String abstractionId, IConfiguration configuration)
     {
-        configurationsManager.setConfiguration(abstraction, configuration);
+        configurationsManager.setConfiguration(abstractionId, configuration);
     }
 }

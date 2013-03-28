@@ -1,7 +1,5 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.storages.ClassNode;
-
 /**
  * Created with IntelliJ IDEA.
  * User: mv146
@@ -11,7 +9,7 @@ import overclocking.jrobocontainer.storages.ClassNode;
  */
 public interface IConfigurationsManager
 {
-    IConfiguration getConfiguration(ClassNode abstraction);
+    IConfiguration getConfiguration(String abstractionId);
 
-    void setConfiguration(ClassNode abstraction, IConfiguration configuration);
+    void setConfiguration(String abstractionId, IConfiguration configuration);
 }

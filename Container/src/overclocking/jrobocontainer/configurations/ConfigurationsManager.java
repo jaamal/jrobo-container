@@ -1,7 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-import overclocking.jrobocontainer.storages.ClassNode;
+import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
 import java.util.HashMap;
 
@@ -14,21 +14,23 @@ import java.util.HashMap;
  */
 public class ConfigurationsManager implements IConfigurationsManager {
 
-    HashMap<ClassNode, IConfiguration> configurations;
+    HashMap<String, IConfiguration> configurations;
+    private IClassNodesStorage classNodesStorage;
 
-    public ConfigurationsManager() {
-        configurations = new HashMap<ClassNode, IConfiguration>();
+    public ConfigurationsManager(IClassNodesStorage classNodesStorage) {
+        this.classNodesStorage = classNodesStorage;
+        configurations = new HashMap<String, IConfiguration>();
     }
 
     @Override
-    public IConfiguration getConfiguration(ClassNode abstraction) {
-        if(configurations.containsKey(abstraction))
-            return configurations.get(abstraction);
-        throw new JRoboContainerException(abstraction.getClassName() + " not found in paths");
+    public IConfiguration getConfiguration(String abstractionId) {
+        if(configurations.containsKey(abstractionId))
+            return configurations.get(abstractionId);
+        throw new JRoboContainerException(classNodesStorage.getClassNodeById(abstractionId).getClassName() + " not found in paths");
     }
 
     @Override
-    public void setConfiguration(ClassNode abstraction, IConfiguration configuration) {
+    public void setConfiguration(String abstraction, IConfiguration configuration) {
         configurations.put(abstraction, configuration);
     }
 }

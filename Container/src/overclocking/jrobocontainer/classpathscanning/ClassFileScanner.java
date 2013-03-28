@@ -1,4 +1,4 @@
-package overclocking.jrobocontainer.classscanning;
+package overclocking.jrobocontainer.classpathscanning;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;

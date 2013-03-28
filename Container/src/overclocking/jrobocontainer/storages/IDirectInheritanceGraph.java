@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public interface IDirectInheritanceGraph {
-    void addVertex(ClassNode vertex);
-    void addEdge(ClassNode from, ClassNode to);
-    ArrayList<ClassNode> getAdjacent(ClassNode vertex);
-    ArrayList<ClassNode> getVertices();
+    void addVertex(String vertex);
+    void addEdge(String from, String to);
+    ArrayList<String> getAdjacent(String vertex);
+    ArrayList<String> getVertices();
 }

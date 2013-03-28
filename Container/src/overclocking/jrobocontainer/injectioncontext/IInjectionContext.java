@@ -6,9 +6,9 @@ import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
 public interface IInjectionContext
 {
-    boolean isClassProcessing(ClassNode clazz);
-    void markClassAsProcessing(ClassNode clazz);
-    void markClassAsNotProcessing(ClassNode clazz);
+    boolean isClassProcessing(String classId);
+    void markClassAsProcessing(String classId);
+    void markClassAsNotProcessing(String classId);
 
     void beginGet(ClassNode clazz);
     void endGet(ClassNode clazz);

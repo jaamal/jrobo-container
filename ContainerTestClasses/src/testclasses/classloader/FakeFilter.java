@@ -1,6 +1,6 @@
 package testclasses.classloader;
 
-import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
+import overclocking.jrobocontainer.classpathscanning.IClassPathScannerConfiguration;
 
 public class FakeFilter implements IClassPathScannerConfiguration
 {

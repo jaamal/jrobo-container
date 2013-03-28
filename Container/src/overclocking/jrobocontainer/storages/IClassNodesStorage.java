@@ -5,11 +5,13 @@ import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
 
 public interface IClassNodesStorage
 {
-    ClassNode getClassNode(JavaClass javaClass);
+    ClassNode getClassNodeById(String id);
 
-    ClassNode getClassNode(String className);
+    String getClassId(JavaClass javaClass);
 
-    ClassNode getClassNode(Class<?> clazz);
+    String getClassId(String className);
 
-    <T> Class<T> getClassByNode(ClassNode classNode, IClassLoadersStorage classNodesStorage);
+    String getClassId(Class<?> clazz);
+
+    <T> Class<T> getClassById(String id, IClassLoadersStorage classNodesStorage);
 }

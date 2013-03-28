@@ -4,59 +4,72 @@ import org.apache.bcel.classfile.JavaClass;
 import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
 
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class ClassNodesStorage implements IClassNodesStorage
 {
-    TreeMap<String, ClassNode> map;
+    TreeMap<String, ClassNode> idToClassNode;
+    TreeMap<String, String> classNameToId;
 
     public ClassNodesStorage()
     {
-        map = new TreeMap<String, ClassNode>();
+        idToClassNode = new TreeMap<String, ClassNode>();
+        classNameToId = new TreeMap<String, String>();
     }
 
     @Override
-    public ClassNode getClassNode(JavaClass javaClass)
+    public String getClassId(JavaClass javaClass)
     {
         String className = javaClass.getClassName();
-        if (!map.containsKey(className))
-            map.put(className, new ClassNode(javaClass));
-        ClassNode result = map.get(className);
-        if(result.getJavaClass() == null)
+        if(!classNameToId.containsKey(className))
         {
-            result.setJavaClass(javaClass);
-            map.put(className, result);
+            String id = UUID.randomUUID().toString();
+            ClassNode result = new ClassNode(javaClass, id);
+            classNameToId.put(className, id);
+            idToClassNode.put(id, result);
+            return id;
         }
-        return result;
+        String id = classNameToId.get(className);
+        ClassNode classNode = idToClassNode.get(id);
+        if(classNode.getJavaClass() == null)
+        {
+            classNode.setJavaClass(javaClass);
+            idToClassNode.put(id, classNode);
+        }
+        return id;
     }
 
     @Override
-    public ClassNode getClassNode(String className)
+    public String getClassId(String className)
     {
-        if(!map.containsKey(className))
-            map.put(className, new ClassNode(className));
-        return map.get(className);
+        if(!classNameToId.containsKey(className))
+        {
+            String id = UUID.randomUUID().toString();
+            ClassNode result = new ClassNode(className, id);
+            classNameToId.put(className, id);
+            idToClassNode.put(id, result);
+            return id;
+        }
+        return classNameToId.get(className);
     }
 
     @Override
-    public ClassNode getClassNode(Class<?> clazz)
+    public String getClassId(Class<?> clazz)
     {
-        return getClassNode(clazz.getName());
+        return getClassId(clazz.getName());
     }
 
     @Override
-    public <T> Class<T> getClassByNode(ClassNode classNode, IClassLoadersStorage classLoadersStorage)
+    public ClassNode getClassNodeById(String id)
     {
-        ClassLoader classLoader = classLoadersStorage.getClassLoaderFor(classNode.getClassName());
-        try
-        {
-            Class<T> result = (Class<T>) classLoader.loadClass(classNode.getClassName());
-            classNode.setClazz(result);
-            map.put(classNode.getClassName(), classNode);
-        }
-        catch (ClassNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        ClassNode result = idToClassNode.get(id);
+        return idToClassNode.get(id);
+    }
+
+    @Override
+    public <T> Class<T> getClassById(String classNodeId, IClassLoadersStorage classLoadersStorage)
+    {
+        ClassNode classNode = idToClassNode.get(classNodeId);
+        return (Class<T>) classLoadersStorage.getClassLoaderFor(classNode.getClassName());
     }
 }

@@ -1,4 +1,4 @@
-package overclocking.jrobocontainer.classscanning;
+package overclocking.jrobocontainer.classpathscanning;
 
 public interface IClassPathScannerConfiguration
 {

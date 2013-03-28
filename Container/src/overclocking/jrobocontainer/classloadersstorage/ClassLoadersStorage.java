@@ -1,7 +1,6 @@
 package overclocking.jrobocontainer.classloadersstorage;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
 
@@ -22,9 +21,9 @@ public class ClassLoadersStorage implements IClassLoadersStorage
     }
 
     @Override
-    public ClassLoader getClassLoaderFor(String className)
+    public Class<?> getClassLoaderFor(String className)
     {
-        ClassLoader result = tryGetClassLoaderFor(className);
+        Class<?> result = tryGetClassLoaderFor(className);
         if(result == null)
         {
             if(instrumentation != null)
@@ -36,30 +35,30 @@ public class ClassLoadersStorage implements IClassLoadersStorage
         return result;
     }
 
-    private ClassLoader tryGetClassLoaderFor(String className)
+    private Class<?> tryGetClassLoaderFor(String className)
     {
+        Method method = null;
+        try {
+            ClassLoader xxxx = getClass().getClassLoader();
+            method = ClassLoader.class.getDeclaredMethod("findLoadedClass0", String.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        method.setAccessible(true);
         for(ClassLoader classLoader : classLoaders)
         {
+            if(classLoader == null)
+                continue;
             try
             {
-                Method method = ClassLoader.class.getDeclaredMethod("findClass", String.class);
-                method.setAccessible(true);
-                if(method.invoke(classLoader, className) != null)
-                    return classLoader;
-            }
-            catch (NoSuchMethodException e)
-            {
-                e.printStackTrace();
-            }
-            catch (InvocationTargetException e)
-            {
-                e.printStackTrace();
-            }
-            catch (IllegalAccessException e)
-            {
-                e.printStackTrace();
+                Class<?> result = classLoader.loadClass(className);
+                if(result != null)
+                    return result;
+            }catch (ClassNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
+        System.out.println("asdfasdfasdf");
         return null;
     }
 

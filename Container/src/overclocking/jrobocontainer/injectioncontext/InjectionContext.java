@@ -18,7 +18,7 @@ import java.util.HashSet;
 public class InjectionContext implements IInjectionContext
 {
 
-    private HashSet<ClassNode> processingClasses;
+    private HashSet<String> processingClasses;
     private ILog log;
     private IClassLoadersStorage classLoadersStorage;
     private IClassNodesStorage classNodesStorage;
@@ -27,24 +27,24 @@ public class InjectionContext implements IInjectionContext
     {
         this.classLoadersStorage = classLoadersStorage;
         this.classNodesStorage = classNodesStorage;
-        processingClasses = new HashSet<ClassNode>();
+        processingClasses = new HashSet<String>();
         log = new Log();
     }
 
     @Override
-    public boolean isClassProcessing(ClassNode clazz)
+    public boolean isClassProcessing(String clazz)
     {
         return processingClasses.contains(clazz);
     }
 
     @Override
-    public void markClassAsProcessing(ClassNode clazz)
+    public void markClassAsProcessing(String clazz)
     {
         processingClasses.add(clazz);
     }
 
     @Override
-    public void markClassAsNotProcessing(ClassNode clazz)
+    public void markClassAsNotProcessing(String clazz)
     {
         processingClasses.remove(clazz);
     }

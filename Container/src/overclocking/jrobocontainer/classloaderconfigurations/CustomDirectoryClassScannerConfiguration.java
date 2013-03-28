@@ -1,6 +1,6 @@
 package overclocking.jrobocontainer.classloaderconfigurations;
 
-import overclocking.jrobocontainer.classscanning.IClassPathScannerConfiguration;
+import overclocking.jrobocontainer.classpathscanning.IClassPathScannerConfiguration;
 
 public class CustomDirectoryClassScannerConfiguration implements IClassPathScannerConfiguration
 {

@@ -1,4 +1,4 @@
-package overclocking.jrobocontainer.classscanning;
+package overclocking.jrobocontainer.classpathscanning;
 
 import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
 import overclocking.jrobocontainer.storages.IStorage;

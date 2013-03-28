@@ -1,6 +1,6 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.classscanning.Resolver;
+import overclocking.jrobocontainer.classpathscanning.Resolver;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
@@ -17,14 +17,16 @@ public class AutoConfiguration extends AbstractConfiguration {
 
     private Object instance;
 
-    public AutoConfiguration(IStorage storage, ClassNode abstraction) {
+    public AutoConfiguration(IStorage storage, String abstractionId) {
         this.storage = storage;
-        this.abstraction = abstraction;
+        this.abstractionId = abstractionId;
         instance = null;
     }
 
     @SuppressWarnings("unchecked")
     public <T> T innerGet(IInjectionContext injectionContext){
+
+        ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         try {
             if(instance != null)
             {
@@ -32,15 +34,15 @@ public class AutoConfiguration extends AbstractConfiguration {
                 return (T)instance;
             }
             injectionContext.beginCreate(abstraction);
-            ClassNode resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
-            synchronized (storage.getSynchronizeObject(resolvedClass)) {
-                if(resolvedClass == abstraction)
+            String resolvedClassId = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), injectionContext.getClassNodesStorage());
+            synchronized (storage.getSynchronizeObject(resolvedClassId)) {
+                if(resolvedClassId.equals(abstractionId))
                 {
-                    instance = getInstance(resolvedClass, injectionContext);
+                    instance = getInstance(resolvedClassId, injectionContext);
                 }
                 else
                 {
-                    instance = storage.getConfiguration(resolvedClass).get(injectionContext);
+                    instance = storage.getConfiguration(resolvedClassId).get(injectionContext);
                 }
             }
             injectionContext.endCreate(abstraction);
@@ -53,9 +55,10 @@ public class AutoConfiguration extends AbstractConfiguration {
     }
 
     public <T> T innerCreate(IInjectionContext injectionContext) {
+        ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         try {
-            ClassNode resolvedClass = Resolver.resolveClass(abstraction, storage.getImplementations(abstraction));
-            return (T)getInstance(resolvedClass, injectionContext);
+            String resolvedClassId = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), injectionContext.getClassNodesStorage());
+            return (T)getInstance(resolvedClassId, injectionContext);
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {

@@ -7,6 +7,20 @@ public class ClassNode
     private Class<?> clazz;
     private String className;
     private JavaClass javaClass;
+    private String id;
+
+    public ClassNode(String className, String id)
+    {
+        this.className = className;
+        this.id = id;
+    }
+
+    public ClassNode(JavaClass javaClass, String id)
+    {
+        this.javaClass = javaClass;
+        this.className = javaClass.getClassName();
+        this.id = id;
+    }
 
     public void setJavaClass(JavaClass javaClass)
     {
@@ -16,17 +30,6 @@ public class ClassNode
     public JavaClass getJavaClass()
     {
         return javaClass;
-    }
-
-    public ClassNode(String className)
-    {
-        this.className = className;
-    }
-
-    public ClassNode(JavaClass javaClass)
-    {
-        this.javaClass = javaClass;
-        this.className = javaClass.getClassName();
     }
 
     public Class<?> getClazz()
@@ -51,11 +54,23 @@ public class ClassNode
 
     public boolean isAbstract()
     {
+        if(javaClass == null)
+            return false;
         return javaClass.isAbstract();
     }
 
     public boolean isInterface()
     {
+        if(javaClass == null)
+            return false;
         return javaClass.isInterface();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
