@@ -2,7 +2,7 @@ package overclocking.jrobocontainer.classpathscanning;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
+import overclocking.jrobocontainer.logging.ILoadingLog;
 import overclocking.jrobocontainer.storages.IStorage;
 
 import java.io.File;
@@ -17,17 +17,24 @@ public class ClassFileScanner
         this.storage = storage;
     }
 
-    public void load(File file, ILoadingContext loadingContext)
+    public void scanFile(File file, ILoadingLog log)
     {
+        String fileName = file.getName();
+        log.beginScanFile(fileName);
         try
         {
             ClassParser classParser = new ClassParser(file.getAbsolutePath());
-            JavaClass clazz = classParser.parse();
-            storage.addClass(clazz, loadingContext);
+            JavaClass javaClass = classParser.parse();
+            storage.addClass(javaClass, log);
+            log.scanFileSuccess(javaClass.getClassName());
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            log.scanFileFail(e.getMessage());
+        }
+        finally
+        {
+            log.endScanFile();
         }
     }
 

@@ -1,8 +1,7 @@
 package overclocking.jrobocontainer.injectioncontext;
 
-import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
-import overclocking.jrobocontainer.logging.ILog;
-import overclocking.jrobocontainer.logging.Log;
+import overclocking.jrobocontainer.logging.IInjectionLog;
+import overclocking.jrobocontainer.logging.InjectionLog;
 import overclocking.jrobocontainer.storages.ClassNode;
 import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
@@ -19,16 +18,14 @@ public class InjectionContext implements IInjectionContext
 {
 
     private HashSet<String> processingClasses;
-    private ILog log;
-    private IClassLoadersStorage classLoadersStorage;
+    private IInjectionLog log;
     private IClassNodesStorage classNodesStorage;
 
-    public InjectionContext(IClassLoadersStorage classLoadersStorage, IClassNodesStorage classNodesStorage)
+    public InjectionContext(IClassNodesStorage classNodesStorage)
     {
-        this.classLoadersStorage = classLoadersStorage;
         this.classNodesStorage = classNodesStorage;
         processingClasses = new HashSet<String>();
-        log = new Log();
+        log = new InjectionLog();
     }
 
     @Override
@@ -95,12 +92,6 @@ public class InjectionContext implements IInjectionContext
     public String getLog()
     {
         return log.getLog();
-    }
-
-    @Override
-    public IClassLoadersStorage getClassLoadersStorage()
-    {
-        return classLoadersStorage;
     }
 
     @Override

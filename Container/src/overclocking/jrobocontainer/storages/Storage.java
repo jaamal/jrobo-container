@@ -6,7 +6,7 @@ import overclocking.jrobocontainer.configurations.ConfigurationsManager;
 import overclocking.jrobocontainer.configurations.IConfiguration;
 import overclocking.jrobocontainer.configurations.IConfigurationsManager;
 import overclocking.jrobocontainer.exceptions.JRoboContainerException;
-import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
+import overclocking.jrobocontainer.logging.ILoadingLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class Storage implements IStorage
     IExtendedInheritanceGraph extendedInheritanceGraph;
     HashMap<String, Object> synchronizeObjects;
     IConfigurationsManager configurationsManager;
-    ILoadingContext loadingContext;
+    ILoadingLog log;
     IClassNodesStorage classNodesStorage;
 
     public Storage(IClassNodesStorage classNodesStorage)
@@ -29,10 +29,10 @@ public class Storage implements IStorage
     }
 
     @Override
-    public void addClass(JavaClass clazz, ILoadingContext loadingContext)
+    public void addClass(JavaClass clazz, ILoadingLog log)
     {
-        if (this.loadingContext == null)
-            this.loadingContext = loadingContext;
+        if (this.log == null)
+            this.log = log;
         String nodeId = classNodesStorage.getClassId(clazz);
         configurationsManager.setConfiguration(nodeId, new AutoConfiguration(this, nodeId));
         synchronizeObjects.put(nodeId, new Object());

@@ -27,7 +27,9 @@ public class ParametrizedConstructorTests extends JRoboContainerTestBase
     @Test
     public void testParamLevels()
     {
+        //System.out.println(container.getClassesLoadingLog());
         IParamLevel1 result = container.get(IParamLevel1.class);
+        System.out.println(container.getLastLog());
         Assert.assertTrue(result instanceof ParamLevel1);
         ParamLevel1 casted = (ParamLevel1) result;
         Assert.assertTrue(casted.paramLevel2A instanceof ParamLevel2A);

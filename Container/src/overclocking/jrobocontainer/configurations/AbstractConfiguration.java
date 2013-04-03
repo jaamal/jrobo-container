@@ -65,7 +65,7 @@ public abstract class AbstractConfiguration implements IConfiguration
     private <T> Constructor<T> getConstructor(String classNodeId, IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode classNode = injectionContext.getClassNodesStorage().getClassNodeById(classNodeId);
-        Class<T> clazz = injectionContext.getClassLoadersStorage().loadClass(classLoader, classNode.getClassName());
+        Class<T> clazz = loadClass(classLoader, classNode.getClassName());
         Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
         if (constructors.length == 1)
             return constructors[0];
@@ -117,7 +117,7 @@ public abstract class AbstractConfiguration implements IConfiguration
     public <T> T[] getAll(IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
-        abstraction.setClazz(injectionContext.getClassLoadersStorage().loadClass(classLoader, abstraction.getClassName()));
+        abstraction.setClazz(loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginGetAll(abstraction);
         ArrayList<String> implementations = storage.getImplementations(abstractionId);
         ArrayList<T> result = new ArrayList<T>();
@@ -125,5 +125,16 @@ public abstract class AbstractConfiguration implements IConfiguration
             result.add((T) storage.getConfiguration(implementationId).get(injectionContext, classLoader));
         injectionContext.endGetAll(abstraction);
         return result.toArray((T[]) Array.newInstance(abstraction.getClazz(), result.size()));
+    }
+
+    public <T> Class<T> loadClass(ClassLoader classLoader, String className)     {
+        try
+        {
+            return (Class<T>)classLoader.loadClass(className);
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return null;
+        }
     }
 }

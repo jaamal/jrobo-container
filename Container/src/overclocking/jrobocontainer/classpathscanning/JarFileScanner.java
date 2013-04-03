@@ -2,7 +2,7 @@ package overclocking.jrobocontainer.classpathscanning;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import overclocking.jrobocontainer.loadingcontext.ILoadingContext;
+import overclocking.jrobocontainer.logging.ILoadingLog;
 import overclocking.jrobocontainer.storages.IStorage;
 
 import java.io.File;
@@ -23,41 +23,60 @@ public class JarFileScanner
         this.classPathScannerConfiguration = entitiesFilter;
     }
 
-    public void load(File file, ILoadingContext loadingContext)
+    public void load(File file, ILoadingLog log)
     {
-        try
+        String fileName = file.getName();
+        log.beginScanFile(fileName);
+        if (classPathScannerConfiguration.acceptsJar(file.getName()))
         {
-            if (classPathScannerConfiguration.acceptsJar(file.getName()))
+            try
             {
                 JarFile jarFile = new JarFile(file);
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements())
                 {
-                    loadJarEntry(jarFile, entries.nextElement(), loadingContext);
+                    loadJarEntry(jarFile, entries.nextElement(), log);
                 }
             }
+            catch (IOException e)
+            {
+                log.scanFileFail(e.getMessage());
+            }
+            finally
+            {
+                log.endScanFile();
+            }
         }
-        catch (IOException e)
+        else
         {
+            log.skipJarFile();
+            log.endScanFile();
         }
 
     }
 
-    private void loadJarEntry(JarFile file, JarEntry entry, ILoadingContext loadingContext)
+    private void loadJarEntry(JarFile file, JarEntry entry, ILoadingLog log)
     {
-        loadingContext.appendToLog("Jar " + file.getName() + ", entry " + entry.getName());
-        if(!entry.getName().endsWith(".class"))
+        String entryName = entry.getName();
+        if(!entryName.endsWith(".class"))
+        {
             return;
-        ClassParser classParser = new ClassParser(file.getName(), entry.getName());
+        }
+        log.beginScanJarEntry(entryName);
+        ClassParser classParser = new ClassParser(file.getName(), entryName);
         try
         {
-            JavaClass clazz = classParser.parse();
-            storage.addClass(clazz, loadingContext);
-
+            JavaClass javaClass = classParser.parse();
+            storage.addClass(javaClass, log);
+            log.scanEntrySuccess(javaClass.getClassName());
         }
         catch(Exception ex)
         {
-            loadingContext.appendToLog("Failed to read " + entry.getName() + " in " + file.getName() + ": " + ex.getMessage());
+            log.scanEntryFail(ex.getMessage());
+        }
+        finally
+        {
+            log.endScanJarEntry();
         }
     }
 

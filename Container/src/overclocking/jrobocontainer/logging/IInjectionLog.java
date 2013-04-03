@@ -2,7 +2,7 @@ package overclocking.jrobocontainer.logging;
 
 import overclocking.jrobocontainer.storages.ClassNode;
 
-public interface ILog
+public interface IInjectionLog
 {
     void beginGet(ClassNode clazz);
     void endGet(ClassNode clazz);
