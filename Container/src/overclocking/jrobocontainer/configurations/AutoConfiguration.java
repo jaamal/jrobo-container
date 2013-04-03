@@ -1,19 +1,11 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.classpathscanning.Resolver;
 import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
 import overclocking.jrobocontainer.storages.IClassNodesStorage;
 import overclocking.jrobocontainer.storages.IStorage;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mv146
- * Date: 06.10.12
- * Time: 13:38
- * To change this template use File | Settings | File Templates.
- */
 public class AutoConfiguration extends AbstractConfiguration {
     private Object instance;
 
@@ -23,7 +15,6 @@ public class AutoConfiguration extends AbstractConfiguration {
         this.instance = null;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader){
 
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
@@ -34,7 +25,7 @@ public class AutoConfiguration extends AbstractConfiguration {
                 return (T)instance;
             }
             injectionContext.beginCreate(abstraction);
-            String resolvedClassId = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
+            String resolvedClassId = resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
             synchronized (storage.getSynchronizeObject(resolvedClassId)) {
                 if(resolvedClassId.equals(abstractionId))
                 {
@@ -57,7 +48,7 @@ public class AutoConfiguration extends AbstractConfiguration {
     public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) {
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
         try {
-            String resolvedClassId = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
+            String resolvedClassId = resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
             return (T)getInstance(resolvedClassId, injectionContext, classLoader);
         } catch (JroboContainerException ex) {
             throw ex;

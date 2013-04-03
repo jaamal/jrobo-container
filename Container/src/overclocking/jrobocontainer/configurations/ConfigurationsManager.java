@@ -5,13 +5,6 @@ import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mv146
- * Date: 06.10.12
- * Time: 14:18
- * To change this template use File | Settings | File Templates.
- */
 public class ConfigurationsManager implements IConfigurationsManager {
 
     private HashMap<String, IConfiguration> configurations;

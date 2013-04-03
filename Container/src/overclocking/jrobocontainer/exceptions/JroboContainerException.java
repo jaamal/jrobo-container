@@ -2,7 +2,6 @@ package overclocking.jrobocontainer.exceptions;
 
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 
-@SuppressWarnings("serial")
 public class JroboContainerException extends RuntimeException{
 
     private static final String delimiter = "------------------------------------------\r\n";

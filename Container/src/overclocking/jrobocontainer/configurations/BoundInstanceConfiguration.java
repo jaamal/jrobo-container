@@ -1,6 +1,5 @@
 package overclocking.jrobocontainer.configurations;
 
-import overclocking.jrobocontainer.classpathscanning.Resolver;
 import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
@@ -24,7 +23,7 @@ public class BoundInstanceConfiguration extends AbstractConfiguration {
 
     public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) throws JroboContainerException {
         try {
-            String resolvedClass = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
+            String resolvedClass = resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
             return (T)getInstance(resolvedClass, injectionContext, classLoader);
         } catch (JroboContainerException ex) {
             throw ex;

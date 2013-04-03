@@ -4,13 +4,6 @@ import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.IClassNodesStorage;
 import overclocking.jrobocontainer.storages.IStorage;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mv146
- * Date: 06.10.12
- * Time: 16:57
- * To change this template use File | Settings | File Templates.
- */
 public class BoundImplementationConfiguration extends AbstractConfiguration {
     private String boundImplementationId;
 

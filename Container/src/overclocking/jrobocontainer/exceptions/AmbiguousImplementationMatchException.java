@@ -3,7 +3,6 @@ package overclocking.jrobocontainer.exceptions;
 
 import overclocking.jrobocontainer.storages.ClassNode;
 
-@SuppressWarnings("serial")
 public class AmbiguousImplementationMatchException extends
         JroboContainerException {
 	public AmbiguousImplementationMatchException(ClassNode requiredInterface, String implementations)

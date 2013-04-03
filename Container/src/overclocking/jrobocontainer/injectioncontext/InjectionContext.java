@@ -6,13 +6,6 @@ import overclocking.jrobocontainer.storages.ClassNode;
 
 import java.util.HashSet;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mr146
- * Date: 01.03.13
- * Time: 0:30
- * To change this template use File | Settings | File Templates.
- */
 public class InjectionContext implements IInjectionContext
 {
     private HashSet<String> processingClasses;

@@ -2,13 +2,6 @@ package overclocking.jrobocontainer.logging;
 
 import overclocking.jrobocontainer.storages.ClassNode;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mr146
- * Date: 01.03.13
- * Time: 2:07
- * To change this template use File | Settings | File Templates.
- */
 public class InjectionLog extends Log implements IInjectionLog {
 
     public InjectionLog()

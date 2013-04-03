@@ -11,13 +11,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: mv146
- * Date: 06.10.12
- * Time: 16:42
- * To change this template use File | Settings | File Templates.
- */
 public abstract class AbstractConfiguration implements IConfiguration
 {
     protected IStorage storage;
@@ -145,5 +138,21 @@ public abstract class AbstractConfiguration implements IConfiguration
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             return null;
         }
+    }
+
+
+    protected String resolveClass(String requiredAbstractionId,
+                                      ArrayList<String> implementations, IClassNodesStorage classNodesStorage) {
+        ClassNode requiredAbstraction = classNodesStorage.getClassNodeById(requiredAbstractionId);
+        if (implementations == null || implementations.size() == 0) {
+            throw new ImplementationNotFoundException(requiredAbstraction);
+        }
+        if (implementations.size() > 1) {
+            String implementationsString = "";
+            for (String implementation : implementations)
+                implementationsString = implementationsString + classNodesStorage.getClassNodeById(implementation).getClassName() + System.getProperty("line.separator");
+            throw new AmbiguousImplementationMatchException(requiredAbstraction, implementationsString);
+        }
+        return implementations.get(0);
     }
 }
