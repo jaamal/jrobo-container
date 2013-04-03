@@ -7,6 +7,7 @@ import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import testclasses.gettingcreating.IIncrementer;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;
+import testclasses.staticfields.*;
 import org.junit.Test;
 import testclasses.singleimplementation.*;
 
@@ -21,6 +22,13 @@ public class OneImplementationTests extends JRoboContainerTestBase
         IOneImplementation result1 = container.get(IOneImplementation.class);
         IOneImplementation result2 = container.get(IOneImplementation.class);
         Assert.assertSame(result1, result2);
+    }
+
+    @Test
+    public void testStaticFields()
+    {
+        IClassWithStaticFields result = container.get(IClassWithStaticFields.class);
+        Assert.assertEquals(result.getX(), 146 * 146);
     }
 
     @Test

@@ -10,9 +10,10 @@ import overclocking.jrobocontainer.configurations.BoundInstanceConfiguration;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.injectioncontext.InjectionContext;
 import overclocking.jrobocontainer.loadingcontext.LoadingContext;
-import overclocking.jrobocontainer.storages.*;
-
-import java.lang.instrument.Instrumentation;
+import overclocking.jrobocontainer.storages.ClassNodesStorage;
+import overclocking.jrobocontainer.storages.IClassNodesStorage;
+import overclocking.jrobocontainer.storages.IStorage;
+import overclocking.jrobocontainer.storages.Storage;
 
 public class Container implements IContainer
 {
@@ -23,24 +24,14 @@ public class Container implements IContainer
     private IClassLoadersStorage classLoadersStorage;
     private IClassNodesStorage classNodesStorage;
 
-    public Container(ClassLoader[] classLoaders)
+    public Container()
     {
-        this(new DefaultClassScannerConfiguration(), new ClassLoadersStorage(classLoaders));
+        this(new DefaultClassScannerConfiguration(), new ClassLoadersStorage());
     }
 
-    public Container(Instrumentation instrumentation)
+    public Container(IClassPathScannerConfiguration classPathScannerConfiguration)
     {
-        this(new DefaultClassScannerConfiguration(), new ClassLoadersStorage(instrumentation));
-    }
-
-    public Container(IClassPathScannerConfiguration classPathScannerConfiguration, ClassLoader[] classLoaders)
-    {
-        this(classPathScannerConfiguration, new ClassLoadersStorage(classLoaders));
-    }
-
-    public Container(IClassPathScannerConfiguration classPathScannerConfiguration, Instrumentation instrumentation)
-    {
-        this(classPathScannerConfiguration, new ClassLoadersStorage(instrumentation));
+        this(classPathScannerConfiguration, new ClassLoadersStorage());
     }
 
     private Container(IClassPathScannerConfiguration classPathScannerConfiguration, IClassLoadersStorage classLoadersStorage)
@@ -57,14 +48,14 @@ public class Container implements IContainer
     public <T> T get(Class<T> requiredAbstraction)
     {
         lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
-        return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).get(lastInjectionContext);
+        return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).get(lastInjectionContext, requiredAbstraction.getClassLoader());
     }
 
     @Override
     public <T> T create(Class<T> requiredAbstraction)
     {
         lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
-        return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).create(lastInjectionContext);
+        return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).create(lastInjectionContext, requiredAbstraction.getClassLoader());
     }
 
     @Override
@@ -83,11 +74,16 @@ public class Container implements IContainer
     }
 
     @Override
+    public <T> void bindClassLoader(Class<T> abstraction, ClassLoader classLoader) {
+        classNodesStorage.setClassLoader(abstraction.getName(),  classLoader);
+    }
+
+    @Override
     public <T> T[] getAll(Class<T> requiredAbstraction)
     {
         lastInjectionContext = new InjectionContext(classLoadersStorage, classNodesStorage);
         String abstractionNodeId = classNodesStorage.getClassId(requiredAbstraction);
-        return storage.getConfiguration(abstractionNodeId).getAll(lastInjectionContext);
+        return storage.getConfiguration(abstractionNodeId).getAll(lastInjectionContext, requiredAbstraction.getClassLoader());
     }
 
     @Override

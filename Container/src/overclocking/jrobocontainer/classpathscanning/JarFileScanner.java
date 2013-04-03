@@ -45,6 +45,7 @@ public class JarFileScanner
 
     private void loadJarEntry(JarFile file, JarEntry entry, ILoadingContext loadingContext)
     {
+        loadingContext.appendToLog("Jar " + file.getName() + ", entry " + entry.getName());
         if(!entry.getName().endsWith(".class"))
             return;
         ClassParser classParser = new ClassParser(file.getName(), entry.getName());

@@ -6,7 +6,6 @@ import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
 import overclocking.jrobocontainer.storages.IStorage;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -23,22 +22,34 @@ public abstract class AbstractConfiguration implements IConfiguration
     IStorage storage;
     protected String abstractionId;
 
-    protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext)
+    protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode resolvedClass = injectionContext.getClassNodesStorage().getClassNodeById(resolvedClassId);
         if (injectionContext.isClassProcessing(resolvedClassId))
             throw new CyclicalDependencyException(resolvedClass);
         injectionContext.markClassAsProcessing(resolvedClassId);
-        Constructor<T> constructor = getConstructor(resolvedClassId, injectionContext);
+        Constructor<T> constructor = getConstructor(resolvedClassId, injectionContext, classLoader);
         Class<?>[] parametersTypes = constructor.getParameterTypes();
         int parametersCount = constructor.getParameterTypes().length;
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
             if (parametersTypes[i].isArray())
-                parameters[i] = storage.getConfiguration(injectionContext.getClassNodesStorage().getClassId(parametersTypes[i].getComponentType())).getAll(injectionContext);
+            {
+                String classId = injectionContext.getClassNodesStorage().getClassId(parametersTypes[i].getComponentType());
+                ClassLoader nextClassLoader = injectionContext.getClassNodesStorage().getClassNodeById(classId).getClassLoader();
+                if(nextClassLoader == null)
+                    nextClassLoader = classLoader;
+                parameters[i] = storage.getConfiguration(classId).getAll(injectionContext, nextClassLoader);
+            }
             else
-                parameters[i] = storage.getConfiguration(injectionContext.getClassNodesStorage().getClassId(parametersTypes[i])).get(injectionContext);
+            {
+                String classId = injectionContext.getClassNodesStorage().getClassId(parametersTypes[i]);
+                ClassLoader nextClassLoader = injectionContext.getClassNodesStorage().getClassNodeById(classId).getClassLoader();
+                if(nextClassLoader == null)
+                    nextClassLoader = classLoader;
+                parameters[i] = storage.getConfiguration(classId).get(injectionContext, nextClassLoader);
+            }
         }
         injectionContext.markClassAsNotProcessing(resolvedClassId);
         try
@@ -51,9 +62,10 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
     }
 
-    private <T> Constructor<T> getConstructor(String classNodeId, IInjectionContext injectionContext)
+    private <T> Constructor<T> getConstructor(String classNodeId, IInjectionContext injectionContext, ClassLoader classLoader)
     {
-        Class<T> clazz = injectionContext.getClassNodesStorage().getClassById(classNodeId, injectionContext.getClassLoadersStorage());
+        ClassNode classNode = injectionContext.getClassNodesStorage().getClassNodeById(classNodeId);
+        Class<T> clazz = injectionContext.getClassLoadersStorage().loadClass(classLoader, classNode.getClassName());
         Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
         if (constructors.length == 1)
             return constructors[0];
@@ -62,7 +74,6 @@ public abstract class AbstractConfiguration implements IConfiguration
         Constructor<T> result = null;
         for (Constructor<T> constructor : constructors)
         {
-            Annotation[] annotations = constructor.getAnnotations();
             if (constructor.getAnnotation(ContainerConstructor.class) != null)
             {
                 if (result != null)
@@ -71,42 +82,47 @@ public abstract class AbstractConfiguration implements IConfiguration
             }
         }
         if(result == null)
-            throw new AmbiguousConstructorException(clazz);
+        {
+            StringBuilder res = new StringBuilder();
+            for(Constructor<T> constructor : constructors)
+                res.append(constructor);
+            throw new AmbiguousConstructorException(clazz, res.toString());
+        }
         return result;
     }
 
-    abstract protected <T> T innerGet(IInjectionContext injectionContext);
-    abstract protected <T> T innerCreate(IInjectionContext injectionContext);
+    abstract protected <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader);
+    abstract protected <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader);
 
     @Override
-    public <T> T get(IInjectionContext injectionContext)
+    public <T> T get(IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         injectionContext.beginGet(abstraction);
-        T result = innerGet(injectionContext);
+        T result = innerGet(injectionContext, classLoader);
         injectionContext.endGet(abstraction);
         return result;
     }
 
     @Override
-    public <T> T create(IInjectionContext injectionContext)
+    public <T> T create(IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         injectionContext.beginCreate(abstraction);
-        T result = innerCreate(injectionContext);
+        T result = innerCreate(injectionContext, classLoader);
         injectionContext.endCreate(abstraction);
         return result;
     }
 
-    public <T> T[] getAll(IInjectionContext injectionContext)
+    public <T> T[] getAll(IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
-        abstraction.setClazz(injectionContext.getClassLoadersStorage().getClassLoaderFor(abstraction.getClassName()));
+        abstraction.setClazz(injectionContext.getClassLoadersStorage().loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginGetAll(abstraction);
         ArrayList<String> implementations = storage.getImplementations(abstractionId);
         ArrayList<T> result = new ArrayList<T>();
         for (String implementationId : implementations)
-            result.add((T) storage.getConfiguration(implementationId).get(injectionContext));
+            result.add((T) storage.getConfiguration(implementationId).get(injectionContext, classLoader));
         injectionContext.endGetAll(abstraction);
         return result.toArray((T[]) Array.newInstance(abstraction.getClazz(), result.size()));
     }

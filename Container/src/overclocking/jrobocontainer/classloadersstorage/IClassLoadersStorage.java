@@ -2,5 +2,5 @@ package overclocking.jrobocontainer.classloadersstorage;
 
 public interface IClassLoadersStorage
 {
-    Class<?> getClassLoaderFor(String className);
+    <T> Class<T> loadClass(ClassLoader classLoader, String className);
 }

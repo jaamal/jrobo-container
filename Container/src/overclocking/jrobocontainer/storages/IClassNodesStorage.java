@@ -1,7 +1,6 @@
 package overclocking.jrobocontainer.storages;
 
 import org.apache.bcel.classfile.JavaClass;
-import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
 
 public interface IClassNodesStorage
 {
@@ -13,5 +12,5 @@ public interface IClassNodesStorage
 
     String getClassId(Class<?> clazz);
 
-    <T> Class<T> getClassById(String id, IClassLoadersStorage classNodesStorage);
+    void setClassLoader(String name, ClassLoader classLoader);
 }

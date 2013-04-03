@@ -10,7 +10,7 @@ import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
  * To change this template use File | Settings | File Templates.
  */
 public interface IConfiguration {
-    <T> T get(IInjectionContext injectionContext);
-    <T> T create(IInjectionContext injectionContext);
-    <T> T[] getAll(IInjectionContext injectionContext);
+    <T> T get(IInjectionContext injectionContext, ClassLoader classLoader);
+    <T> T create(IInjectionContext injectionContext, ClassLoader classLoader);
+    <T> T[] getAll(IInjectionContext injectionContext, ClassLoader classLoader);
 }

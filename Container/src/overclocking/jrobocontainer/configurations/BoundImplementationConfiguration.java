@@ -22,12 +22,12 @@ public class BoundImplementationConfiguration extends AbstractConfiguration {
     }
 
     @Override
-    public <T> T innerGet(IInjectionContext injectionContext) {
-        return storage.getConfiguration(boundImplementationId).get(injectionContext);
+    public <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader) {
+        return storage.getConfiguration(boundImplementationId).get(injectionContext, classLoader);
     }
 
     @Override
-    public <T> T innerCreate(IInjectionContext injectionContext) {
-        return storage.getConfiguration(boundImplementationId).create(injectionContext);
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) {
+        return storage.getConfiguration(boundImplementationId).create(injectionContext, classLoader);
     }
 }

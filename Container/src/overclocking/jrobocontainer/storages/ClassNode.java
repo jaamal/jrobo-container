@@ -8,6 +8,7 @@ public class ClassNode
     private String className;
     private JavaClass javaClass;
     private String id;
+    private ClassLoader classLoader;
 
     public ClassNode(String className, String id)
     {
@@ -73,4 +74,14 @@ public class ClassNode
     public void setId(String id) {
         this.id = id;
     }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    public ClassLoader getClassLoader()
+    {
+        return classLoader;
+    }
+
 }

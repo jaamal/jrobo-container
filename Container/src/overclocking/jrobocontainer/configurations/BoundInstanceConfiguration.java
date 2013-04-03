@@ -17,16 +17,17 @@ public class BoundInstanceConfiguration extends AbstractConfiguration {
         this.instance = instance;
     }
 
-    public <T> T innerGet(IInjectionContext injectionContext){
+    public <T> T innerGet(IInjectionContext injectionContext, ClassLoader classlo
+    ){
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         injectionContext.reuse(abstraction);
         return (T)instance;
     }
 
-    public <T> T innerCreate(IInjectionContext injectionContext) throws JRoboContainerException {
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) throws JRoboContainerException {
         try {
             String resolvedClass = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), injectionContext.getClassNodesStorage());
-            return (T)getInstance(resolvedClass, injectionContext);
+            return (T)getInstance(resolvedClass, injectionContext, classLoader);
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {

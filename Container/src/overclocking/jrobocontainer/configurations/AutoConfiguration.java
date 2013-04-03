@@ -24,7 +24,7 @@ public class AutoConfiguration extends AbstractConfiguration {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T innerGet(IInjectionContext injectionContext){
+    public <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader){
 
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         try {
@@ -38,11 +38,11 @@ public class AutoConfiguration extends AbstractConfiguration {
             synchronized (storage.getSynchronizeObject(resolvedClassId)) {
                 if(resolvedClassId.equals(abstractionId))
                 {
-                    instance = getInstance(resolvedClassId, injectionContext);
+                    instance = getInstance(resolvedClassId, injectionContext, classLoader);
                 }
                 else
                 {
-                    instance = storage.getConfiguration(resolvedClassId).get(injectionContext);
+                    instance = storage.getConfiguration(resolvedClassId).get(injectionContext, classLoader);
                 }
             }
             injectionContext.endCreate(abstraction);
@@ -54,11 +54,11 @@ public class AutoConfiguration extends AbstractConfiguration {
         }
     }
 
-    public <T> T innerCreate(IInjectionContext injectionContext) {
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) {
         ClassNode abstraction = injectionContext.getClassNodesStorage().getClassNodeById(abstractionId);
         try {
             String resolvedClassId = Resolver.resolveClass(abstractionId, storage.getImplementations(abstractionId), injectionContext.getClassNodesStorage());
-            return (T)getInstance(resolvedClassId, injectionContext);
+            return (T)getInstance(resolvedClassId, injectionContext, classLoader);
         } catch (JRoboContainerException ex) {
             throw ex;
         } catch (Exception ex) {

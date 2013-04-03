@@ -9,6 +9,8 @@ public interface IContainer {
 
     <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> boundImplementation);
 
+    <T> void bindClassLoader(Class<T> abstraction, ClassLoader classLoader);
+
     <T> T[] getAll(Class<T> requiredAbstraction);
 
     String getClassesLoadingLog();

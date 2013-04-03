@@ -1,7 +1,6 @@
 package overclocking.jrobocontainer.storages;
 
 import org.apache.bcel.classfile.JavaClass;
-import overclocking.jrobocontainer.classloadersstorage.IClassLoadersStorage;
 
 import java.util.TreeMap;
 import java.util.UUID;
@@ -62,14 +61,14 @@ public class ClassNodesStorage implements IClassNodesStorage
     @Override
     public ClassNode getClassNodeById(String id)
     {
-        ClassNode result = idToClassNode.get(id);
         return idToClassNode.get(id);
     }
 
     @Override
-    public <T> Class<T> getClassById(String classNodeId, IClassLoadersStorage classLoadersStorage)
-    {
-        ClassNode classNode = idToClassNode.get(classNodeId);
-        return (Class<T>) classLoadersStorage.getClassLoaderFor(classNode.getClassName());
+    public void setClassLoader(String name, ClassLoader classLoader) {
+        String id = getClassId(name);
+        ClassNode node = getClassNodeById(id);
+        node.setClassLoader(classLoader);
+        idToClassNode.put(id, node);
     }
 }
