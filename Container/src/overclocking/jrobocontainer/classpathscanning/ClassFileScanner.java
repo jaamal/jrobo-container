@@ -10,14 +10,13 @@ import java.io.IOException;
 
 public class ClassFileScanner
 {
-
-    IStorage storage;
+    private IStorage storage;
     public ClassFileScanner(IStorage storage)
     {
         this.storage = storage;
     }
 
-    public void scanFile(File file, ILoadingLog log)
+    public void scanClassFile(File file, ILoadingLog log)
     {
         String fileName = file.getName();
         log.beginScanFile(fileName);

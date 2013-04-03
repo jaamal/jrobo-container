@@ -7,7 +7,7 @@ package overclocking.jrobocontainer.exceptions;
  * Time: 12:49
  * To change this template use File | Settings | File Templates.
  */
-public class NoConstructorsFoundException extends JRoboContainerException {
+public class NoConstructorsFoundException extends JroboContainerException {
     public NoConstructorsFoundException(Class<?> clazz)
     {
         super("No constructors found for " + clazz.getName());

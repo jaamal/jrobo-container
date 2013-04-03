@@ -1,6 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
+import overclocking.jrobocontainer.storages.IClassNodesStorage;
 import overclocking.jrobocontainer.storages.IStorage;
 
 /**
@@ -11,12 +12,10 @@ import overclocking.jrobocontainer.storages.IStorage;
  * To change this template use File | Settings | File Templates.
  */
 public class BoundImplementationConfiguration extends AbstractConfiguration {
-
-    private final IStorage storage;
     private String boundImplementationId;
 
-    public BoundImplementationConfiguration(IStorage storage, String abstractionId, String boundImplementationId) {
-        this.storage = storage;
+    public BoundImplementationConfiguration(IStorage storage, IClassNodesStorage classNodesStorage, String abstractionId, String boundImplementationId) {
+        super(storage, classNodesStorage);
         this.boundImplementationId = boundImplementationId;
         this.abstractionId = abstractionId;
     }

@@ -3,7 +3,7 @@ package Tests;
 import TestBases.JRoboContainerTestBase;
 import junit.framework.Assert;
 import org.junit.Test;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import testclasses.getall.*;
 
 
@@ -17,7 +17,7 @@ import testclasses.getall.*;
 public class GetAllTests extends JRoboContainerTestBase
 {
     @Test
-    public void testGetAll() throws JRoboContainerException
+    public void testGetAll() throws JroboContainerException
     {
         IFourImplementations implementations[] = container.getAll(IFourImplementations.class);
         System.out.println(container.getLastLog());

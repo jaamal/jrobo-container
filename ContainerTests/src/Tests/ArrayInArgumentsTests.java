@@ -1,7 +1,7 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import junit.framework.Assert;
 import org.junit.Test;
 import testclasses.getall.*;
@@ -9,7 +9,7 @@ import testclasses.getall.*;
 public class ArrayInArgumentsTests extends JRoboContainerTestBase
 {
     @Test
-    public void testArrayInArguments() throws JRoboContainerException
+    public void testArrayInArguments() throws JroboContainerException
     {
         IArrayInArguments instance = container.get(IArrayInArguments.class);
         Assert.assertNotNull(instance);

@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public class ClassNodesStorage implements IClassNodesStorage
 {
-    TreeMap<String, ClassNode> idToClassNode;
-    TreeMap<String, String> classNameToId;
+    private TreeMap<String, ClassNode> idToClassNode;
+    private TreeMap<String, String> classNameToId;
 
     public ClassNodesStorage()
     {

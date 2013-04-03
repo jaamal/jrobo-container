@@ -9,7 +9,7 @@ import overclocking.jrobocontainer.storages.ClassNode;
  * Time: 13:59
  * To change this template use File | Settings | File Templates.
  */
-public class CyclicalDependencyException extends JRoboContainerException {
+public class CyclicalDependencyException extends JroboContainerException {
     public CyclicalDependencyException(ClassNode clazz)
     {
         super("Cyclical dependency found at " + clazz.getClassName());

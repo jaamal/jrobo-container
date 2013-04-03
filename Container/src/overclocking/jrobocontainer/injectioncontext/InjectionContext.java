@@ -3,7 +3,6 @@ package overclocking.jrobocontainer.injectioncontext;
 import overclocking.jrobocontainer.logging.IInjectionLog;
 import overclocking.jrobocontainer.logging.InjectionLog;
 import overclocking.jrobocontainer.storages.ClassNode;
-import overclocking.jrobocontainer.storages.IClassNodesStorage;
 
 import java.util.HashSet;
 
@@ -16,14 +15,11 @@ import java.util.HashSet;
  */
 public class InjectionContext implements IInjectionContext
 {
-
     private HashSet<String> processingClasses;
     private IInjectionLog log;
-    private IClassNodesStorage classNodesStorage;
 
-    public InjectionContext(IClassNodesStorage classNodesStorage)
+    public InjectionContext()
     {
-        this.classNodesStorage = classNodesStorage;
         processingClasses = new HashSet<String>();
         log = new InjectionLog();
     }
@@ -92,11 +88,5 @@ public class InjectionContext implements IInjectionContext
     public String getLog()
     {
         return log.getLog();
-    }
-
-    @Override
-    public IClassNodesStorage getClassNodesStorage()
-    {
-        return classNodesStorage;
     }
 }

@@ -9,7 +9,6 @@ package overclocking.jrobocontainer.logging;
  */
 public class LoadingLog extends Log implements ILoadingLog
 {
-
     public LoadingLog()
     {
         super();

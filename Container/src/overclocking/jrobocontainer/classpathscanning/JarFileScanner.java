@@ -13,7 +13,6 @@ import java.util.jar.JarFile;
 
 public class JarFileScanner
 {
-
     private IStorage storage;
     private IClassPathScannerConfiguration classPathScannerConfiguration;
 
@@ -23,7 +22,7 @@ public class JarFileScanner
         this.classPathScannerConfiguration = entitiesFilter;
     }
 
-    public void load(File file, ILoadingLog log)
+    public void scanJarFile(File file, ILoadingLog log)
     {
         String fileName = file.getName();
         log.beginScanFile(fileName);
@@ -35,7 +34,7 @@ public class JarFileScanner
                 Enumeration<JarEntry> entries = jarFile.entries();
                 while (entries.hasMoreElements())
                 {
-                    loadJarEntry(jarFile, entries.nextElement(), log);
+                    scanJarEntry(jarFile, entries.nextElement(), log);
                 }
             }
             catch (IOException e)
@@ -55,7 +54,7 @@ public class JarFileScanner
 
     }
 
-    private void loadJarEntry(JarFile file, JarEntry entry, ILoadingLog log)
+    private void scanJarEntry(JarFile file, JarEntry entry, ILoadingLog log)
     {
         String entryName = entry.getName();
         if(!entryName.endsWith(".class"))

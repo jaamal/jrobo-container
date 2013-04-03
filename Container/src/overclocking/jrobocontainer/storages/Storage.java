@@ -5,7 +5,7 @@ import overclocking.jrobocontainer.configurations.AutoConfiguration;
 import overclocking.jrobocontainer.configurations.ConfigurationsManager;
 import overclocking.jrobocontainer.configurations.IConfiguration;
 import overclocking.jrobocontainer.configurations.IConfigurationsManager;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import overclocking.jrobocontainer.logging.ILoadingLog;
 
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.HashMap;
 
 public class Storage implements IStorage
 {
-    IDirectInheritanceGraph directInheritanceGraph;
-    IExtendedInheritanceGraph extendedInheritanceGraph;
-    HashMap<String, Object> synchronizeObjects;
-    IConfigurationsManager configurationsManager;
-    ILoadingLog log;
-    IClassNodesStorage classNodesStorage;
+    private IDirectInheritanceGraph directInheritanceGraph;
+    private IExtendedInheritanceGraph extendedInheritanceGraph;
+    private HashMap<String, Object> synchronizeObjects;
+    private IConfigurationsManager configurationsManager;
+    private ILoadingLog log;
+    private IClassNodesStorage classNodesStorage;
 
     public Storage(IClassNodesStorage classNodesStorage)
     {
@@ -34,7 +34,7 @@ public class Storage implements IStorage
         if (this.log == null)
             this.log = log;
         String nodeId = classNodesStorage.getClassId(clazz);
-        configurationsManager.setConfiguration(nodeId, new AutoConfiguration(this, nodeId));
+        configurationsManager.setConfiguration(nodeId, new AutoConfiguration(this, classNodesStorage, nodeId));
         synchronizeObjects.put(nodeId, new Object());
         String[] interfacesNames = clazz.getInterfaceNames();
         String superClassName = clazz.getSuperclassName();
@@ -63,7 +63,7 @@ public class Storage implements IStorage
     {
         if (synchronizeObjects.containsKey(resolvedClassId))
             return synchronizeObjects.get(resolvedClassId);
-        throw new JRoboContainerException("No synchronize object found for " + resolvedClassId);
+        throw new JroboContainerException("No synchronize object found for " + resolvedClassId);
     }
 
     @Override

@@ -3,23 +3,23 @@ package overclocking.jrobocontainer.exceptions;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 
 @SuppressWarnings("serial")
-public class JRoboContainerException extends RuntimeException{
+public class JroboContainerException extends RuntimeException{
 
     private static final String delimiter = "------------------------------------------\r\n";
-	public JRoboContainerException(String message) {
+	public JroboContainerException(String message) {
 		super(message);
 	}
 
-    public JRoboContainerException(String message, IInjectionContext injectionContext, Exception parentException)
+    public JroboContainerException(String message, IInjectionContext injectionContext, Exception parentException)
     {
         super(injectionContext.getLog() + delimiter + message + ": ", parentException);
     }
 
-    public JRoboContainerException(String message, Exception parentException)
+    public JroboContainerException(String message, Exception parentException)
     {
         super(message, parentException);
     }
-	public JRoboContainerException() {
+	public JroboContainerException() {
 		super();
 	}
 }

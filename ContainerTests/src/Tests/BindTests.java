@@ -1,7 +1,7 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;
 import testclasses.multipleimplementation.MultipleImplementationFirst;
@@ -13,7 +13,7 @@ public class BindTests extends JRoboContainerTestBase
 {
 
     @Test
-    public void testBindInstance() throws JRoboContainerException {
+    public void testBindInstance() throws JroboContainerException {
         MultipleImplementationFirst impl1 = new MultipleImplementationFirst();
         MultipleImplementationSecond impl2 = new MultipleImplementationSecond();
         container.bindInstance(IMultipleImplementation.class, impl1);
@@ -25,7 +25,7 @@ public class BindTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testBindImplementation() throws JRoboContainerException {
+    public void testBindImplementation() throws JroboContainerException {
         container.bindImplementation(IMultipleImplementation.class, MultipleImplementationFirst.class);
         IMultipleImplementation testImpl = container.get(IMultipleImplementation.class);
         Assert.assertTrue(testImpl instanceof MultipleImplementationFirst);

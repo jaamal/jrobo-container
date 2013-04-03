@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 public class DirectInheritanceGraph implements IDirectInheritanceGraph {
 
-    HashMap<String, ArrayList<String>> graph;
-    ArrayList<String> vertices;
+    private HashMap<String, ArrayList<String>> graph;
+    private ArrayList<String> vertices;
 
     public DirectInheritanceGraph()
     {

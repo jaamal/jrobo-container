@@ -7,7 +7,7 @@ package overclocking.jrobocontainer.exceptions;
  * Time: 12:55
  * To change this template use File | Settings | File Templates.
  */
-public class AmbiguousAnnotatedConstructorException extends JRoboContainerException {
+public class AmbiguousAnnotatedConstructorException extends JroboContainerException {
     public AmbiguousAnnotatedConstructorException(Class<?> clazz) {
         super(clazz.getName() + " has multiple constructors annotated with @ContainerConstructor");
     }

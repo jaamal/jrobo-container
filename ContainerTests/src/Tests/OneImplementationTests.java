@@ -1,9 +1,9 @@
 package Tests;
 
 import TestBases.JRoboContainerTestBase;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import testclasses.classloader.simpletest.IOneImplementation;
 import testclasses.classloader.simpletest.OneImplementation;
-import overclocking.jrobocontainer.exceptions.JRoboContainerException;
 import testclasses.gettingcreating.IIncrementer;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;
@@ -16,7 +16,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
 {
 
     @Test
-    public void testGetsSameObject() throws JRoboContainerException
+    public void testGetsSameObject() throws JroboContainerException
     {
         //System.out.println(container.getClassesLoadingLog());
         IOneImplementation result1 = container.get(IOneImplementation.class);
@@ -32,14 +32,14 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testSimple() throws JRoboContainerException
+    public void testSimple() throws JroboContainerException
     {
         IOneImplementation result = container.get(IOneImplementation.class);
         Assert.assertTrue(result instanceof OneImplementation);
     }
 
     @Test
-    public void testGetting() throws JRoboContainerException
+    public void testGetting() throws JroboContainerException
     {
         IIncrementer result1 = container.get(IIncrementer.class);
         Assert.assertTrue(result1.inc() == 1);
@@ -48,7 +48,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testCreating() throws JRoboContainerException
+    public void testCreating() throws JroboContainerException
     {
         IIncrementer result1 = container.create(IIncrementer.class);
         Assert.assertTrue(result1.inc() == 1);
@@ -57,7 +57,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testCreatingAndGetting() throws JRoboContainerException
+    public void testCreatingAndGetting() throws JroboContainerException
     {
         IIncrementer result1 = container.create(IIncrementer.class);
         Assert.assertTrue(result1.inc() == 1);
@@ -70,20 +70,20 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testException() throws JRoboContainerException
+    public void testException() throws JroboContainerException
     {
         try
         {
             container.get(IMultipleImplementation.class);
             Assert.fail();
         }
-        catch (JRoboContainerException ex)
+        catch (JroboContainerException ex)
         {
         }
     }
 
     @Test
-    public void testInterfacesLevelsCreate() throws JRoboContainerException
+    public void testInterfacesLevelsCreate() throws JroboContainerException
     {
         Object result = container.create(ClassWithTwoInterfaces.class);
         Assert.assertTrue(result instanceof ClassWithTwoInterfaces);
@@ -95,7 +95,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
 
 
     @Test
-    public void testMultiInterfaceCreate() throws JRoboContainerException
+    public void testMultiInterfaceCreate() throws JroboContainerException
     {
         MultiInterface1 a = container.create(MultiInterface1.class);
         MultiInterface2 b = container.create(MultiInterface2.class);
@@ -103,7 +103,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testMultiInterfaceGet() throws JRoboContainerException
+    public void testMultiInterfaceGet() throws JroboContainerException
     {
         MultiInterface1 a = container.get(MultiInterface1.class);
         MultiInterface2 b = container.get(MultiInterface2.class);
@@ -111,7 +111,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testInterfacesLevelsGet() throws JRoboContainerException
+    public void testInterfacesLevelsGet() throws JroboContainerException
     {
         Object result = container.get(ClassWithTwoInterfaces.class);
         Assert.assertTrue(result instanceof ClassWithTwoInterfaces);
@@ -126,7 +126,7 @@ public class OneImplementationTests extends JRoboContainerTestBase
     }
 
     @Test
-    public void testAbstractClasses() throws JRoboContainerException
+    public void testAbstractClasses() throws JroboContainerException
     {
         container.create(AbstractClass.class);
     }

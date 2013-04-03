@@ -34,8 +34,8 @@ public class EntitiesScanner
     private void addFile(File file, ILoadingLog log)
     {
         if (file.getName().endsWith(".class"))
-            classFileLoader.scanFile(file, log);
+            classFileLoader.scanClassFile(file, log);
         if (file.getName().endsWith(".jar"))
-            jarFileLoader.load(file, log);
+            jarFileLoader.scanJarFile(file, log);
     }
 }

@@ -35,14 +35,14 @@ public class Container implements IContainer {
 
     @Override
     public <T> T get(Class<T> requiredAbstraction) {
-        InjectionContext currentContext = new InjectionContext(classNodesStorage);
+        InjectionContext currentContext = new InjectionContext();
         lastInjectionContext = currentContext;
         return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).get(currentContext, requiredAbstraction.getClassLoader());
     }
 
     @Override
     public <T> T create(Class<T> requiredAbstraction) {
-        InjectionContext currentContext = new InjectionContext(classNodesStorage);
+        InjectionContext currentContext = new InjectionContext();
         lastInjectionContext = currentContext;
         return storage.getConfiguration(classNodesStorage.getClassId(requiredAbstraction)).create(currentContext, requiredAbstraction.getClassLoader());
     }
@@ -50,14 +50,14 @@ public class Container implements IContainer {
     @Override
     public <T1, T2 extends T1> void bindInstance(Class<T1> abstraction, T2 instance) {
         String node = classNodesStorage.getClassId(abstraction);
-        storage.setConfiguration(node, new BoundInstanceConfiguration(storage, node, instance));
+        storage.setConfiguration(node, new BoundInstanceConfiguration(storage, classNodesStorage, node, instance));
     }
 
     @Override
     public <T1, T2 extends T1> void bindImplementation(Class<T1> abstraction, Class<T2> boundImplementation) {
         String abstractionNodeId = classNodesStorage.getClassId(abstraction);
         String implNodeId = classNodesStorage.getClassId(boundImplementation);
-        storage.setConfiguration(abstractionNodeId, new BoundImplementationConfiguration(storage, abstractionNodeId, implNodeId));
+        storage.setConfiguration(abstractionNodeId, new BoundImplementationConfiguration(storage, classNodesStorage, abstractionNodeId, implNodeId));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Container implements IContainer {
 
     @Override
     public <T> T[] getAll(Class<T> requiredAbstraction) {
-        InjectionContext currentContext = new InjectionContext(classNodesStorage);
+        InjectionContext currentContext = new InjectionContext();
         lastInjectionContext = currentContext;
         String abstractionNodeId = classNodesStorage.getClassId(requiredAbstraction);
         return storage.getConfiguration(abstractionNodeId).getAll(currentContext, requiredAbstraction.getClassLoader());
