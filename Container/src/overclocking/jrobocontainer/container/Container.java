@@ -25,7 +25,7 @@ public class Container implements IContainer {
     }
 
 
-    private Container(IClassPathScannerConfiguration classPathScannerConfiguration) {
+    public Container(IClassPathScannerConfiguration classPathScannerConfiguration) {
         classNodesStorage = new ClassNodesStorage();
         storage = new Storage(classNodesStorage);
         ClassPathScanner classPathScanner = new ClassPathScanner(storage, classPathScannerConfiguration);
