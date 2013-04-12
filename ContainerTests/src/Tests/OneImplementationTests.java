@@ -4,6 +4,7 @@ import TestBases.JRoboContainerTestBase;
 import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import testclasses.classloader.simpletest.IOneImplementation;
 import testclasses.classloader.simpletest.OneImplementation;
+import testclasses.emptyconstructorignore.ClassWithTwoConstructors;
 import testclasses.gettingcreating.IIncrementer;
 import junit.framework.Assert;
 import testclasses.multipleimplementation.IMultipleImplementation;
@@ -16,12 +17,19 @@ public class OneImplementationTests extends JRoboContainerTestBase
 {
 
     @Test
-    public void testGetsSameObject() throws JroboContainerException
+    public void testGetsSameObject()
     {
         //System.out.println(container.getClassesLoadingLog());
         IOneImplementation result1 = container.get(IOneImplementation.class);
         IOneImplementation result2 = container.get(IOneImplementation.class);
         Assert.assertSame(result1, result2);
+    }
+
+    @Test
+    public void testEmptyConstructorIgnoring()
+    {
+        ClassWithTwoConstructors result = container.get(ClassWithTwoConstructors.class);
+        Assert.assertEquals(result.getX(), 1);
     }
 
     @Test

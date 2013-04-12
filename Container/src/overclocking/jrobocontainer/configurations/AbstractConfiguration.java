@@ -84,6 +84,13 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
         if(result == null)
         {
+            if(constructors.length == 2)
+            {
+                if(constructors[0].getParameterTypes().length == 0)
+                    return constructors[1];
+                if(constructors[1].getParameterTypes().length == 0)
+                    return constructors[0];
+            }
             StringBuilder res = new StringBuilder();
             for(Constructor<T> constructor : constructors)
                 res.append(constructor);
