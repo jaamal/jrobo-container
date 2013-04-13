@@ -9,7 +9,6 @@ import testclasses.classloader.simpletest.IOneImplementation;
 import testclasses.classloader.simpletest.OneImplementation;
 import testclasses.gettingcreating.IIncrementer;
 import testclasses.multipleimplementation.IMultipleImplementation;
-import testclasses.primitives.IntInConstructor;
 import testclasses.singleimplementation.*;
 import testclasses.staticfields.IClassWithStaticFields;
 
@@ -36,12 +35,6 @@ public class OneImplementationTests extends JRoboContainerTestBase
     {
         IClassWithStaticFields result = container.get(IClassWithStaticFields.class);
         Assert.assertEquals(result.getX(), 146 * 146);
-    }
-
-    @Test
-    public void testIntInConstructor()
-    {
-        IntInConstructor result = container.get(IntInConstructor.class);
     }
 
     @Test

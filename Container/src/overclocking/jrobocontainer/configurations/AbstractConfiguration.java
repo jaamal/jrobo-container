@@ -1,6 +1,7 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.annotations.ContainerConstructor;
+import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.exceptions.*;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
@@ -10,6 +11,7 @@ import overclocking.jrobocontainer.storages.IStorage;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class AbstractConfiguration implements IConfiguration
 {
@@ -23,8 +25,12 @@ public abstract class AbstractConfiguration implements IConfiguration
         this.classNodesStorage = classNodesStorage;
     }
 
-    protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader)
+    protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
+        if(substitutions == null)
+            substitutions = new AbstractionInstancePair[0];
+        boolean isSubstitutionUsed[] = new boolean[substitutions.length];
+        Arrays.fill(isSubstitutionUsed, false);
         ClassNode resolvedClass = classNodesStorage.getClassNodeById(resolvedClassId);
         if (injectionContext.isClassProcessing(resolvedClassId))
             throw new CyclicalDependencyException(resolvedClass);
@@ -35,6 +41,16 @@ public abstract class AbstractConfiguration implements IConfiguration
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
+            parameters[i] = null;
+            for(int j = 0; j < substitutions.length; j++)
+                if(!isSubstitutionUsed[j] && parametersTypes[i].isAssignableFrom(substitutions[j].getAbstraction()))
+                {
+                    parameters[i] = substitutions[j].getInstance();
+                    isSubstitutionUsed[j] = true;
+                    break;
+                }
+            if(parameters[i] != null)
+                continue;
             if (parametersTypes[i].isArray())
             {
                 String classId = classNodesStorage.getClassId(parametersTypes[i].getComponentType());
@@ -100,7 +116,7 @@ public abstract class AbstractConfiguration implements IConfiguration
     }
 
     abstract protected <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader);
-    abstract protected <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader);
+    abstract protected <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions);
 
     @Override
     public <T> T get(IInjectionContext injectionContext, ClassLoader classLoader)
@@ -113,11 +129,11 @@ public abstract class AbstractConfiguration implements IConfiguration
     }
 
     @Override
-    public <T> T create(IInjectionContext injectionContext, ClassLoader classLoader)
+    public <T> T create(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
         injectionContext.beginCreate(abstraction);
-        T result = innerCreate(injectionContext, classLoader);
+        T result = innerCreate(injectionContext, classLoader, substitutions);
         injectionContext.endCreate(abstraction);
         return result;
     }

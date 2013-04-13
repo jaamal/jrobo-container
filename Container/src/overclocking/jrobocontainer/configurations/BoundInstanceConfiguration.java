@@ -1,5 +1,6 @@
 package overclocking.jrobocontainer.configurations;
 
+import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
@@ -21,10 +22,10 @@ public class BoundInstanceConfiguration extends AbstractConfiguration {
         return (T)instance;
     }
 
-    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) throws JroboContainerException {
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions) throws JroboContainerException {
         try {
             String resolvedClass = resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
-            return (T)getInstance(resolvedClass, injectionContext, classLoader);
+            return (T)getInstance(resolvedClass, injectionContext, classLoader, substitutions);
         } catch (JroboContainerException ex) {
             throw ex;
         } catch (Exception ex) {

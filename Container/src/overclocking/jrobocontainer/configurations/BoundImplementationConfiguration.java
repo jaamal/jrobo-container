@@ -1,5 +1,6 @@
 package overclocking.jrobocontainer.configurations;
 
+import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.IClassNodesStorage;
 import overclocking.jrobocontainer.storages.IStorage;
@@ -19,7 +20,7 @@ public class BoundImplementationConfiguration extends AbstractConfiguration {
     }
 
     @Override
-    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) {
-        return storage.getConfiguration(boundImplementationId).create(injectionContext, classLoader);
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions) {
+        return storage.getConfiguration(boundImplementationId).create(injectionContext, classLoader, substitutions);
     }
 }

@@ -1,5 +1,6 @@
 package overclocking.jrobocontainer.configurations;
 
+import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.exceptions.JroboContainerException;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
@@ -29,7 +30,7 @@ public class AutoConfiguration extends AbstractConfiguration {
             synchronized (storage.getSynchronizeObject(resolvedClassId)) {
                 if(resolvedClassId.equals(abstractionId))
                 {
-                    instance = getInstance(resolvedClassId, injectionContext, classLoader);
+                    instance = getInstance(resolvedClassId, injectionContext, classLoader, null);
                 }
                 else
                 {
@@ -45,11 +46,11 @@ public class AutoConfiguration extends AbstractConfiguration {
         }
     }
 
-    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader) {
+    public <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions) {
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
         try {
             String resolvedClassId = resolveClass(abstractionId, storage.getImplementations(abstractionId), classNodesStorage);
-            return (T)getInstance(resolvedClassId, injectionContext, classLoader);
+            return (T)getInstance(resolvedClassId, injectionContext, classLoader, substitutions);
         } catch (JroboContainerException ex) {
             throw ex;
         } catch (Exception ex) {
