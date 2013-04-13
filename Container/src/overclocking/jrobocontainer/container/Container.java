@@ -31,6 +31,7 @@ public class Container implements IContainer {
         ClassPathScanner classPathScanner = new ClassPathScanner(storage, classPathScannerConfiguration);
         loadingLog = new LoadingLog();
         classPathScanner.loadClasses(loadingLog);
+        bindInstance(IContainer.class, this);
     }
 
     @Override
