@@ -20,10 +20,16 @@ public class Container implements IContainer
     private IInjectionContext lastInjectionContext;
     private LoadingLog loadingLog;
     private IClassNodesStorage classNodesStorage;
+    private static IContainer instance;
 
     public Container()
     {
         this(new DefaultClassScannerConfiguration());
+    }
+
+    public static IContainer getInstance()
+    {
+        return instance;
     }
 
 
@@ -34,6 +40,7 @@ public class Container implements IContainer
         ClassPathScanner classPathScanner = new ClassPathScanner(storage, classPathScannerConfiguration);
         loadingLog = new LoadingLog();
         classPathScanner.loadClasses(loadingLog);
+        instance = this;
         bindInstance(IContainer.class, this);
     }
 

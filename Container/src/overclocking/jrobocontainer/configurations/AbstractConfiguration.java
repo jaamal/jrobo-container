@@ -1,8 +1,10 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.annotations.ContainerConstructor;
+import overclocking.jrobocontainer.annotations.ContainerFactory;
 import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.exceptions.*;
+import overclocking.jrobocontainer.factories.FactoryCreator;
 import overclocking.jrobocontainer.injectioncontext.IInjectionContext;
 import overclocking.jrobocontainer.storages.ClassNode;
 import overclocking.jrobocontainer.storages.IClassNodesStorage;
@@ -18,11 +20,13 @@ public abstract class AbstractConfiguration implements IConfiguration
     protected IStorage storage;
     protected IClassNodesStorage classNodesStorage;
     protected String abstractionId;
+    private FactoryCreator factoryCreator;
 
     protected AbstractConfiguration(IStorage storage, IClassNodesStorage classNodesStorage)
     {
         this.storage = storage;
         this.classNodesStorage = classNodesStorage;
+        factoryCreator = new FactoryCreator();
     }
 
     protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
@@ -41,6 +45,10 @@ public abstract class AbstractConfiguration implements IConfiguration
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
+            if(parametersTypes[i].getAnnotation(ContainerFactory.class) != null)
+            {
+                parameters[i] = factoryCreator.createFactory(parametersTypes[i]);
+            }
             parameters[i] = null;
             for(int j = 0; j < substitutions.length; j++)
                 if(!isSubstitutionUsed[j] && parametersTypes[i].isAssignableFrom(substitutions[j].getAbstraction()))
