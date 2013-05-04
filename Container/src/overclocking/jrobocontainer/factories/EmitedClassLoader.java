@@ -7,4 +7,3 @@ public class EmitedClassLoader extends ClassLoader
         return defineClass(null, bytecode, 0, bytecode.length);
     }
 }
-

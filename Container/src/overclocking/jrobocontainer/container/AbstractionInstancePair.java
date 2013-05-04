@@ -7,7 +7,6 @@ public class AbstractionInstancePair<T1, T2 extends T1>
 
     public AbstractionInstancePair(Class<T1> abstraction, T2 instance)
     {
-
         this.abstraction = abstraction;
         this.instance = instance;
     }

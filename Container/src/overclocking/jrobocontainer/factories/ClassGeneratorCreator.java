@@ -11,7 +11,7 @@ public class ClassGeneratorCreator
         String superClassName = "java.lang.Object";
         String fileName = "<generated>";
         int accessFlags = Constants.ACC_PUBLIC;
-        String[] interfaces = new String[]{factoryInterface.getName()};
+        String[] interfaces = new String[] {factoryInterface.getName()};
         ClassGen result = new ClassGen(className, superClassName, fileName, accessFlags, interfaces);
         return result;
     }

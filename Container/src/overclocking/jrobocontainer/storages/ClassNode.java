@@ -1,6 +1,7 @@
 package overclocking.jrobocontainer.storages;
 
 import org.apache.bcel.classfile.JavaClass;
+import overclocking.jrobocontainer.annotations.ContainerFactory;
 
 public class ClassNode
 {
@@ -82,6 +83,11 @@ public class ClassNode
     public ClassLoader getClassLoader()
     {
         return classLoader;
+    }
+
+    public boolean isFactory()
+    {
+        return clazz.getAnnotation(ContainerFactory.class) != null;
     }
 
 }

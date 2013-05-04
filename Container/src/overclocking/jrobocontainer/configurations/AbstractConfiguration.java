@@ -1,7 +1,6 @@
 package overclocking.jrobocontainer.configurations;
 
 import overclocking.jrobocontainer.annotations.ContainerConstructor;
-import overclocking.jrobocontainer.annotations.ContainerFactory;
 import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import overclocking.jrobocontainer.exceptions.*;
 import overclocking.jrobocontainer.factories.FactoryCreator;
@@ -31,7 +30,7 @@ public abstract class AbstractConfiguration implements IConfiguration
 
     protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
-        if(substitutions == null)
+        if (substitutions == null)
             substitutions = new AbstractionInstancePair[0];
         boolean isSubstitutionUsed[] = new boolean[substitutions.length];
         Arrays.fill(isSubstitutionUsed, false);
@@ -39,39 +38,34 @@ public abstract class AbstractConfiguration implements IConfiguration
         if (injectionContext.isClassProcessing(resolvedClassId))
             throw new CyclicalDependencyException(resolvedClass);
         injectionContext.markClassAsProcessing(resolvedClassId);
-        Constructor<T> constructor = getConstructor(resolvedClassId, injectionContext, classLoader);
+        Constructor<T> constructor = getConstructor(resolvedClassId, injectionContext, classLoader, substitutions);
         Class<?>[] parametersTypes = constructor.getParameterTypes();
         int parametersCount = constructor.getParameterTypes().length;
         Object parameters[] = new Object[parametersCount];
         for (int i = 0; i < parametersCount; i++)
         {
-            if(parametersTypes[i].getAnnotation(ContainerFactory.class) != null)
-            {
-                parameters[i] = factoryCreator.createFactory(parametersTypes[i]);
-            }
             parameters[i] = null;
-            for(int j = 0; j < substitutions.length; j++)
-                if(!isSubstitutionUsed[j] && parametersTypes[i].isAssignableFrom(substitutions[j].getAbstraction()))
+            for (int j = 0; j < substitutions.length; j++)
+                if (!isSubstitutionUsed[j] && parametersTypes[i].isAssignableFrom(substitutions[j].getAbstraction()))
                 {
                     parameters[i] = substitutions[j].getInstance();
                     isSubstitutionUsed[j] = true;
                     break;
                 }
-            if(parameters[i] != null)
+            if (parameters[i] != null)
                 continue;
             if (parametersTypes[i].isArray())
             {
                 String classId = classNodesStorage.getClassId(parametersTypes[i].getComponentType());
                 ClassLoader nextClassLoader = classNodesStorage.getClassNodeById(classId).getClassLoader();
-                if(nextClassLoader == null)
+                if (nextClassLoader == null)
                     nextClassLoader = classLoader;
                 parameters[i] = storage.getConfiguration(classId).getAll(injectionContext, nextClassLoader);
-            }
-            else
+            } else
             {
                 String classId = classNodesStorage.getClassId(parametersTypes[i]);
                 ClassLoader nextClassLoader = classNodesStorage.getClassNodeById(classId).getClassLoader();
-                if(nextClassLoader == null)
+                if (nextClassLoader == null)
                     nextClassLoader = classLoader;
                 parameters[i] = storage.getConfiguration(classId).get(injectionContext, nextClassLoader);
             }
@@ -87,7 +81,7 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
     }
 
-    private <T> Constructor<T> getConstructor(String classNodeId, IInjectionContext injectionContext, ClassLoader classLoader)
+    private <T> Constructor<T> getConstructor(String classNodeId, IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
         ClassNode classNode = classNodesStorage.getClassNodeById(classNodeId);
         Class<T> clazz = loadClass(classLoader, classNode.getClassName());
@@ -106,32 +100,48 @@ public abstract class AbstractConfiguration implements IConfiguration
                 result = constructor;
             }
         }
-        if(result == null)
+        if (result != null)
+            return result;
+        for (Constructor constructor : constructors)
         {
-            if(constructors.length == 2)
-            {
-                if(constructors[0].getParameterTypes().length == 0)
-                    return constructors[1];
-                if(constructors[1].getParameterTypes().length == 0)
-                    return constructors[0];
-            }
-            StringBuilder res = new StringBuilder();
-            for(Constructor<T> constructor : constructors)
-                res.append(constructor);
-            throw new AmbiguousConstructorException(clazz, res.toString());
+            Class[] types = constructor.getParameterTypes();
+            if (types.length != substitutions.length)
+                continue;
+            boolean fail = false;
+            for (int i = 0; i < types.length; i++)
+                if(!substitutions[i].getAbstraction().isAssignableFrom(types[i]))
+                    fail = true;
+            if(!fail)
+                return constructor;
         }
-        return result;
+        if (constructors.length == 2)
+        {
+            if (constructors[0].getParameterTypes().length == 0)
+                return constructors[1];
+            if (constructors[1].getParameterTypes().length == 0)
+                return constructors[0];
+        }
+        StringBuilder res = new StringBuilder();
+        for (Constructor<T> constructor : constructors)
+            res.append(constructor);
+        throw new AmbiguousConstructorException(clazz, res.toString());
     }
 
     abstract protected <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader);
+
     abstract protected <T> T innerCreate(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions);
 
     @Override
     public <T> T get(IInjectionContext injectionContext, ClassLoader classLoader)
     {
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
+        abstraction.setClazz(loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginGet(abstraction);
-        T result = innerGet(injectionContext, classLoader);
+        T result;
+        if (abstraction.isFactory())
+            result = (T) factoryCreator.createFactory(abstraction.getClazz());
+        else
+            result = innerGet(injectionContext, classLoader);
         injectionContext.endGet(abstraction);
         return result;
     }
@@ -140,8 +150,13 @@ public abstract class AbstractConfiguration implements IConfiguration
     public <T> T create(IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
         ClassNode abstraction = classNodesStorage.getClassNodeById(abstractionId);
+        abstraction.setClazz(loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginCreate(abstraction);
-        T result = innerCreate(injectionContext, classLoader, substitutions);
+        T result;
+        if (abstraction.isFactory())
+            result = (T) factoryCreator.createFactory(abstraction.getClass());
+        else
+            result = innerCreate(injectionContext, classLoader, substitutions);
         injectionContext.endCreate(abstraction);
         return result;
     }
@@ -163,9 +178,10 @@ public abstract class AbstractConfiguration implements IConfiguration
     {
         try
         {
-            return (Class<T>)classLoader.loadClass(className);
+            return (Class<T>) classLoader.loadClass(className);
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException e)
+        {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             return null;
         }
@@ -173,12 +189,15 @@ public abstract class AbstractConfiguration implements IConfiguration
 
 
     protected String resolveClass(String requiredAbstractionId,
-                                      ArrayList<String> implementations, IClassNodesStorage classNodesStorage) {
+                                  ArrayList<String> implementations, IClassNodesStorage classNodesStorage)
+    {
         ClassNode requiredAbstraction = classNodesStorage.getClassNodeById(requiredAbstractionId);
-        if (implementations == null || implementations.size() == 0) {
+        if (implementations == null || implementations.size() == 0)
+        {
             throw new ImplementationNotFoundException(requiredAbstraction);
         }
-        if (implementations.size() > 1) {
+        if (implementations.size() > 1)
+        {
             String implementationsString = "";
             for (String implementation : implementations)
                 implementationsString = implementationsString + classNodesStorage.getClassNodeById(implementation).getClassName() + System.getProperty("line.separator");

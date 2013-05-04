@@ -4,8 +4,6 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.Type;
 import overclocking.jrobocontainer.container.Container;
-import overclocking.jrobocontainer.container.IContainer;
-import overclocking.jrobocontainer.exceptions.JroboContainerException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -29,15 +27,15 @@ public class FactoryCreator
         if (!factoryInterface.isInterface())
             return null;
         ClassGen classGenerator = classGeneratorCreator.create(factoryInterface);
-        classGenerator.addField(fieldCreator.create("container", IContainer.class, classGenerator));
+        classGenerator.setMinor(0);
+        classGenerator.setMajor(50);
+        classGenerator.addField(fieldCreator.create("container", Container.class, classGenerator));
+        classGenerator.addMethod(methodCreator.createConstructor(classGenerator));
         for (Method method : factoryInterface.getDeclaredMethods())
             if (method.getName().equals("create"))
             {
-                for (Class czz : method.getParameterTypes())
-                    System.out.println(czz.getName());
                 classGenerator.addMethod(methodCreator.create(classGenerator, Type.getType(method.getReturnType()), Type.getTypes(method.getParameterTypes())));
             }
-        classGenerator.addMethod(methodCreator.createConstructor(classGenerator));
         JavaClass javaClass = classGenerator.getJavaClass();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
@@ -47,9 +45,10 @@ public class FactoryCreator
             Class clazz = new EmitedClassLoader().loadClass(byteArrayOutputStream.toByteArray());
             return (T)clazz.getConstructors()[0].newInstance(Container.getInstance());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new JroboContainerException("Failed to generate implementation for " + factoryInterface.getName(), e);
+            ex.printStackTrace();
         }
+        return null;
     }
 }
