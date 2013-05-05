@@ -1,9 +1,10 @@
 package testclasses.factories;
 
-public class IntsClass
+public class IntPrimitiveClass
 {
     int x;
-    public IntsClass(int x)
+
+    public IntPrimitiveClass(int x)
     {
         this.x = x;
     }
@@ -13,3 +14,4 @@ public class IntsClass
         return x;
     }
 }
+

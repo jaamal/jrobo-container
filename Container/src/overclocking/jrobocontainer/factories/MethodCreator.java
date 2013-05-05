@@ -32,8 +32,9 @@ public class MethodCreator
         return result;
     }
 
-    public Method create(ClassGen classGenerator, Type returnType, Type[] argumentTypes)
+    public Method create(ClassGen classGenerator, Type returnType, Class[] argumentClasses)
     {
+        Type[] argumentTypes = Type.getTypes(argumentClasses);
         int accessFlags = Constants.ACC_PUBLIC;
         String[] argumentNames = new String[argumentTypes.length];
         for (int i = 0; i < argumentNames.length; i++)
@@ -62,16 +63,10 @@ public class MethodCreator
 
         for (int i = 0; i < argumentTypes.length; i++)
         {
-            //getting array
             il.append(new DUP());//[printer, array, array]
-            //load index for storing
             int curIndex = constantPool.addInteger(i);
             il.append(new LDC(curIndex));//[printer, array, array, i]
-
-            //new SomePair
             il.append(instructionFactory.createNew(new ObjectType(AbstractionInstancePair.class.getName())));//[printer, array, array, i, pair]
-
-            //duplicating for constructor call
             il.append(new DUP());//[printer, array, array, i, pair, pair]
 
             if (argumentTypes[i].equals(Type.INT))
@@ -82,18 +77,71 @@ public class MethodCreator
                 il.append(new ILOAD(i + 1));
                 il.append(instructionFactory.createInvoke("java.lang.Integer", "<init>", Type.VOID, new Type[]{Type.INT}, Constants.INVOKESPECIAL));
             }
+            else if (argumentTypes[i].equals(Type.SHORT))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Short", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Short.class)));
+                il.append(new DUP());
+                il.append(new ILOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Short", "<init>", Type.VOID, new Type[]{Type.SHORT}, Constants.INVOKESPECIAL));
+            }
+            else if (argumentTypes[i].equals(Type.LONG))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Long", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Long.class)));
+                il.append(new DUP());
+                il.append(new LLOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Long", "<init>", Type.VOID, new Type[]{Type.LONG}, Constants.INVOKESPECIAL));
+            }
+            else if (argumentTypes[i].equals(Type.BYTE))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Byte", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Byte.class)));
+                il.append(new DUP());
+                il.append(new ILOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Byte", "<init>", Type.VOID, new Type[]{Type.BYTE}, Constants.INVOKESPECIAL));
+            }
+            else if (argumentTypes[i].equals(Type.CHAR))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Character", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Character.class)));
+                il.append(new DUP());
+                il.append(new ILOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Character", "<init>", Type.VOID, new Type[]{Type.CHAR}, Constants.INVOKESPECIAL));
+            }
+            else  if (argumentTypes[i].equals(Type.BOOLEAN))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Boolean", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Boolean.class)));
+                il.append(new DUP());
+                il.append(new ILOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Boolean", "<init>", Type.VOID, new Type[]{Type.BOOLEAN}, Constants.INVOKESPECIAL));
+            }
+            else if (argumentTypes[i].equals(Type.DOUBLE))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Double", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Double.class)));
+                il.append(new DUP());
+                il.append(new DLOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Double", "<init>", Type.VOID, new Type[]{Type.DOUBLE}, Constants.INVOKESPECIAL));
+            }
+            else if (argumentTypes[i].equals(Type.FLOAT))
+            {
+                il.append(instructionFactory.createGetStatic("java.lang.Float", "TYPE", Type.CLASS));
+                il.append(instructionFactory.createNew((ObjectType) Type.getType(Float.class)));
+                il.append(new DUP());
+                il.append(new FLOAD(i + 1));
+                il.append(instructionFactory.createInvoke("java.lang.Float", "<init>", Type.VOID, new Type[]{Type.FLOAT}, Constants.INVOKESPECIAL));
+            }
             else
             {
                 //first argument
-                int classIndex = getIndexInConstantPool(constantPool, argumentTypes[i].toString());
+                int classIndex = getIndexInConstantPool(constantPool, getClassName(argumentClasses[i]));
                 il.append(new LDC_W(classIndex));//[printer, array, array, i, pair, pair, classarg]
                 //second argument
                 il.append(new ALOAD(i + 1));//[printer, array, array, i, pair, pair, classarg, objectarg]
             }
-            //call SomePair constructor
             il.append(instructionFactory.createInvoke("overclocking.jrobocontainer.container.AbstractionInstancePair", "<init>", Type.VOID, new Type[]{Type.CLASS, Type.OBJECT}, Constants.INVOKESPECIAL));//[printer, array, array, i, pair]
-
-            //store in array
             il.append(new AASTORE());//[printer, array]
         }
         il.append(instructionFactory.createInvoke("overclocking.jrobocontainer.container.Container", "create", Type.OBJECT, new Type[]{Type.CLASS, Type.getType(AbstractionInstancePair[].class)}, Constants.INVOKEVIRTUAL));//[String]
@@ -104,6 +152,11 @@ public class MethodCreator
         methodGen.setMaxLocals();
         Method result = methodGen.getMethod();
         return result;
+    }
+
+    private String getClassName(Class type)
+    {
+        return type.getName();
     }
 
     private int getIndexInConstantPool(ConstantPoolGen constantPool, String name)

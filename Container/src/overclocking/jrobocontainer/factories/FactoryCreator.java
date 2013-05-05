@@ -34,7 +34,7 @@ public class FactoryCreator
         for (Method method : factoryInterface.getDeclaredMethods())
             if (method.getName().equals("create"))
             {
-                classGenerator.addMethod(methodCreator.create(classGenerator, Type.getType(method.getReturnType()), Type.getTypes(method.getParameterTypes())));
+                classGenerator.addMethod(methodCreator.create(classGenerator, Type.getType(method.getReturnType()), method.getParameterTypes()));
             }
         JavaClass javaClass = classGenerator.getJavaClass();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

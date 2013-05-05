@@ -3,7 +3,7 @@ package testclasses.factories;
 import overclocking.jrobocontainer.annotations.ContainerFactory;
 
 @ContainerFactory
-public interface IIntsFactory
+public interface ICharPrimitiveFactory
 {
-    IntsClass create(int arg0);
+    CharPrimitiveClass create(char arg0);
 }
