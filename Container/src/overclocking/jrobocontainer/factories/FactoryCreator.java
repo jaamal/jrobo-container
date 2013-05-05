@@ -4,6 +4,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.Type;
 import overclocking.jrobocontainer.container.Container;
+import overclocking.jrobocontainer.exceptions.JroboContainerException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -25,7 +26,9 @@ public class FactoryCreator
     public <T> T createFactory(Class<T> factoryInterface)
     {
         if (!factoryInterface.isInterface())
-            return null;
+        {
+            throw new JroboContainerException(factoryInterface.getName() + " is not an interface, but marked as @ContainerFactory");
+        }
         ClassGen classGenerator = classGeneratorCreator.create(factoryInterface);
         classGenerator.setMinor(0);
         classGenerator.setMajor(50);

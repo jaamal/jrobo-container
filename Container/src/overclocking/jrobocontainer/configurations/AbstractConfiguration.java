@@ -19,7 +19,7 @@ public abstract class AbstractConfiguration implements IConfiguration
     protected IStorage storage;
     protected IClassNodesStorage classNodesStorage;
     protected String abstractionId;
-    private FactoryCreator factoryCreator;
+    protected FactoryCreator factoryCreator;
 
     protected AbstractConfiguration(IStorage storage, IClassNodesStorage classNodesStorage)
     {
@@ -109,9 +109,9 @@ public abstract class AbstractConfiguration implements IConfiguration
                 continue;
             boolean fail = false;
             for (int i = 0; i < types.length; i++)
-                if(!substitutions[i].getAbstraction().isAssignableFrom(types[i]))
+                if (!substitutions[i].getAbstraction().isAssignableFrom(types[i]))
                     fail = true;
-            if(!fail)
+            if (!fail)
                 return constructor;
         }
         if (constructors.length == 2)
@@ -138,10 +138,7 @@ public abstract class AbstractConfiguration implements IConfiguration
         abstraction.setClazz(loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginGet(abstraction);
         T result;
-        if (abstraction.isFactory())
-            result = (T) factoryCreator.createFactory(abstraction.getClazz());
-        else
-            result = innerGet(injectionContext, classLoader);
+        result = innerGet(injectionContext, classLoader);
         injectionContext.endGet(abstraction);
         return result;
     }
@@ -153,10 +150,7 @@ public abstract class AbstractConfiguration implements IConfiguration
         abstraction.setClazz(loadClass(classLoader, abstraction.getClassName()));
         injectionContext.beginCreate(abstraction);
         T result;
-        if (abstraction.isFactory())
-            result = (T) factoryCreator.createFactory(abstraction.getClass());
-        else
-            result = innerCreate(injectionContext, classLoader, substitutions);
+        result = innerCreate(injectionContext, classLoader, substitutions);
         injectionContext.endCreate(abstraction);
         return result;
     }

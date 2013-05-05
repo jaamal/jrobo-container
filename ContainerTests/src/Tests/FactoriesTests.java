@@ -151,4 +151,12 @@ public class FactoriesTests extends JRoboContainerTestBase
                 Assert.assertEquals(result[i][j], ints[i][j]);
         }
     }
+
+    @Test
+    public void testSameFactories()
+    {
+        IStringFactory factory1 = container.get(IStringFactory.class);
+        IStringFactory factory2 = container.get(IStringFactory.class);
+        Assert.assertSame(factory1, factory2);
+    }
 }
