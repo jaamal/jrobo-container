@@ -30,15 +30,15 @@ public abstract class AbstractConfiguration implements IConfiguration
 
     protected <T> T getInstance(String resolvedClassId, IInjectionContext injectionContext, ClassLoader classLoader, AbstractionInstancePair[] substitutions)
     {
-        if (substitutions == null)
-            substitutions = new AbstractionInstancePair[0];
-        boolean isSubstitutionUsed[] = new boolean[substitutions.length];
-        Arrays.fill(isSubstitutionUsed, false);
         ClassNode resolvedClass = classNodesStorage.getClassNodeById(resolvedClassId);
         if (injectionContext.isClassProcessing(resolvedClassId))
             throw new CyclicalDependencyException(resolvedClass);
         injectionContext.markClassAsProcessing(resolvedClassId);
         Constructor<T> constructor = getConstructor(resolvedClassId, injectionContext, classLoader, substitutions);
+        if (substitutions == null)
+            substitutions = new AbstractionInstancePair[0];
+        boolean isSubstitutionUsed[] = new boolean[substitutions.length];
+        Arrays.fill(isSubstitutionUsed, false);
         Class<?>[] parametersTypes = constructor.getParameterTypes();
         int parametersCount = constructor.getParameterTypes().length;
         Object parameters[] = new Object[parametersCount];
@@ -102,17 +102,14 @@ public abstract class AbstractConfiguration implements IConfiguration
         }
         if (result != null)
             return result;
-        for (Constructor constructor : constructors)
+        if(substitutions != null)
         {
-            Class[] types = constructor.getParameterTypes();
-            if (types.length != substitutions.length)
-                continue;
-            boolean fail = false;
-            for (int i = 0; i < types.length; i++)
-                if (!substitutions[i].getAbstraction().isAssignableFrom(types[i]))
-                    fail = true;
-            if (!fail)
-                return constructor;
+            for (Constructor constructor : constructors)
+            {
+                Class[] types = constructor.getParameterTypes();
+                if(matches(constructor.getParameterTypes(), substitutions))
+                    return constructor;
+            }
         }
         if (constructors.length == 2)
         {
@@ -125,6 +122,27 @@ public abstract class AbstractConfiguration implements IConfiguration
         for (Constructor<T> constructor : constructors)
             res.append(constructor);
         throw new AmbiguousConstructorException(clazz, res.toString());
+    }
+
+    private boolean matches(Class[] types, AbstractionInstancePair[] substitutions)
+    {
+        boolean used[] = new boolean[substitutions.length];
+        for(Class clazz : types)
+        {
+            boolean matchFound = false;
+            for(int i = 0; i < substitutions.length; i++)
+                if(!used[i] && substitutions[i].getAbstraction().isAssignableFrom(clazz))
+                {
+                    matchFound = true;
+                    used[i] = true;
+                    break;
+                }
+            if(matchFound)
+                continue;
+            if(!classNodesStorage.containsClass(clazz))
+                return false;
+        }
+        return true;
     }
 
     abstract protected <T> T innerGet(IInjectionContext injectionContext, ClassLoader classLoader);

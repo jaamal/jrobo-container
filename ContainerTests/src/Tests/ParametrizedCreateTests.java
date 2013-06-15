@@ -6,6 +6,8 @@ import org.junit.Test;
 import overclocking.jrobocontainer.container.AbstractionInstancePair;
 import testclasses.classloader.simpletest.IOneImplementation;
 import testclasses.classloader.simpletest.OneImplementation;
+import testclasses.parametrizedcreate.IA;
+import testclasses.parametrizedcreate.IB;
 import testclasses.primitivesinconstructor.IDifferentTypesInConstructor;
 import testclasses.primitivesinconstructor.IIntInConstructor;
 import testclasses.primitivesinconstructor.ITwoIntsInConstructor;
@@ -55,5 +57,25 @@ public class ParametrizedCreateTests extends JRoboContainerTestBase
         Assert.assertEquals(result.getSecondInt(), secondIntPair.getInstance());
         Assert.assertEquals(result.getFirstString(), firstStringPair.getInstance());
         Assert.assertEquals(result.getSecondString(), secondStringPair.getInstance());
+    }
+
+    @Test
+    public void testCreateMatching()
+    {
+        IB b = container.get(IB.class);
+        IA a = container.create(IA.class, new AbstractionInstancePair(String.class, "asdf"), new AbstractionInstancePair(int.class, 146));
+        Assert.assertSame(b, a.getB());
+        Assert.assertEquals("asdf", a.getS());
+        Assert.assertEquals(146, a.getX());
+
+        a = container.create(IA.class, new AbstractionInstancePair(String.class, "asdf"));
+        Assert.assertEquals(null, a.getB());
+        Assert.assertEquals("asdf", a.getS());
+        Assert.assertEquals(0, a.getX());
+
+        a = container.create(IA.class, new AbstractionInstancePair(int.class, 777));
+        Assert.assertEquals(b, a.getB());
+        Assert.assertEquals(null, a.getS());
+        Assert.assertEquals(777, a.getX());
     }
 }

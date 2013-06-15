@@ -9,4 +9,5 @@ public interface IClassNodesStorage
     String getClassId(String className);
     String getClassId(Class<?> clazz);
     void setClassLoader(String name, ClassLoader classLoader);
+    boolean containsClass(Class<?> clazz);
 }

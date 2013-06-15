@@ -71,4 +71,10 @@ public class ClassNodesStorage implements IClassNodesStorage
         node.setClassLoader(classLoader);
         idToClassNode.put(id, node);
     }
+
+    @Override
+    public boolean containsClass(Class<?> clazz)
+    {
+        return classNameToId.containsKey(clazz.getName());
+    }
 }
