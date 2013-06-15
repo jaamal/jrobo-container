@@ -7,7 +7,7 @@ public class ClassGeneratorCreator
 {
     public ClassGen create(Class factoryInterface)
     {
-        String className = factoryInterface.getName().substring(1);
+        String className = factoryInterface.getName() + "GeneratedImplementation";
         String superClassName = "java.lang.Object";
         String fileName = "<generated>";
         int accessFlags = Constants.ACC_PUBLIC;
