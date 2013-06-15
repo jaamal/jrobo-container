@@ -142,6 +142,9 @@ public abstract class AbstractConfiguration implements IConfiguration
             if(!classNodesStorage.containsClass(clazz))
                 return false;
         }
+        for(int i = 0; i < used.length; i++)
+            if(!used[i])
+                return false;
         return true;
     }
 
